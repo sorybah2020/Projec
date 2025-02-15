@@ -1,2 +1,17 @@
 @import "./css/main.css";
 @import "./css/transactions.css";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  --icon-color: #151515;
+  --gray-color: #545454;
+  --blue-color: #618bf9;
+  --table-header: #292935;
+  --table-content: #696969;
+  --border-color: #e0e0e0;
+  --red-color: #ff5e65;
+  --green-color: #04cd93;
+  --light-blue-color: #759df5;
+  --btn-color: #5081f4;
+}

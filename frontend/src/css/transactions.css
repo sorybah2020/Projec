@@ -14,24 +14,17 @@
   text-align: center;
   padding: 30px;
 }
+.profile h3 {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--table-header);
+}
 .profile img.profile-picture {
   width: 80px;
   height: 80px;
   border-radius: 50%;
 }
-/* nav button {
-                      display: block;
-                      width: 100%;
-                      padding: 10px;
-                      margin: 5px 0;
-                      border: none;
-                      background: #007bff;
-                      color: white;
-                      cursor: pointer;
-                    }
-                    nav button.active {
-                      background: #0056b3;
-                    } */
+
 .btn {
   background-color: #5584f6;
   border-radius: 0.2em;
@@ -39,6 +32,9 @@
   padding: 10px;
   border: none;
   cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 main {
   flex: 1;
@@ -55,6 +51,12 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  background-color: #ffffff;
+  border-radius: 0.5em;
+  border: none !important;
+}
+thead tr:first-child {
+  background-color: transparent;
 }
 table,
 th,
@@ -70,31 +72,71 @@ td {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-family: Arial, sans-serif;
+  font-family: "Inter";
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+tfoot tr:hover {
+  background-color: transparent;
 }
 
 th,
 td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
 }
 
 th {
   background-color: #f8f9fa;
   font-weight: bold;
+  color: var(--table-header);
+  font-size: 14px;
+}
+tbody tr td {
+  color: var(--table-content);
+  font-size: 14px;
+  border: none;
+}
+thead th,
+thead tr {
+  border: none;
+  cursor: pointer;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
 }
 
 tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f0eeee;
 }
 
+.table-amount {
+  color: var(--red-color);
+  font-weight: bold;
+}
+.header-table {
+  text-align: end;
+}
+.table-action-link {
+  text-decoration: none;
+  margin-right: 20px;
+  color: #000000de;
+  font-size: 14px;
+  display: inline-flex;
+  gap: 5px;
+}
+.table-action-link:last-child {
+  margin-right: 0px;
+}
 /* Pagination Styling */
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+
   gap: 5px;
 }
 
@@ -111,16 +153,42 @@ tr:hover {
   background-color: #d6d6d6;
 }
 
-.pagination button.active {
-  background-color: #007bff;
-  color: white;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
+.pagination button:disabled,
+.pagination button.next-button:disabled {
+  background-color: transparent;
   cursor: not-allowed;
+  color: #e0e0e0;
+  font-weight: bold;
+  padding: 8px 5px;
 }
 
+.pagination button:not([disabled]) {
+  color: #3e3e3e;
+  background: transparent;
+}
+
+.pagination button.active {
+  background-color: var(--btn-color);
+  color: white;
+  border-radius: 2.5em;
+}
+
+.pagination button.next-button {
+  background-color: transparent;
+  color: #e0e0e0;
+  font-weight: bold;
+  color: #212121;
+  padding: 8px 5px;
+}
+.pagination-nav {
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+  align-items: center;
+}
+.page-info {
+  color: #212121;
+}
 /* Page Info */
 .page-info {
   text-align: center;
@@ -137,6 +205,7 @@ tr:hover {
 .filters h3 {
   margin-top: 0;
   margin-bottom: 0px;
+  color: #485058;
 }
 .filter-section {
   padding: 20px;
@@ -149,10 +218,12 @@ tr:hover {
   border-radius: 0.4em;
   background-color: #f9f9f9;
   width: 100%;
-  height: 29px;
+  height: 24px;
   justify-content: center;
   gap: 5px;
   margin: auto;
+  color: #545454;
+  font-size: 15px;
 }
 .budget .icon {
   width: 25px;
@@ -198,6 +269,8 @@ nav ul {
   padding: 10px 20px 10px 20px;
   background-color: #e8ecef;
   color: #485058;
+  display: flex;
+  flex-direction: row;
 }
 
 .filter-icon {
@@ -213,7 +286,7 @@ nav ul {
 
 .filter-title {
   font-size: 14px;
-  color: #759df5;
+  color: var(--blue-color);
   font-weight: 500;
 }
 
@@ -250,7 +323,7 @@ nav ul {
 
 input[type="checkbox"] {
   margin-right: 5px;
-  accent-color: #007bff;
+  accent-color: var(--btn-color);
 }
 
 .amount-range {
@@ -294,4 +367,13 @@ input[type="checkbox"] {
   flex: 1;
   border: none;
   padding: 13px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 0.2em;
+}
+.search .search-keyword:focus-visible {
+  outline: unset;
+}
+
+input[type="text"] {
+  outline: none;
 }
