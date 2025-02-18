@@ -404,6 +404,7 @@ input[type="text"] {
   z-index: 10;
   width: -webkit-fill-available;
   box-shadow: none;
+  color: #000000de;
 }
 .filter-date .date-icon {
   position: absolute;
