@@ -198,7 +198,7 @@ tr:hover {
 }
 
 .filters {
-  width: 250px;
+  width: 350px;
   background: #f9f9f9;
   /* padding: 20px; */
 }
@@ -376,4 +376,45 @@ input[type="checkbox"] {
 
 input[type="text"] {
   outline: none;
+}
+
+/*Filters*/
+.date-picker {
+  cursor: pointer;
+}
+.date-picker-container {
+  top: 35px;
+  position: absolute;
+  z-index: 10;
+  right: 0px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+.filter-date {
+  position: relative;
+}
+.filter-date .date-picker {
+  padding: 10px 2px 5px;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid;
+  position: relative;
+  z-index: 10;
+  width: -webkit-fill-available;
+  box-shadow: none;
+}
+.filter-date .date-icon {
+  position: absolute;
+  right: 3px;
+  top: 8px;
+}
+.filter-date-section {
+  height: 35px;
+  position: relative;
+}
+
+.filter-date .date-icon {
+  cursor: pointer;
 }
