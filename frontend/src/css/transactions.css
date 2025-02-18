@@ -393,7 +393,8 @@ input[type="text"] {
 .filter-date {
   position: relative;
 }
-.filter-date .date-picker {
+.filter-date .date-picker,
+.category-select {
   padding: 10px 2px 5px;
   background: transparent;
   border-top: none;
@@ -404,7 +405,11 @@ input[type="text"] {
   z-index: 10;
   width: -webkit-fill-available;
   box-shadow: none;
-  color: #000000de;
+  color: var(--table-header);
+  border-radius: unset;
+}
+.category-select:focus-visible {
+  outline: unset;
 }
 .filter-date .date-icon {
   position: absolute;

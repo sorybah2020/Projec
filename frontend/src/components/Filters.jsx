@@ -36,6 +36,9 @@ const Filters = () => {
           <option selected disabled>
             Select Categories
           </option>
+          <option>Food</option>
+          <option>Transportion</option>
+          <option>Clothing</option>
         </select>
       </div>
 
