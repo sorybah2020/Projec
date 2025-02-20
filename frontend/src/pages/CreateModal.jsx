@@ -94,6 +94,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
             type="submit"
             className="btn second-btn close-btn"
             value="Close"
+            onClick={() => closeModal("creation")}
           />
         </div>
       </form>
