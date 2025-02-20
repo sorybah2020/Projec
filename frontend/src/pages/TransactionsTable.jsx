@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import CreateModal from "./CreateModal";
 
 const TransactionsTable = () => {
   const [transactions, setTransactions] = useState([
@@ -74,7 +75,9 @@ const TransactionsTable = () => {
       amount: "$7",
     },
   ]);
-  const rowsPerPage = 3;
+
+  //Pagination
+  const rowsPerPage = 10;
 
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(transactions.length / rowsPerPage);
@@ -88,6 +91,16 @@ const TransactionsTable = () => {
       setCurrentPage(newPage);
     }
   };
+
+  // Modal State
+  const [modalIsOpen, setIsOpen] = useState({
+    creation: false,
+    edition: false,
+  });
+
+  function openModal(modalName) {
+    setIsOpen({ ...modalIsOpen, [modalName]: true });
+  }
 
   return (
     <>
@@ -103,6 +116,7 @@ const TransactionsTable = () => {
             type="submit"
             className="btn add-transaction"
             value="add transaction"
+            onClick={() => openModal("creation")}
           />
         </div>
         <table>
@@ -256,6 +270,7 @@ const TransactionsTable = () => {
             </tr>
           </tfoot>
         </table>
+        <CreateModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
       </div>
     </>
   );

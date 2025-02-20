@@ -394,21 +394,27 @@ input[type="text"] {
   position: relative;
 }
 .filter-date .date-picker,
-.category-select {
-  padding: 10px 2px 5px;
+.category-select,
+.form-group input[type="date"],
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="time"] {
+  padding: 0px 2px 5px;
   background: transparent;
   border-top: none;
   border-left: none;
   border-right: none;
   border-bottom: 1px solid;
   position: relative;
-  z-index: 10;
   width: -webkit-fill-available;
   box-shadow: none;
   color: var(--table-header);
   border-radius: unset;
 }
-.category-select:focus-visible {
+.category-select:focus-visible,
+input[type="date"]:focus-visible,
+.form-group select:focus-visible,
+.form-group input[type="time"]:focus-visible {
   outline: unset;
 }
 .filter-date .date-icon {
@@ -423,4 +429,95 @@ input[type="text"] {
 
 .filter-date .date-icon {
   cursor: pointer;
+}
+
+/*Modal*/
+
+.modal-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #000000de;
+  align-items: center;
+}
+
+.modal-close {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.modal-header {
+  margin: 0px;
+}
+
+.ReactModal__Content--after-open {
+  width: 500px;
+  height: fit-content;
+  position: absolute;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  padding: 30px;
+  font-family: "Inter", sans-serif;
+}
+
+.ReactModal__Overlay {
+  background-color: #3e3d3dbf !important;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group-container {
+  display: flex;
+  gap: 50px;
+}
+.form-group-col {
+  display: flex;
+  flex-direction: column;
+  flex: 50%;
+}
+
+.form-group.two-col {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group .desc {
+  width: 100%;
+}
+.btn-container {
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+}
+
+.second-btn {
+  background: white;
+  border: 1px solid #5584f6;
+  color: #5584f6;
+}
+
+.form-group label.header {
+  color: var(--table-content);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group select,
+.form-group input[type="date"],
+.form-group input[type="time"] {
+  cursor: pointer;
+}
+
+.form-group input[type="checkbox"] {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form-group label {
+  padding-bottom: 10px;
+  display: inline-block;
 }

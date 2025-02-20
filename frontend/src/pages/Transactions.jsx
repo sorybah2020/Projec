@@ -1,6 +1,6 @@
 import Filters from "../components/Filters";
 import Sidebar from "../components/Sidebar";
-import TransactionsTable from "../components/TransactionsTable";
+import TransactionsTable from "./TransactionsTable";
 const Transactions = () => {
   return (
     <div className="container">
