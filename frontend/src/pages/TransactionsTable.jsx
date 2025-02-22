@@ -270,7 +270,11 @@ const TransactionsTable = () => {
             </tr>
           </tfoot>
         </table>
-        <CreateModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
+        <CreateModal
+          modalIsOpen={modalIsOpen}
+          setIsOpen={setIsOpen}
+          setTransactions={setTransactions}
+        />
       </div>
     </>
   );

@@ -398,7 +398,8 @@ input[type="text"] {
 .form-group input[type="date"],
 .form-group select,
 .form-group input[type="text"],
-.form-group input[type="time"] {
+.form-group input[type="time"],
+.form-group input[type="number"] {
   padding: 0px 2px 5px;
   background: transparent;
   border-top: none;
@@ -414,7 +415,8 @@ input[type="text"] {
 .category-select:focus-visible,
 input[type="date"]:focus-visible,
 .form-group select:focus-visible,
-.form-group input[type="time"]:focus-visible {
+.form-group input[type="time"]:focus-visible,
+.form-group input[type="number"]:focus-visible {
   outline: unset;
 }
 .filter-date .date-icon {
@@ -487,6 +489,22 @@ input[type="date"]:focus-visible,
 
 .form-group .desc {
   width: 100%;
+}
+.form-group .check-wrapper {
+  display: flex;
+  gap: 50px;
+}
+.form-group-container.diff {
+  flex-direction: column;
+  gap: 0px;
+}
+.err-message {
+  color: var(--red-color);
+  font-size: 10px;
+  padding-top: 10px;
+}
+.text-redText {
+  color: var(--red-color);
 }
 .btn-container {
   display: flex;

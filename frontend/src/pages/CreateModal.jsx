@@ -1,10 +1,56 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import Validation from "../utilities/Validation";
 
-const CreateModal = ({ modalIsOpen, setIsOpen }) => {
+const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
+  const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({
+    category: "",
+    date: "",
+    paymentMode: "",
+    description: "",
+    amount: "",
+    cashflow: "",
+    time: "",
+  });
+
   function closeModal(modalName) {
+    setFormData({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
+
+  const handleChange = (input) => {
+    const { name, value } = input;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    if (
+      name == "category" ||
+      name == "date" ||
+      name == "paymentMode" ||
+      name == "description" ||
+      name == "amount" ||
+      name == "cashflow" ||
+      name == "time"
+    ) {
+      const { newErrors } = Validation.validateField(name, value);
+
+      setErrors({ ...errors, ...newErrors });
+    }
+  };
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    const { valid, newErrors } = Validation.validateAll(formData);
+    setErrors(newErrors);
+    if (valid) {
+      console.log("hello");
+    }
+  };
+
+  Modal.setAppElement("#root");
 
   return (
     <Modal
@@ -26,70 +72,173 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
       </div>
       <form>
         <div className="form-group">
-          <label className="header">Cashflow</label>
-          <div className="form-group-container">
-            <label>
-              <input type="checkbox" /> Income
-            </label>
-            <label>
-              <input type="checkbox" /> Expense
-            </label>
+          <label className="header">
+            Cashflow <em className="text-redText">*</em>
+          </label>
+          <div className="form-group-container diff">
+            <div className="check-wrapper">
+              <label>
+                <input
+                  type="radio"
+                  name="cashflow"
+                  onChange={(e) => handleChange(e.target)}
+                  value={"Income"}
+                />{" "}
+                Income
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="cashflow"
+                  onChange={(e) => handleChange(e.target)}
+                  value={"Expense"}
+                />{" "}
+                Expense
+              </label>
+            </div>
+            {errors?.["cashflow"] && (
+              <em className="err-message">{errors["cashflow"]}</em>
+            )}
           </div>
         </div>
 
         <div className="form-group two-col">
           <div className="form-group-col">
-            <label className="header">Choose a Date</label>
-            <input type="date" />
+            <label className="header">
+              Choose a Date <em className="text-redText">*</em>
+            </label>
+            <input
+              type="date"
+              name="date"
+              onChange={(e) => handleChange(e.target)}
+            />
+            {errors?.["date"] && (
+              <em className="err-message">{errors["cashflow"]}</em>
+            )}
           </div>
           <div className="form-group-col">
-            <label className="header">Choose a Time</label>
-            <input type="time" id="time" name="time" />
+            <label className="header">
+              Choose a Time <em className="text-redText">*</em>
+            </label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              onChange={(e) => handleChange(e.target)}
+            />
+            {errors?.["time"] && (
+              <em className="err-message">{errors["cashflow"]}</em>
+            )}
           </div>
         </div>
 
         <div className="form-group two-col">
           <div className="form-group-col">
-            <label className="header">Category</label>
-            <select>
-              <option value="" disabled selected>
+            <label className="header">
+              Category <em className="text-redText">*</em>
+            </label>
+            <select name="category">
+              <option
+                value=""
+                disabled
+                selected
+                onChange={(e) => handleChange(e.target)}
+              >
                 Select Category
               </option>
               <option>Food</option>
               <option>Transportation</option>
               <option>Clothing</option>
             </select>
+            {errors?.["category"] && (
+              <em className="err-message">{errors["cashflow"]}</em>
+            )}
           </div>
           <div className="form-group-col">
-            <label className="header">EnterAmount</label>
-            <input type="text" />
+            <label className="header">
+              EnterAmount <em className="text-redText">*</em>
+            </label>
+            <input
+              type="number"
+              name="amount"
+              min="1"
+              onChange={(e) => handleChange(e.target)}
+              value={formData.amount}
+            />
+            {errors?.["amount"] && (
+              <em className="err-message">{errors["cashflow"]}</em>
+            )}
           </div>
         </div>
 
         <div className="form-group">
-          <label className="header">Description</label>
-          <div className="form-group-container">
-            <input type="text" className="desc" />
+          <label className="header">
+            Description <em className="text-redText">*</em>
+          </label>
+          <div className="form-group-container diff">
+            <input
+              type="text"
+              className="desc"
+              name="description"
+              value={formData.description}
+              onChange={(e) => handleChange(e.target)}
+            />
+            {errors?.["description"] && (
+              <em className="err-message">{errors["description"]}</em>
+            )}
           </div>
         </div>
 
         <div className="form-group">
-          <label className="header">Payment Mode</label>
-          <div className="form-group-container">
-            <label>
-              <input type="checkbox" /> Cash
-            </label>
-            <label>
-              <input type="checkbox" /> Debit Card
-            </label>
-            <label>
-              <input type="checkbox" /> Credit Card
-            </label>
+          <label className="header">
+            Payment Mode <em className="text-redText">*</em>
+          </label>
+          <div className="form-group-container diff">
+            <div className="check-wrapper">
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMode"
+                  onChange={(e) => handleChange(e.target)}
+                  value={"Cash"}
+                />{" "}
+                Cash
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMode"
+                  onChange={(e) => handleChange(e.target)}
+                  value={"Debit Card"}
+                />{" "}
+                Debit Card
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMode"
+                  onChange={(e) => handleChange(e.target)}
+                  value={"Debit Card"}
+                />{" "}
+                Credit Card
+              </label>
+            </div>
+
+            {errors?.["paymentMode"] && (
+              <em className="err-message">{errors["paymentMode"]}</em>
+            )}
           </div>
         </div>
 
         <div className="btn-container">
-          <input type="submit" className="btn create-btn" value="Create" />
+          <input
+            type="submit"
+            className="btn create-btn"
+            value="Create"
+            onClick={(e) => {
+              handleCreate(e);
+            }}
+          />
           <input
             type="submit"
             className="btn second-btn close-btn"
@@ -104,5 +253,6 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
 CreateModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
+  setTransactions: PropTypes.func.isRequired,
 };
 export default CreateModal;
