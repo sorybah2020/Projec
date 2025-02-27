@@ -17,6 +17,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
 
   function closeModal(modalName) {
     setFormData({});
+    setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
 
@@ -26,19 +27,10 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       ...formData,
       [name]: value,
     });
-    if (
-      name == "category" ||
-      name == "date" ||
-      name == "paymentMode" ||
-      name == "description" ||
-      name == "amount" ||
-      name == "cashflow" ||
-      name == "time"
-    ) {
-      const { newErrors } = Validation.validateField(name, value);
 
-      setErrors({ ...errors, ...newErrors });
-    }
+    const { newErrors } = Validation.validateField(name, value);
+
+    setErrors({ ...errors, ...newErrors });
   };
 
   const handleCreate = async (e) => {
@@ -46,7 +38,8 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     const { valid, newErrors } = Validation.validateAll(formData);
     setErrors(newErrors);
     if (valid) {
-      console.log("hello");
+      setTransactions((prevState) => [...prevState, formData]);
+      closeModal("creation");
     }
   };
 
@@ -113,7 +106,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["date"] && (
-              <em className="err-message">{errors["cashflow"]}</em>
+              <em className="err-message">{errors["date"]}</em>
             )}
           </div>
           <div className="form-group-col">
@@ -127,7 +120,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["time"] && (
-              <em className="err-message">{errors["cashflow"]}</em>
+              <em className="err-message">{errors["time"]}</em>
             )}
           </div>
         </div>
@@ -137,13 +130,8 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
             <label className="header">
               Category <em className="text-redText">*</em>
             </label>
-            <select name="category">
-              <option
-                value=""
-                disabled
-                selected
-                onChange={(e) => handleChange(e.target)}
-              >
+            <select name="category" onChange={(e) => handleChange(e.target)}>
+              <option value="" disabled selected>
                 Select Category
               </option>
               <option>Food</option>
@@ -151,7 +139,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
               <option>Clothing</option>
             </select>
             {errors?.["category"] && (
-              <em className="err-message">{errors["cashflow"]}</em>
+              <em className="err-message">{errors["category"]}</em>
             )}
           </div>
           <div className="form-group-col">
@@ -166,7 +154,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
               value={formData.amount}
             />
             {errors?.["amount"] && (
-              <em className="err-message">{errors["cashflow"]}</em>
+              <em className="err-message">{errors["amount"]}</em>
             )}
           </div>
         </div>

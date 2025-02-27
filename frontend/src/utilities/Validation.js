@@ -1,16 +1,16 @@
+const reqFields = [
+  "category",
+  "date",
+  "paymentMode",
+  "description",
+  "amount",
+  "cashflow",
+  "time",
+];
+
 const validateAll = (formData) => {
   let newErrors = {};
   let valid = true;
-
-  const reqFields = [
-    "category",
-    "date",
-    "paymentMode",
-    "description",
-    "amount",
-    "cashflow",
-    "time",
-  ];
 
   reqFields.forEach((field) => {
     if (!formData[field]) {
@@ -26,7 +26,7 @@ const validateField = (name, value) => {
   const newErrors = {};
   let valid = true;
 
-  if (!value) {
+  if (reqFields[name] && !value) {
     newErrors[name] = "Required Field";
     valid = false;
   } else {
