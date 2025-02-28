@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 
@@ -10,9 +10,7 @@ const CreateModal = ({
   setIsOpen,
   setTransactions,
 }) => {
-  const [formData, setFormData] = useState({
-    userId: authId,
-  });
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
     date: "",
@@ -22,9 +20,16 @@ const CreateModal = ({
     cashflow: "",
     time: "",
   });
+  useEffect(() => {
+    setFormData({
+      userId: authId,
+    });
+  }, [authId]);
 
   function closeModal(modalName) {
-    setFormData({});
+    setFormData({
+      userId: authId,
+    });
     setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
