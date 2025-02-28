@@ -4,8 +4,15 @@ import { useState } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 
-const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
-  const [formData, setFormData] = useState({});
+const CreateModal = ({
+  authId = "67c0ffcf02a6253bfbd4cdbb",
+  modalIsOpen,
+  setIsOpen,
+  setTransactions,
+}) => {
+  const [formData, setFormData] = useState({
+    userId: authId,
+  });
   const [errors, setErrors] = useState({
     category: "",
     date: "",
@@ -254,5 +261,6 @@ CreateModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
+  authId: PropTypes.string.isRequired,
 };
 export default CreateModal;

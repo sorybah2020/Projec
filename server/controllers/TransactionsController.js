@@ -1,13 +1,10 @@
 const TransactionsModel = require("../models/TransactionsModel.js");
 const connectDB = require("../config/mongodb.js");
-
+const mongoose = require("mongoose");
 const createTransaction = async (req, res) => {
   try {
-    await connectDB();
-
-    const { category, date, paymentMode, description, amount, cashflow, time } =
-      req.body;
-    console.log({
+    const {
+      userId,
       category,
       date,
       paymentMode,
@@ -15,8 +12,10 @@ const createTransaction = async (req, res) => {
       amount,
       cashflow,
       time,
-    });
+    } = req.body;
+
     if (
+      !userId ||
       !category ||
       !date ||
       !paymentMode ||
@@ -28,6 +27,7 @@ const createTransaction = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
     const transaction = new TransactionsModel({
+      userId,
       category,
       date,
       paymentMode,
@@ -45,6 +45,16 @@ const createTransaction = async (req, res) => {
   } catch (error) {}
 };
 
+const getTransactionsById = async (req, res) => {
+  try {
+    const userId = req.params.authId;
+    const transactions = await TransactionsModel.find({ userId: userId });
+    if (transactions.length > 0) {
+      return res.status(200).json(transactions);
+    }
+  } catch (error) {}
+};
 module.exports = {
   createTransaction,
+  getTransactionsById,
 };

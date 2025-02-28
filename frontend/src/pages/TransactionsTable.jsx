@@ -1,80 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import Spinner from "../components/Spinner";
 import CreateModal from "./CreateModal";
+import TransactionsAPI from "../services/TransactionsAPI";
+import PropTypes from "prop-types";
 
-const TransactionsTable = () => {
-  const [transactions, setTransactions] = useState([
-    {
-      category: "Food",
-      date: "11/30/2017",
-      paymentMode: "Debit Card",
-      description: "Palmetto Cheese, Mint julep",
-      amount: "$6",
-    },
-    {
-      category: "Housing",
-      date: "11/29/2017",
-      paymentMode: "Credit Card",
-      description: "Laundry and cleaning supplies",
-      amount: "$20",
-    },
-    {
-      category: "Food",
-      date: "11/29/2017",
-      paymentMode: "Credit Card",
-      description: "Muffuletta sandwich, Mint julep",
-      amount: "$10",
-    },
-    {
-      category: "Clothing",
-      date: "11/28/2017",
-      paymentMode: "Debit Card",
-      description: "Pair of Running Shoes",
-      amount: "$45",
-    },
-    {
-      category: "Education",
-      date: "11/28/2017",
-      paymentMode: "Cash",
-      description: "Expense for Education",
-      amount: "$50",
-    },
-    {
-      category: "Transportation",
-      date: "11/27/2017",
-      paymentMode: "Debit Card",
-      description: "Cars and trucks, used",
-      amount: "$7",
-    },
-    {
-      category: "Food",
-      date: "11/27/2017",
-      paymentMode: "Credit Card",
-      description: "Palmetto Cheese, Mint julep",
-      amount: "$12",
-    },
-    {
-      category: "Food",
-      date: "11/26/2017",
-      paymentMode: "Debit Card",
-      description: "Peanuts in Coke",
-      amount: "$8",
-    },
-    {
-      category: "Shopping",
-      date: "11/26/2017",
-      paymentMode: "Cash",
-      description: "Beauty care things",
-      amount: "$65",
-    },
-    {
-      category: "Miscellaneous",
-      date: "11/25/2017",
-      paymentMode: "Debit Card",
-      description: "Cinema, International Release",
-      amount: "$7",
-    },
-  ]);
+const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
+  const [transactions, setTransactions] = useState([]);
+  const [transLoading, setTransLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const result = await TransactionsAPI.getTransactionsById(authId, options);
+      if (result.length > 0) {
+        setTimeout(() => {
+          setTransactions(result);
+          setTransLoading(false);
+        }, 1000);
+      } else {
+        setTransLoading(false);
+      }
+    };
+    fetchTransactions();
+  }, [authId]);
 
   //Pagination
   const rowsPerPage = 10;
@@ -118,6 +73,7 @@ const TransactionsTable = () => {
             onClick={() => openModal("creation")}
           />
         </div>
+
         <table>
           <thead>
             <tr>
@@ -160,14 +116,24 @@ const TransactionsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentRows.length > 0 ? (
+            {transLoading ? (
+              // Show spinner inside the table body while loading
+              <tr>
+                <td
+                  colSpan="6"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  <Spinner />
+                </td>
+              </tr>
+            ) : currentRows.length > 0 ? (
               currentRows.map((transaction, index) => (
                 <tr key={index}>
                   <td>
                     <input type="checkbox" />
                   </td>
                   <td>{transaction.category}</td>
-                  <td>{transaction.date}</td>
+                  <td>{format(new Date(transaction.date), "MM-dd-yyyy")}</td>
                   <td>{transaction.paymentMode}</td>
                   <td>{transaction.description}</td>
                   <td className="table-amount">{transaction.amount}</td>
@@ -269,6 +235,7 @@ const TransactionsTable = () => {
             </tr>
           </tfoot>
         </table>
+
         <CreateModal
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
@@ -278,5 +245,7 @@ const TransactionsTable = () => {
     </>
   );
 };
-
+TransactionsTable.propTypes = {
+  authId: PropTypes.string.isRequired,
+};
 export default TransactionsTable;
