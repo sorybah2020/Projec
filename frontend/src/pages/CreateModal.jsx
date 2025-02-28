@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import Validation from "../utilities/Validation";
+import TransactionsAPI from "../services/TransactionsAPI";
 
 const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
   const [formData, setFormData] = useState({});
@@ -38,8 +39,19 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     const { valid, newErrors } = Validation.validateAll(formData);
     setErrors(newErrors);
     if (valid) {
-      setTransactions((prevState) => [...prevState, formData]);
-      closeModal("creation");
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      };
+
+      const result = await TransactionsAPI.createTransaction(options);
+      if (result.success) {
+        setTransactions((prevState) => [...prevState, formData]);
+        closeModal("creation");
+      }
     }
   };
 

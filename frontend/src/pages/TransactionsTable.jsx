@@ -81,7 +81,6 @@ const TransactionsTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(transactions.length / rowsPerPage);
-  console.log("transactions", transactions);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = transactions?.slice(indexOfFirstRow, indexOfLastRow);
