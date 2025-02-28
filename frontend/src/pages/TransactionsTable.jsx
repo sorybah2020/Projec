@@ -13,7 +13,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
     edit: false,
     delete: false,
   });
-  const [editIds, setEditids] = useState([]);
+  const [checkedIds, setChecked] = useState([]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -62,21 +62,34 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
   }
 
   const handleCheck = (id) => {
-    if (editIds.includes(id)) {
-      setEditids(editIds.filter((item) => item !== id));
+    //check the checkboxes for edit and delete
+    if (checkedIds.includes(id)) {
+      setChecked(checkedIds.filter((item) => item !== id));
       return;
     }
-    setEditids([...editIds, id]);
+    setChecked([...checkedIds, id]);
   };
 
   useEffect(() => {
+    //update the edit and delete link
     const updateActLink = {
-      edit: editIds.length === 1,
-      delete: editIds.length > 0,
+      edit: checkedIds.length === 1,
+      delete: checkedIds.length > 0,
     };
 
     setActLink(updateActLink);
-  }, [editIds]);
+  }, [checkedIds]);
+
+  const handleDelete = async () => {
+    console.log(checkedIds);
+
+    // const options = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // };
+  };
 
   return (
     <>
@@ -120,6 +133,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                   to=""
                   className="table-action-link"
                   style={{ color: actLink.delete ? "#000000de" : "#a9a9a9de" }}
+                  onClick={() => handleDelete()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
