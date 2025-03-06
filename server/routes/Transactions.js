@@ -11,5 +11,6 @@ router.get(
   "/get/transaction/:transactionId",
   TransactionsController.getTransactionById
 );
+router.put("/transaction/edit", TransactionsController.editTransaction);
 
 module.exports = router;

@@ -71,8 +71,60 @@ const getTransactionById = async (req, res) => {
   }
 };
 
+const editTransaction = async (req, res) => {
+  try {
+    const {
+      userId,
+      category,
+      date,
+      paymentMode,
+      description,
+      amount,
+      cashflow,
+      time,
+      _id,
+    } = req.body;
+
+    if (
+      !userId ||
+      !category ||
+      !date ||
+      !paymentMode ||
+      !description ||
+      !amount ||
+      !cashflow ||
+      !time ||
+      !_id
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const transaction = TransactionsModel.updateOne(
+      { _id: _id },
+      {
+        userId: userId,
+        category: category,
+        date: date,
+        paymentMode: paymentMode,
+        description: description,
+        amount: amount,
+        cashflow: cashflow,
+        time: time,
+      }
+    );
+    const result = transaction;
+    console.log(result);
+    if (result._update) {
+      return res
+        .status(200)
+        .json({ success: "Transaction updated into database" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   createTransaction,
   getTransactionsById,
   getTransactionById,
+  editTransaction,
 };

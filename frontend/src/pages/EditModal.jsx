@@ -58,22 +58,25 @@ const EditModal = ({
     setErrors({ ...errors, ...newErrors });
   };
 
-  const handleCreate = async (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
     const { valid, newErrors } = Validation.validateAll(formData);
     setErrors(newErrors);
     if (valid) {
       const options = {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       };
 
-      const result = await TransactionsAPI.createTransaction(options);
+      const result = await TransactionsAPI.editTransaction(options);
       if (result.success) {
-        setTransactions((prevState) => [...prevState, formData]);
+        // setTransactions((prevState) => ({
+        //   ...prevState,
+        //   [formData._id]: formData,
+        // }));
         closeModal("edition");
       }
     }
@@ -91,6 +94,7 @@ const EditModal = ({
       transactionToEdit,
       options
     );
+    console.log(result);
     if (result.length > 0) {
       setFormData(result[0]);
     }
@@ -164,7 +168,11 @@ const EditModal = ({
               type="date"
               name="date"
               onChange={(e) => handleChange(e.target)}
-              value={format(new Date(formData.date), "yyyy-MM-dd")}
+              value={
+                formData.date
+                  ? format(new Date(formData.date), "yyyy-MM-dd")
+                  : ""
+              }
             />
             {errors?.["date"] && (
               <em className="err-message">{errors["date"]}</em>
@@ -294,9 +302,9 @@ const EditModal = ({
           <input
             type="submit"
             className="btn create-btn"
-            value="Create"
+            value="Edit"
             onClick={(e) => {
-              handleCreate(e);
+              handleEdit(e);
             }}
           />
           <input

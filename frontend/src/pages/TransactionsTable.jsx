@@ -32,7 +32,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
         setTimeout(() => {
           setTransactions(result);
           setTransLoading(false);
-        }, 1000);
+        }, 500);
       } else {
         setTransLoading(false);
       }
@@ -126,7 +126,10 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                 <Link
                   to=""
                   className="table-action-link"
-                  style={{ color: actLink.edit ? "#000000de" : "#a9a9a9de" }}
+                  style={{
+                    color: actLink.edit ? "#000000de" : "#a9a9a9de",
+                    pointerEvents: actLink.edit ? "" : "none",
+                  }}
                   onClick={() => handleEdit()}
                 >
                   <svg
