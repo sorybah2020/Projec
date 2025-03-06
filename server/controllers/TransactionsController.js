@@ -42,7 +42,9 @@ const createTransaction = async (req, res) => {
         .status(200)
         .json({ success: "Transaction saved into database" });
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 };
 
 const getTransactionsById = async (req, res) => {
@@ -52,9 +54,25 @@ const getTransactionsById = async (req, res) => {
     if (transactions.length > 0) {
       return res.status(200).json(transactions);
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 };
+
+const getTransactionById = async (req, res) => {
+  try {
+    const transactionId = req.params.transactionId;
+    const transaction = await TransactionsModel.find({ _id: transactionId });
+    if (transaction.length > 0) {
+      return res.status(200).json(transaction);
+    }
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createTransaction,
   getTransactionsById,
+  getTransactionById,
 };

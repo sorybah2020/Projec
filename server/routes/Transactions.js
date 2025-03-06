@@ -7,5 +7,9 @@ router.get(
   "/get/transactions/:authId",
   TransactionsController.getTransactionsById
 );
+router.get(
+  "/get/transaction/:transactionId",
+  TransactionsController.getTransactionById
+);
 
 module.exports = router;

@@ -24,4 +24,17 @@ const getTransactionsById = async (authId, options) => {
     return error;
   }
 };
-export default { createTransaction, getTransactionsById };
+
+const getTransaction = async (transactionToEdit, options) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/get/transaction/${transactionToEdit}`,
+      options
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+export default { createTransaction, getTransactionsById, getTransaction };

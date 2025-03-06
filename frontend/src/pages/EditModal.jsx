@@ -1,16 +1,17 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
+import { format } from "date-fns";
 
-const CreateModal = ({
-  authId = "67c0ffcf02a6253bfbd4cdbb",
+const EditModal = ({
   modalIsOpen,
   setIsOpen,
   setTransactions,
+  transactionToEdit,
 }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
     category: "",
     date: "",
@@ -20,6 +21,7 @@ const CreateModal = ({
     cashflow: "",
     time: "",
   });
+
   const categories = [
     "Rent",
     "Food",
@@ -38,16 +40,8 @@ const CreateModal = ({
     "Personal Care",
   ];
 
-  useEffect(() => {
-    setFormData({
-      userId: authId,
-    });
-  }, [authId]);
-
   function closeModal(modalName) {
-    setFormData({
-      userId: authId,
-    });
+    setFormData([]);
     setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
@@ -80,27 +74,49 @@ const CreateModal = ({
       const result = await TransactionsAPI.createTransaction(options);
       if (result.success) {
         setTransactions((prevState) => [...prevState, formData]);
-        closeModal("creation");
+        closeModal("edition");
       }
     }
   };
 
-  Modal.setAppElement("#root");
+  const fetchTransaction = useCallback(async () => {
+    //get transaction by id
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const result = await TransactionsAPI.getTransaction(
+      transactionToEdit,
+      options
+    );
+    if (result.length > 0) {
+      setFormData(result[0]);
+    }
+  }, [transactionToEdit]);
+
+  useEffect(() => {
+    if (modalIsOpen.edition) {
+      //when the modal is open, get the transaction
+      fetchTransaction();
+    }
+  }, [modalIsOpen.edition, fetchTransaction]);
 
   return (
     <Modal
-      isOpen={modalIsOpen.creation}
-      onRequestClose={() => closeModal("creation")}
-      contentLabel="Create Transaction"
+      isOpen={modalIsOpen.edition}
+      onRequestClose={() => closeModal("edition")}
+      contentLabel="Edit Transaction"
     >
       <div className="modal-container">
-        <h3 className="header-main modal-header">{"New Transaction"}</h3>
+        <h3 className="header-main modal-header">{"Edit Transaction"}</h3>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -960 960 960"
           className="modal-close"
           fill="#000000de"
-          onClick={() => closeModal("creation")}
+          onClick={() => closeModal("edition")}
         >
           <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
         </svg>
@@ -118,6 +134,7 @@ const CreateModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Income"}
+                  checked={formData.cashflow === "Income"}
                 />{" "}
                 Income
               </label>
@@ -127,6 +144,7 @@ const CreateModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Expense"}
+                  checked={formData.cashflow === "Expense"}
                 />{" "}
                 Expense
               </label>
@@ -146,6 +164,7 @@ const CreateModal = ({
               type="date"
               name="date"
               onChange={(e) => handleChange(e.target)}
+              value={format(new Date(formData.date), "yyyy-MM-dd")}
             />
             {errors?.["date"] && (
               <em className="err-message">{errors["date"]}</em>
@@ -159,6 +178,7 @@ const CreateModal = ({
               type="time"
               id="time"
               name="time"
+              value={formData.time}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["time"] && (
@@ -173,12 +193,19 @@ const CreateModal = ({
               Category <em className="text-redText">*</em>
             </label>
             <select name="category" onChange={(e) => handleChange(e.target)}>
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select Category
               </option>
-              {categories.map((category) => (
-                <option key={category}>{category}</option>
-              ))}
+              {categories.map((category) => {
+                if (formData.category === category) {
+                  return (
+                    <option key={category} selected>
+                      {category}
+                    </option>
+                  );
+                }
+                return <option key={category}>{category}</option>;
+              })}
             </select>
             {errors?.["category"] && (
               <em className="err-message">{errors["category"]}</em>
@@ -210,7 +237,7 @@ const CreateModal = ({
               type="text"
               className="desc"
               name="description"
-              value={formData.description}
+              value={formData?.description || ""}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["description"] && (
@@ -231,6 +258,7 @@ const CreateModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Cash"}
+                  checked={formData.paymentMode === "Cash"}
                 />{" "}
                 Cash
               </label>
@@ -240,6 +268,7 @@ const CreateModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Debit Card"}
+                  checked={formData.paymentMode === "Debit Card"}
                 />{" "}
                 Debit Card
               </label>
@@ -248,7 +277,8 @@ const CreateModal = ({
                   type="radio"
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
-                  value={"Debit Card"}
+                  value={"Credit Card"}
+                  checked={formData.paymentMode === "Credit Card"}
                 />{" "}
                 Credit Card
               </label>
@@ -280,10 +310,10 @@ const CreateModal = ({
     </Modal>
   );
 };
-CreateModal.propTypes = {
+EditModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
-  authId: PropTypes.string.isRequired,
+  transactionToEdit: PropTypes.array.isRequired,
 };
-export default CreateModal;
+export default EditModal;

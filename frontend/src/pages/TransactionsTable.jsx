@@ -4,15 +4,19 @@ import { format } from "date-fns";
 import Spinner from "../components/Spinner";
 import CreateModal from "./CreateModal";
 import TransactionsAPI from "../services/TransactionsAPI";
+import EditModal from "../pages/EditModal";
 import PropTypes from "prop-types";
 
 const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
   const [transactions, setTransactions] = useState([]);
+  const [transactionToEdit, setTransactionToEdit] = useState([]);
   const [transLoading, setTransLoading] = useState(true);
+
   const [actLink, setActLink] = useState({
     edit: false,
     delete: false,
   });
+
   const [checkedIds, setChecked] = useState([]);
 
   useEffect(() => {
@@ -91,6 +95,12 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
     // };
   };
 
+  const handleEdit = () => {
+    //Edit the transaction
+    setTransactionToEdit(checkedIds[0]);
+    openModal("edition");
+  };
+
   return (
     <>
       <header>
@@ -117,6 +127,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                   to=""
                   className="table-action-link"
                   style={{ color: actLink.edit ? "#000000de" : "#a9a9a9de" }}
+                  onClick={() => handleEdit()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -273,7 +284,6 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                       </svg>
                     </button>
                   </div>
-
                   <div className="page-info">
                     {currentPage} of {totalPages} pages ({transactions.length}{" "}
                     items)
@@ -288,6 +298,13 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
           setTransactions={setTransactions}
+        />
+
+        <EditModal
+          modalIsOpen={modalIsOpen}
+          setIsOpen={setIsOpen}
+          setTransactions={setTransactions}
+          transactionToEdit={transactionToEdit}
         />
       </div>
     </>
