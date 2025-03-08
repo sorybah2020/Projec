@@ -1,4 +1,14 @@
+import { useReducer } from "react";
+import DatePicker from "./DatePicker";
+
 const Filters = () => {
+  // const [filters, setFilters] = useReducer({
+  //   date: {},
+  //   category: "",
+  //   cashflow: "",
+  //   paymentMode: "",
+  //   amount: "",
+  // });
   return (
     <aside className="filters">
       <div className="filter-header">
@@ -17,12 +27,7 @@ const Filters = () => {
       </div>
 
       <div className="filter-group">
-        <label className="filter-title">Select a range</label>
-        <input
-          type="text"
-          className="date-range"
-          value="05/31/2017 - 11/30/2017"
-        />
+        <DatePicker />
       </div>
 
       <div className="filter-group">
@@ -31,6 +36,9 @@ const Filters = () => {
           <option selected disabled>
             Select Categories
           </option>
+          <option>Food</option>
+          <option>Transportion</option>
+          <option>Clothing</option>
         </select>
       </div>
 
