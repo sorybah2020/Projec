@@ -98,7 +98,7 @@ const editTransaction = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    TransactionsModel.findOneAndUpdate(
+    const transEdited = await TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
         userId: userId,
@@ -111,16 +111,20 @@ const editTransaction = async (req, res) => {
         time: time,
       },
       { new: true }
-    )
-      .then((result) => {
-        console.log(result);
-        return res.status(200).json({ updatedTransaction: result });
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    );
+    if (transEdited) {
+      return res.status(200).json({ updatedTransaction: result });
+    }
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteTransactions = async (req, res) => {
+  const transIds = req.body.ids;
+  trans = await TransactionsModel.deleteMany({ _id: { $in: transIds } });
+  if (trans) {
+    return res.status(200).json({ success: "Transactions deleted" });
   }
 };
 module.exports = {
@@ -128,4 +132,5 @@ module.exports = {
   getTransactionsById,
   getTransactionById,
   editTransaction,
+  deleteTransactions,
 };

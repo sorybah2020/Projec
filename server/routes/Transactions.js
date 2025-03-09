@@ -12,5 +12,6 @@ router.get(
   TransactionsController.getTransactionById
 );
 router.put("/transaction/edit", TransactionsController.editTransaction);
+router.post("/transactions/delete", TransactionsController.deleteTransactions);
 
 module.exports = router;

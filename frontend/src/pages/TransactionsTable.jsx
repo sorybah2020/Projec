@@ -87,12 +87,22 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
   const handleDelete = async () => {
     console.log(checkedIds);
 
-    // const options = {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: checkedIds }),
+    };
+
+    const result = await TransactionsAPI.deleteTransactions(options);
+    if (result.success) {
+      setTransactions((prevTransactions) => {
+        return prevTransactions.filter((trans) => {
+          return !checkedIds.includes(trans._id);
+        });
+      });
+    }
   };
 
   const handleEdit = () => {

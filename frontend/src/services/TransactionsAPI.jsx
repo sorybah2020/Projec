@@ -51,9 +51,24 @@ const editTransaction = async (options) => {
     return error;
   }
 };
+
+const deleteTransactions = async (options) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/transactions/delete",
+      options
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
 export default {
   createTransaction,
   getTransactionsById,
   getTransaction,
   editTransaction,
+  deleteTransactions,
 };
