@@ -85,8 +85,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
   }, [checkedIds]);
 
   const handleDelete = async () => {
-    console.log(checkedIds);
-
+    //delete transactions
     const options = {
       method: "POST",
       headers: {
@@ -109,6 +108,21 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
     //Edit the transaction
     setTransactionToEdit(checkedIds[0]);
     openModal("edition");
+  };
+
+  const handleCheckAll = (target) => {
+    //check all checkboxes or uncheck all
+    if (target.checked) {
+      const checkboxes = [...checkedIds];
+      transactions.map((transaction) => {
+        if (!checkedIds.includes(transaction._id)) {
+          checkboxes.push(transaction._id);
+        }
+      });
+      setChecked(checkboxes);
+      return;
+    }
+    setChecked([]);
   };
 
   return (
@@ -174,7 +188,14 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
             </tr>
             <tr>
               <th>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={
+                    checkedIds.length === transactions.length &&
+                    transactions.length > 0
+                  }
+                  onChange={(e) => handleCheckAll(e.target)}
+                />
               </th>
               <th>Category</th>
               <th>Date</th>
@@ -201,7 +222,8 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                     <input
                       type="checkbox"
                       value={transaction._id}
-                      onClick={(e) => handleCheck(e.target.value)}
+                      checked={checkedIds.includes(transaction._id)}
+                      onClick={() => handleCheck(transaction._id)}
                     />
                   </td>
                   <td>{transaction.category}</td>
