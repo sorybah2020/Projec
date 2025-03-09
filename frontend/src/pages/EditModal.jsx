@@ -41,9 +41,9 @@ const EditModal = ({
   ];
 
   function closeModal(modalName) {
-    setFormData([]);
-    setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
+    //setFormData([]);
+    //setErrors({});
   }
 
   const handleChange = (input) => {
@@ -64,7 +64,7 @@ const EditModal = ({
     setErrors(newErrors);
     if (valid) {
       const options = {
-        method: "PATCH",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -72,13 +72,19 @@ const EditModal = ({
       };
 
       const result = await TransactionsAPI.editTransaction(options);
-      if (result.success) {
-        // setTransactions((prevState) => ({
-        //   ...prevState,
-        //   [formData._id]: formData,
-        // }));
-        closeModal("edition");
+
+      if (result.updatedTransaction) {
+        setTransactions((prevTransactions) => {
+          const trans = [...prevTransactions];
+          trans.map((transaction, index) => {
+            if (transaction._id === result.updatedTransaction._id) {
+              trans[index] = result.updatedTransaction;
+            }
+          });
+          return trans;
+        });
       }
+      closeModal("edition");
     }
   };
 
@@ -94,7 +100,7 @@ const EditModal = ({
       transactionToEdit,
       options
     );
-    console.log(result);
+
     if (result.length > 0) {
       setFormData(result[0]);
     }

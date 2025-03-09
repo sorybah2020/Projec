@@ -98,7 +98,7 @@ const editTransaction = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const transaction = TransactionsModel.updateOne(
+    TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
         userId: userId,
@@ -109,15 +109,16 @@ const editTransaction = async (req, res) => {
         amount: amount,
         cashflow: cashflow,
         time: time,
-      }
-    );
-    const result = transaction;
-    console.log(result);
-    if (result._update) {
-      return res
-        .status(200)
-        .json({ success: "Transaction updated into database" });
-    }
+      },
+      { new: true }
+    )
+      .then((result) => {
+        console.log(result);
+        return res.status(200).json({ updatedTransaction: result });
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
