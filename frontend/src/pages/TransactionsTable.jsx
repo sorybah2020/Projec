@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Spinner from "../components/Spinner";
@@ -19,26 +19,27 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
 
   const [checkedIds, setChecked] = useState([]);
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const result = await TransactionsAPI.getTransactionsById(authId, options);
-      if (result.length > 0) {
-        setTimeout(() => {
-          setTransactions(result);
-          setTransLoading(false);
-        }, 500);
-      } else {
-        setTransLoading(false);
-      }
+  const fetchTransactions = useCallback(async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
-    fetchTransactions();
+    const result = await TransactionsAPI.getTransactionsById(authId, options);
+    if (result.length > 0) {
+      setTimeout(() => {
+        setTransactions(result);
+        setTransLoading(false);
+      }, 500);
+    } else {
+      setTransLoading(false);
+    }
   }, [authId]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [authId, fetchTransactions]);
 
   //Pagination
   const rowsPerPage = 10;
@@ -125,6 +126,20 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
     setChecked([]);
   };
 
+  const handleSearch = (keyword) => {
+    if (keyword.trim() !== "") {
+      //search by category, paymentmode and description
+      const searchResult = transactions.filter((transaction) =>
+        ["category", "paymentMode", "description"].some((key) =>
+          transaction[key].toLowerCase().includes(keyword.toLowerCase())
+        )
+      );
+      setTransactions(searchResult);
+      return;
+    }
+    fetchTransactions(); //get again all available transactions
+  };
+
   return (
     <>
       <header>
@@ -134,7 +149,12 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
       </header>
       <div>
         <div className="search">
-          <input type="text" placeholder="Search" className="search-keyword" />
+          <input
+            type="text"
+            placeholder="Search"
+            className="search-keyword"
+            onInput={(e) => handleSearch(e.target.value)}
+          />
           <input
             type="submit"
             className="btn add-transaction"
