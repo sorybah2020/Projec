@@ -128,13 +128,17 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
 
   const handleSearch = (keyword) => {
     if (keyword.trim() !== "") {
+      setTransLoading(true);
       //search by category, paymentmode and description
       const searchResult = transactions.filter((transaction) =>
         ["category", "paymentMode", "description"].some((key) =>
           transaction[key].toLowerCase().includes(keyword.toLowerCase())
         )
       );
-      setTransactions(searchResult);
+      setTimeout(() => {
+        setTransactions(searchResult);
+        setTransLoading(false);
+      }, 300);
       return;
     }
     fetchTransactions(); //get again all available transactions
