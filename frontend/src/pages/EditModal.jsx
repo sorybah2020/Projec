@@ -317,7 +317,7 @@ const EditModal = ({
             type="submit"
             className="btn second-btn close-btn"
             value="Close"
-            onClick={() => closeModal("creation")}
+            onClick={() => closeModal("edition")}
           />
         </div>
       </form>
