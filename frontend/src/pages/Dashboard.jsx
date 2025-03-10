@@ -1,11 +1,11 @@
 import Sidebar from "../components/Sidebar";
+import DashboardTable from "../components/DashboardTable"
 const Dashboard = () => {
   return (
     <div className="container">
       <Sidebar/>
-      <main className="content">
-        <h1>Dashboard</h1>
-        <p>Welcome to your dashboard!</p>
+      <main>
+       <DashboardTable/>
       </main>
     </div>
   );
