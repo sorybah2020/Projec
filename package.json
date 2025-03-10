@@ -2,6 +2,7 @@
   "name": "capstone",
   "version": "1.0.0",
   "description": "Capstone Project",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
@@ -18,8 +19,11 @@
   },
   "homepage": "https://github.com/sorybah2020/Projec#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mongoose": "^8.10.1"
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1"
   }
 }
