@@ -1,18 +1,47 @@
 import asyncHandler from "express-async-handler";
+import User from "../model/userModel.js";
 
 // POST request
 // Description: Login User controller.
 // Used by: api/users/auth
-const User = asyncHandler(async (req, res) => {
+const Login = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `Hello ${req.params.name}!` });
 });
 
 // POST request
 // Description:  Register a new user.
 // Used by: api/users
-
 const Register = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Registered ${req.params.name}` });
+  const { name, email, password } = req.body;
+
+  // Check if user exists in the database
+  const userExists = await User.findOne({ email });
+  // If user exists, throw an error saying that the user already exists
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  // If user does not exist, create a new user
+  //with the name, email, and password provided in the request body
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  // If user is created successfully, return the user's information
+  // letting the user know that the user has been registered
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Something went wrong");
+  }
 });
 
 // POST request
@@ -36,4 +65,4 @@ const Update = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `Updated ${req.params.name}!` });
 });
 
-export { User, Register, Logout, getUser, Update };
+export { Login, Register, Logout, getUser, Update };
