@@ -1,11 +1,26 @@
 import asyncHandler from "express-async-handler";
 import User from "../model/userModel.js";
+import generateJWT from "../utils/jwtToken.js";
 
 // POST request
 // Description: Login User controller.
 // Used by: api/users/auth
 const Login = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Hello ${req.params.name}!` });
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    generateJWT(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid email or password");
+  }
 });
 
 // POST request
@@ -33,6 +48,7 @@ const Register = asyncHandler(async (req, res) => {
   // If user is created successfully, return the user's information
   // letting the user know that the user has been registered
   if (user) {
+    generateJWT(res, user._id);
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -48,7 +64,12 @@ const Register = asyncHandler(async (req, res) => {
 // Description: Logs out an existing user.
 // Used by: api/users/logout
 const Logout = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Goodbye ${req.params.name}!` });
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: `Logged Out ${req.params.name}!` });
 });
 
 // GET request
@@ -62,7 +83,26 @@ const getUser = asyncHandler(async (req, res) => {
 // Description: Updates user information.
 // Used by: api/users/profile
 const Update = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Updated ${req.params.name}!` });
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    generateJWT(res, updatedUser._id);
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+    });
+  } else {
+    throw new Error("User not found");
+  }
 });
 
 export { Login, Register, Logout, getUser, Update };
