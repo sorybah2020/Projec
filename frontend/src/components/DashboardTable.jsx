@@ -17,51 +17,58 @@ const data = [
 export default function Dashboard() {
   const totalExpenses = data.reduce((sum, item) => sum + item.value, 0);
   return (
-    <div className="p-6">
+    <div className="p">
       {/* Income, Expenses, Balance */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        <Card className="p-4 text-center bg-blue-50 shadow-md rounded-lg">
-          <h2 className="text-2xl font-bold text-blue-600">$43,300</h2>
-          <p className="text-gray-500">Income</p>
+      <div className="row">
+      <Card className="Income">
+          <h2 className="Total Income">$43,300</h2>
+          <p>Income</p>
         </Card>
-        <Card className="p-4 text-center bg-red-50 shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold text-red-600">${totalExpenses.toLocaleString()}</h2>
-          <p className="text-gray-500">Expenses</p>
+        <Card className="Expenses">
+        <h2 className="Total Expenses">${totalExpenses.toLocaleString()}</h2>
+          <p>Expenses</p>
         </Card>
-        <Card className="p-4 text-center bg-green-50 shadow-md rounded-lg">
-          <h2 className="text-2xl font-bold text-green-600">$5,247</h2>
-          <p className="text-gray-500">Balance</p>
+        <Card className="Balance">
+          <h2 className="Total Balances">$5,247</h2>
+          <p> Balance</p>
         </Card>
-        <Card className="p-4 text-center bg-gray-50 shadow-md rounded-lg">
-          <h2 className="text-2xl font-bold text-gray-700">1,283</h2>
-          <p className="text-gray-500">Transactions</p>
+        <Card className="Transactions">
+          <h2 className="Total Transactions">1,283</h2>
+          <p>Transactions</p>
         </Card>
       </div>
 
       {/* Pie Chart with Labels on the Right */}
-      <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row">
-        <div className="w-full md:w-2/3 flex justify-center">
-          <PieChart width={400} height={400}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              outerRadius={120}
-              innerRadius={60} 
-              dataKey="value"
-              label
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </div>
-        <div className="w-full md:w-1/3 flex flex-col justify-center">
-          <Legend layout="vertical" align="left" verticalAlign="middle" />
-        </div>
-      </div>
+      <Card className="pie-chart-container">
+      <h3>Total Expenses</h3>
+      <PieChart width={600} height={400}>
+        <Pie
+          data={data}
+          cx="40%"
+          cy="50%"
+          innerRadius={100}  // Makes it a donut chart
+          outerRadius={150}
+          dataKey="value"
+          label
+          labelLine
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={entry.color} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend
+          layout="vertical"
+          align="right"
+          verticalAlign="middle"
+          formatter={(value, entry) => {
+            const total = data.reduce((sum, item) => sum + item.value, 0);
+            const percent = ((entry.payload.value / total) * 100).toFixed(2);
+            return `${value} $${entry.payload.value} (${percent}%)`;
+          }}
+        />
+      </PieChart>
+    </Card>
     </div>
   );
 }

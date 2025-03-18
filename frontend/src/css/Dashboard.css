@@ -9,7 +9,7 @@
     margin: 10px 0px;
          
   }
- 
+  
   
   .sidebar-menu a.active {
     background-color: #5584f6;
@@ -25,9 +25,37 @@
     background-color: #eef4f9;
   }
  
-
+  .dashboard {
+    padding: 24px;
+    background-color: #0b1425;
+    min-height: 100vh;
+  }
   
-  
 
+  .pie-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .recharts-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between; 
+    gap: 10px; 
+    padding: 20px;
+    
+  }
+  
  
-  
