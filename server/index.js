@@ -17,6 +17,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use(notFound);
+app.use(errorHandler);
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL (React)
@@ -24,14 +31,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.get("/", (req, res) => {
-  res.send("Server is running!");
 
-  res.send("Hello World!");
-});
-
-app.use(notFound);
-app.use(errorHandler);
 app.use("/api", TransactionsRouter);
 
 app.listen(port, () => {
