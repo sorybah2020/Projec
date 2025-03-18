@@ -1,16 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import connectDB from "./config/mongodb.js";
+import userRoutes from "./routes/userRoutes.js";
+import cookieParser from "cookie-parser";
 
-const TransactionsRouter = require("./routes/Transactions.js");
-
-require("dotenv").config();
-const connectDB = require("./config/mongodb");
 const port = process.env.PORT || 3000;
 
 connectDB();
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+
+app.use("/api/users", userRoutes);
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL (React)
@@ -20,7 +26,12 @@ app.use(
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Server is running!");
+
+  res.send("Hello World!");
 });
+
+app.use(notFound);
+app.use(errorHandler);
 app.use("/api", TransactionsRouter);
 
 app.listen(port, () => {
