@@ -1,4 +1,5 @@
 import TransactionsModel from "../model/TransactionsModel.js";
+import mongoose from "mongoose";
 const createTransaction = async (req, res) => {
   try {
     const {
@@ -119,10 +120,16 @@ const editTransaction = async (req, res) => {
 };
 
 const deleteTransactions = async (req, res) => {
-  const transIds = req.body.ids;
-  trans = await TransactionsModel.deleteMany({ _id: { $in: transIds } });
-  if (trans) {
+  const transIds = req.body.ids.map((id) =>
+    mongoose.Types.ObjectId.createFromHexString(id)
+  );
+
+  const trans = await TransactionsModel.deleteMany({ _id: { $in: transIds } });
+
+  if (trans.deletedCount > 0) {
     return res.status(200).json({ success: "Transactions deleted" });
+  } else {
+    return res.status(404).json({ error: "No transactions found to delete" });
   }
 };
 export default {
