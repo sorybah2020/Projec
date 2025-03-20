@@ -24,7 +24,7 @@ const Filters = () => {
     category: "",
     cashflow: ["expense", "income"],
     paymentMode: ["cash", "debit card", "credit card"],
-    amount: "",
+    amount: { min: 0, max: 10000 },
   };
   const filterReducer = (state, action) => {
     switch (action.type) {
@@ -61,6 +61,19 @@ const Filters = () => {
         };
       case "SET_DATE":
         return { ...state, date: action.payload };
+      case "SET_AMOUNT_RANGE":
+        if (action.payload.min) {
+          return {
+            ...state,
+            amount: { ...state.amount, min: action.payload.min },
+          };
+        }
+        if (action.payload.max) {
+          return {
+            ...state,
+            amount: { ...state.amount, max: action.payload.max },
+          };
+        }
     }
   };
   const [filters, dispatch] = useReducer(filterReducer, filtersInitialState);
@@ -178,11 +191,31 @@ const Filters = () => {
         <label className="filter-title">Amount</label>
         <div className="amount-range">
           <label>
-            Min: <input type="text" value="$2" />
+            Min:{" "}
+            <input
+              type="text"
+              value={filters.amount.min}
+              onInput={(e) =>
+                dispatch({
+                  type: "SET_AMOUNT_RANGE",
+                  payload: { min: e.target.value },
+                })
+              }
+            />
           </label>
           <span className="separator">—</span>
           <label>
-            Max: <input type="text" value="$6,000" />
+            Max:{" "}
+            <input
+              type="text"
+              value={filters.amount.max}
+              onInput={(e) =>
+                dispatch({
+                  type: "SET_AMOUNT_RANGE",
+                  payload: { max: e.target.value },
+                })
+              }
+            />
           </label>
         </div>
       </div>
