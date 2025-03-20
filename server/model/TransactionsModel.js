@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const TrancationsSchema = new mongoose.Schema({
   userId: {
@@ -37,4 +37,4 @@ const TrancationsSchema = new mongoose.Schema({
 });
 
 const Transcations = mongoose.model("Transactions", TrancationsSchema);
-module.exports = Transcations;
+export default Transcations;

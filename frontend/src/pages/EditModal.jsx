@@ -72,8 +72,8 @@ const EditModal = ({
       };
 
       const result = await TransactionsAPI.editTransaction(options);
-
-      if (result.updatedTransaction) {
+      console.log(result);
+      if (result?.updatedTransaction) {
         setTransactions((prevTransactions) => {
           const trans = [...prevTransactions];
           trans.map((transaction, index) => {

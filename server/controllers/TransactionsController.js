@@ -1,6 +1,4 @@
-const TransactionsModel = require("../models/TransactionsModel.js");
-const connectDB = require("../config/mongodb.js");
-const mongoose = require("mongoose");
+import TransactionsModel from "../model/TransactionsModel.js";
 const createTransaction = async (req, res) => {
   try {
     const {
@@ -113,7 +111,7 @@ const editTransaction = async (req, res) => {
       { new: true }
     );
     if (transEdited) {
-      return res.status(200).json({ updatedTransaction: result });
+      return res.status(200).json({ updatedTransaction: transEdited });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -127,7 +125,7 @@ const deleteTransactions = async (req, res) => {
     return res.status(200).json({ success: "Transactions deleted" });
   }
 };
-module.exports = {
+export default {
   createTransaction,
   getTransactionsById,
   getTransactionById,

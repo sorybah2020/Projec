@@ -5,6 +5,9 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/mongodb.js";
 import userRoutes from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import bodyParser from "body-parser";
+import TransactionsRouter from "./routes/Transactions.js";
 
 const port = process.env.PORT || 3000;
 
@@ -16,14 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use("/api/users", userRoutes);
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.use(notFound);
-app.use(errorHandler);
-
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL (React)
@@ -32,7 +27,13 @@ app.use(
 );
 app.use(bodyParser.json());
 
+app.use("/api/users", userRoutes);
 app.use("/api", TransactionsRouter);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
