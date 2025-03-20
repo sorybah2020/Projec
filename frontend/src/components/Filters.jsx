@@ -1,7 +1,9 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import DatePicker from "./DatePicker";
+import PropTypes from "prop-types";
+import { format, parseISO } from "date-fns";
 
-const Filters = () => {
+const Filters = ({ transactions, setFilteredTransactions }) => {
   const categories = [
     "Rent",
     "Food",
@@ -28,8 +30,15 @@ const Filters = () => {
   };
   const filterReducer = (state, action) => {
     switch (action.type) {
-      case "SET_CATEGORY":
+      case "SET_CATEGORY": {
+        //console.log("category", transactions);
+        // let tt = transactions.filter((transactions) => {
+        //   return transactions.category === action.payload;
+        // });
+        // setFilteredTransactions(tt);
+        // console.log("tt", tt);
         return { ...state, category: action.payload };
+      }
       case "SET_CASHFLOW":
         if (!action.payload.checked) {
           return {
@@ -76,7 +85,100 @@ const Filters = () => {
         }
     }
   };
+
   const [filters, dispatch] = useReducer(filterReducer, filtersInitialState);
+
+  useEffect(() => {
+    if (transactions.length > 0) {
+      //console.log(filters.date);
+      // Apply filtering in useEffect when `filters.category` changes
+      const filtered = transactions.filter((transaction) => {
+        //!filters.category || transaction.category === filters.category;
+        if (filters.category && transaction.category !== filters.category)
+          return false;
+        if (
+          filters.cashflow.length > 0 &&
+          !filters.cashflow.includes(transaction.cashflow.toLowerCase())
+        )
+          return false;
+        if (
+          filters.paymentMode.length > 0 &&
+          !filters.paymentMode.includes(transaction.paymentMode.toLowerCase())
+        )
+          return false;
+        if (
+          transaction.amount < filters.amount?.min ||
+          transaction.amount > filters.amount?.max
+        )
+          return false;
+
+        if (filters.date?.startDate && filters.date?.endDate) {
+          const transactionYear = format(
+            parseISO(transaction?.date),
+            "yyyy-MM-dd"
+          );
+          const startYear = format(
+            parseISO(filters.date?.startDate),
+            "yyyy-MM-dd"
+          );
+          const endYear = format(parseISO(filters.date?.endDate), "yyyy-MM-dd");
+
+          if (transactionYear < startYear || transactionYear > endYear)
+            return false;
+        }
+
+        return true;
+      });
+
+      setFilteredTransactions(filtered);
+    }
+  }, [filters, transactions, setFilteredTransactions]);
+
+  // Apply filters whenever transactions or filters change
+  useEffect(() => {
+    if (transactions.length > 0) {
+      let filtered = [...transactions];
+
+      // Filter by category
+      if (filters.category) {
+        filtered = filtered.filter(
+          (transaction) => transaction.category === filters.category
+        );
+      }
+
+      // Filter by cashflow (income/expense)
+      filtered = filtered.filter((transaction) =>
+        filters.cashflow.includes(transaction.cashflow.toLowerCase())
+      );
+
+      // Filter by payment mode
+      filtered = filtered.filter((transaction) =>
+        filters.paymentMode.includes(transaction.paymentMode.toLowerCase())
+      );
+
+      // Filter by amount range
+      filtered = filtered.filter(
+        (transaction) =>
+          transaction.amount >= filters.amount.min &&
+          transaction.amount <= filters.amount.max
+      );
+
+      // Filter by date range
+      if (filters.date.from && filters.date.to) {
+        const fromDate = new Date(filters.date.from);
+        const toDate = new Date(filters.date.to);
+        filtered = filtered.filter((transaction) => {
+          const transactionDate = new Date(transaction.date);
+          return transactionDate >= fromDate && transactionDate <= toDate;
+        });
+      }
+
+      setFilteredTransactions(filtered);
+    } else {
+      setFilteredTransactions([]);
+    }
+  }, [filters, transactions, setFilteredTransactions]);
+
   return (
     <aside className="filters">
       <div className="filter-header">
@@ -221,6 +323,10 @@ const Filters = () => {
       </div>
     </aside>
   );
+};
+Filters.propTypes = {
+  transactions: PropTypes.array.isRequired,
+  setFilteredTransactions: PropTypes.func.isRequired,
 };
 
 export default Filters;

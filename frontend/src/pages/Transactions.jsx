@@ -7,9 +7,8 @@ import { useState, useEffect, useCallback } from "react";
 const Transactions = () => {
   let authId = "67c0ffcf02a6253bfbd4cdbb";
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] =
-    useState(transactions);
   const [transLoading, setTransLoading] = useState(true);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   const fetchTransactions = useCallback(async () => {
     const options = {
@@ -33,20 +32,27 @@ const Transactions = () => {
     fetchTransactions();
   }, [authId, fetchTransactions]);
 
+  useEffect(() => {
+    setFilteredTransactions(transactions);
+  }, [transactions]);
+
   return (
     <div className="container">
       <Sidebar />
       <main>
         <TransactionsTable
           authId={authId}
-          transactions={transactions}
+          transactions={filteredTransactions}
           setTransactions={setTransactions}
           fetchTransactions={fetchTransactions}
           transLoading={transLoading}
           setTransLoading={setTransLoading}
         />
       </main>
-      <Filters />
+      <Filters
+        transactions={transactions}
+        setFilteredTransactions={setFilteredTransactions}
+      />
     </div>
   );
 };
