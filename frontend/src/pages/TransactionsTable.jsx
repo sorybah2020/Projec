@@ -1,16 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Spinner from "../components/Spinner";
 import CreateModal from "./CreateModal";
-import TransactionsAPI from "../services/TransactionsAPI";
+//import TransactionsAPI from "../services/TransactionsAPI";
 import EditModal from "../pages/EditModal";
 import PropTypes from "prop-types";
+import TransactionsAPI from "../services/TransactionsAPI";
 
-const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
-  const [transactions, setTransactions] = useState([]);
+const TransactionsTable = ({
+  transactions,
+  setTransactions,
+  fetchTransactions,
+  transLoading,
+  setTransLoading,
+}) => {
   const [transactionToEdit, setTransactionToEdit] = useState([]);
-  const [transLoading, setTransLoading] = useState(true);
 
   const [actLink, setActLink] = useState({
     edit: false,
@@ -19,35 +24,13 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
 
   const [checkedIds, setChecked] = useState([]);
 
-  const fetchTransactions = useCallback(async () => {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const result = await TransactionsAPI.getTransactionsById(authId, options);
-    if (result.length > 0) {
-      setTimeout(() => {
-        setTransactions(result);
-        setTransLoading(false);
-      }, 500);
-    } else {
-      setTransLoading(false);
-    }
-  }, [authId]);
-
-  useEffect(() => {
-    fetchTransactions();
-  }, [authId, fetchTransactions]);
-
   //Pagination
-  const rowsPerPage = 10;
 
+  const rowsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(transactions.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const totalPages = Math.ceil(transactions?.length / rowsPerPage);
   const currentRows = transactions?.slice(indexOfFirstRow, indexOfLastRow);
 
   const changePage = (newPage) => {
@@ -215,8 +198,8 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                 <input
                   type="checkbox"
                   checked={
-                    checkedIds.length === transactions.length &&
-                    transactions.length > 0
+                    checkedIds.length === transactions?.length &&
+                    transactions?.length > 0
                   }
                   onChange={(e) => handleCheckAll(e.target)}
                 />
@@ -239,8 +222,8 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                   <Spinner />
                 </td>
               </tr>
-            ) : currentRows.length > 0 ? (
-              currentRows.map((transaction, index) => (
+            ) : currentRows?.length > 0 ? (
+              currentRows?.map((transaction, index) => (
                 <tr key={index}>
                   <td>
                     <input
@@ -344,7 +327,7 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
                     </button>
                   </div>
                   <div className="page-info">
-                    {currentPage} of {totalPages} pages ({transactions.length}{" "}
+                    {currentPage} of {totalPages} pages ({transactions?.length}{" "}
                     items)
                   </div>
                 </div>
@@ -370,6 +353,10 @@ const TransactionsTable = ({ authId = "67c0ffcf02a6253bfbd4cdbb" }) => {
   );
 };
 TransactionsTable.propTypes = {
-  authId: PropTypes.string.isRequired,
+  transactions: PropTypes.array.isRequired,
+  setTransactions: PropTypes.func.isRequired,
+  fetchTransactions: PropTypes.func.isRequired,
+  transLoading: PropTypes.bool.isRequired,
+  setTransLoading: PropTypes.func.isRequired,
 };
 export default TransactionsTable;
