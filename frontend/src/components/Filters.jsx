@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import DatePicker from "./DatePicker";
 import PropTypes from "prop-types";
-import { parseISO, isAfter, isBefore, format } from "date-fns";
+import { parseISO, format } from "date-fns";
 
 const Filters = ({ transactions, setFilteredTransactions }) => {
   const categories = [
@@ -68,16 +68,10 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
       case "SET_DATE":
         return { ...state, date: action.payload };
       case "SET_AMOUNT_RANGE":
-        if (action.payload.min) {
+        if (action.payload) {
           return {
             ...state,
-            amount: { ...state.amount, min: action.payload.min },
-          };
-        }
-        if (action.payload.max) {
-          return {
-            ...state,
-            amount: { ...state.amount, max: action.payload.max },
+            amount: { ...state.amount, ...action.payload },
           };
         }
     }
@@ -177,7 +171,7 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
                 dispatch({ type: "SET_CASHFLOW", payload: e.target })
               }
               value={"Income"}
-              checked={filters.cashflow.includes("income")}
+              checked={filters.cashflow?.includes("income")}
             />{" "}
             Income
           </label>
@@ -188,7 +182,7 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
               onChange={(e) =>
                 dispatch({ type: "SET_CASHFLOW", payload: e.target })
               }
-              checked={filters.cashflow.includes("expense")}
+              checked={filters.cashflow?.includes("expense")}
               value={"Expense"}
             />{" "}
             Expense
@@ -246,7 +240,7 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
             <input
               type="text"
               value={filters.amount.min}
-              onInput={(e) =>
+              onChange={(e) =>
                 dispatch({
                   type: "SET_AMOUNT_RANGE",
                   payload: { min: e.target.value },
@@ -260,7 +254,7 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
             <input
               type="text"
               value={filters.amount.max}
-              onInput={(e) =>
+              onChange={(e) =>
                 dispatch({
                   type: "SET_AMOUNT_RANGE",
                   payload: { max: e.target.value },
