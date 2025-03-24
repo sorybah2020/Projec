@@ -337,7 +337,7 @@ input[type="checkbox"] {
 }
 
 .amount-range input {
-  width: 35px;
+  width: 42px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -421,7 +421,7 @@ input[type="date"]:focus-visible,
 .filter-date .date-icon {
   position: absolute;
   right: 3px;
-  top: 8px;
+  top: 2px;
 }
 .filter-date-section {
   height: 35px;
