@@ -92,12 +92,12 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
           return false;
         console.log(filters.cashflow);
         if (
-          filters.cashflow.length === 0 &&
+          filters.cashflow.length > 0 &&
           !filters.cashflow.includes(transaction.cashflow.toLowerCase())
         )
           return false;
         if (
-          filters.paymentMode.length === 0 &&
+          filters.paymentMode.length > 0 &&
           !filters.paymentMode.includes(transaction.paymentMode.toLowerCase())
         )
           return false;
