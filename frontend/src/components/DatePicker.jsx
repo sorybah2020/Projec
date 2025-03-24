@@ -1,8 +1,9 @@
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 
-const DatePicker = () => {
+const DatePicker = ({ dispatch }) => {
   const [range, setRange] = useState([
     {
       startDate: new Date(),
@@ -19,6 +20,18 @@ const DatePicker = () => {
     if (ref.current && !ref.current.contains(event.target)) {
       setOpen(false);
     }
+  };
+
+  const handleSetDate = (selection) => {
+    setRange([selection]); //set the range to the selected date
+    dispatch({
+      //dispatch to action SET_DATE
+      type: "SET_DATE",
+      payload: {
+        startDate: format(selection.startDate, "yyyy-MM-dd"),
+        endDate: format(selection.endDate, "yyyy-MM-dd"),
+      },
+    });
   };
 
   useEffect(() => {
@@ -56,7 +69,7 @@ const DatePicker = () => {
           <div className="date-picker-container">
             <DateRange
               editableDateInputs={true}
-              onChange={(item) => setRange([item.selection])}
+              onChange={(item) => handleSetDate(item.selection)}
               moveRangeOnFirstSelection={false}
               ranges={range}
             />
@@ -65,6 +78,10 @@ const DatePicker = () => {
       </div>
     </>
   );
+};
+
+DatePicker.propTypes = {
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default DatePicker;
