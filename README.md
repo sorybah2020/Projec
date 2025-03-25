@@ -62,3 +62,9 @@ In Terminial run these commands:
 - MongoDB
 - Mongoose
 - Css
+
+# Page URLs
+
+- http://localhost:5173/transactions
+- http://localhost:5173/login
+- http://localhost:5173/signup
