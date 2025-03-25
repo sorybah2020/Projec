@@ -1,4 +1,4 @@
-# Advanced Capstone Project - E-tracker
+# Advanced Capstone Project : E-tracker
 
 About this web app: **Our website will help users track and manage their expenses while analyzing their spending on categories such as groceries, rent, and more. Users can add expenses manually or import them directly from their bank account. Track, Analyze, and Take Control – Smarter Expense Management!**
 
@@ -11,17 +11,17 @@ The following **required** functionality is completed:
 - [] **The web app should have Profile page**
   - [] **NOTE: will display user information, including: Name, Surname, Address, Total Budget etc..**
 - [x] **The web app should have Transactions page**
-  - [x] **NOTE: Expenses (category, date, payment method, description, amount—e.g., the name of a purchased product) Incomes \***
-  - [x] **NOTE: Filters to sort transactions by category, payment method, amount, and date. \***
-  - [x] **NOTE: Search functionality to find transactions by keyword \***
-  - [x] **NOTE: Popups for adding, editing, and deleting transactions \***
+  - [x] **NOTE: Expenses (category, date, payment method, description, amount—e.g., the name of a purchased product) Incomes.**
+  - [x] **NOTE: Filters to sort transactions by category, payment method, amount, and date.**
+  - [x] **NOTE: Search functionality to find transactions by keyword.**
+  - [x] **NOTE: Popups for adding, editing, and deleting transactions.**
   - [] **NOTE: Bank expenses imports via API**
 - [] **The web app should have Dashboard page**
 
-  - [] **NOTE: Total Income \***
-  - [] **NOTE: Total Expenses \***
-  - [] **NOTE: Total Balance \***
-  - [] **NOTE: Graphs displaying expenses, and account balance for a selected period. \***
+  - [] **NOTE: Total Income**
+  - [] **NOTE: Total Expenses**
+  - [] **NOTE: Total Balance**
+  - [] **NOTE: Graphs displaying expenses, and account balance for a selected period.**
   - [] **NOTE: Recent Transactions Table (showing the last five transactions)**
 
 - [] **The web app should have Login page**
