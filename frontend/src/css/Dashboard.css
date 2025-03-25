@@ -1,23 +1,8 @@
 .container {
     display: flex;
   }
-  .sidebar-menu a {
-    text-decoration: none;    
-    padding: 7px 0px;
-    color: #545454;
-    cursor: pointer;
-    margin: 10px 0px;
-         
-  }
-  
-  
-  .sidebar-menu a.active {
-    background-color: #5584f6;
-    border-radius: 0.000001em;
-    color: #ffffff;
-  }
 
-  
+
   .content {
     flex: 1;
     margin-left: 250px; 
@@ -47,7 +32,9 @@
   .recharts-legend-item {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 15px;
+    margin-bottom: 8px;
+    margin-left: auto;
   }
   
   .row {
