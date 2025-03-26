@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import SignupAPI from "../services/SignupAPI";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  let navigate = useNavigate();
+
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
-    signupUsername: "",
-    signupEmail: "",
-    signupPassword: "",
+    name: "",
+    email: "",
+    password: "",
   });
 
-  const reqFields = ["signup-username", "signup-email", "signup-password"];
+  const reqFields = ["name", "email", "password"];
 
   const validateAll = (formData) => {
     let newErrors = {};
@@ -22,9 +26,18 @@ const Signup = () => {
       }
     });
 
+    if (!/\S+@\S+\.\S+/.test(formData["email"].trim())) {
+      newErrors.email = "Please enter a valid email address.";
+      valid = false;
+    } else {
+      console.log(newErrors.email);
+      newErrors.email = "";
+    }
+
     return { valid, newErrors };
   };
   const handleChange = (input) => {
+    //handle change in input fields
     const { name, value } = input;
     setFormData({
       ...formData,
@@ -35,44 +48,102 @@ const Signup = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    //validate login fields
     const { valid, newErrors } = validateAll(formData);
     setErrors(newErrors);
-    console.log(valid, newErrors);
+    if (valid) {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      };
+
+      const result = await SignupAPI.createUser(options); //submit user info
+      if (!result.ok) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          frm_subms: result.message,
+        }));
+        return;
+      }
+      navigate("/login"); //navigate to login page
+    }
   };
+
   return (
     <>
-      <div className="container">
-        <div id="signup-form" className="form-container">
-          <h2>Sign Up</h2>
-          <input
-            type="text"
-            id="signup-username"
-            placeholder="Username"
-            required
-            name="signupUsername"
-            onChange={(e) => handleChange(e.target)}
-          />
-          <input
-            type="email"
-            id="signup-email"
-            name="signupEmail"
-            placeholder="Email"
-            required
-            onChange={(e) => handleChange(e.target)}
-          />
-          <input
-            type="password"
-            id="signupPassword"
-            placeholder="Password"
-            required
-            name="signupPassword"
-            onChange={(e) => handleChange(e.target)}
-          />
+      <div id="signup-form" className="form-container">
+        <h2>Welcome Back</h2>
+        <form>
+          <div className="form-group">
+            <label className="header">
+              Username <em className="text-redText">*</em>
+            </label>
+            <div className="form-group-container diff">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Username"
+                required
+                onChange={(e) => handleChange(e.target)}
+              />
+              {errors?.["name"] && (
+                <em className="err-message">{errors["name"]}</em>
+              )}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="header">
+              Email <em className="text-redText">*</em>
+            </label>
+            <div className="form-group-container diff">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                required
+                onChange={(e) => handleChange(e.target)}
+              />
+              {errors?.["email"] && (
+                <em className="err-message">{errors["email"]}</em>
+              )}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="header">
+              Password <em className="text-redText">*</em>
+            </label>
+            <div className="form-group-container diff">
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+                name="password"
+                onChange={(e) => handleChange(e.target)}
+              />
+              {errors?.["password"] && (
+                <em className="err-message">{errors["password"]}</em>
+              )}
+            </div>
+          </div>
+          <div className="form-group">
+            {errors?.["frm_subms"] && (
+              <em className="err-message">{errors["frm_subms"]}</em>
+            )}
+          </div>
+
           <button onClick={(e) => handleLogin(e)}>Sign Up</button>
           <p>
             Already have an account? <Link to="/login">Login</Link>
           </p>
-        </div>
+        </form>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-body {
+/* body {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -14,9 +14,9 @@ body {
   text-align: center;
   width: 300px;
   margin: auto;
-}
+} */
 
-.form-container.active {
+/* .form-container.active {
   display: block;
 }
 input {
@@ -38,4 +38,13 @@ button {
 }
 button:hover {
   background: #ff1493;
+} */
+
+#signup-form input {
+  border: 1px solid #ccc;
+  width: 100%;
+}
+#signup-form {
+  width: 350px;
+  padding: 20px;
 }

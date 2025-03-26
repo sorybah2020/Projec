@@ -30,6 +30,7 @@ const Register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   // Check if user exists in the database
+
   const userExists = await User.findOne({ email });
   // If user exists, throw an error saying that the user already exists
   if (userExists) {
