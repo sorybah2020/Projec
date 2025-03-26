@@ -50,9 +50,10 @@ const getTransactionsById = async (req, res) => {
   try {
     const userId = req.params.authId;
     const transactions = await TransactionsModel.find({ userId: userId });
-    if (transactions.length > 0) {
-      return res.status(200).json(transactions);
+    if (transactions.length == 0) {
+      return res.status(200).json({ message: "No transactions found" });
     }
+    return res.status(200).json(transactions);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
