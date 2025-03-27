@@ -37,6 +37,15 @@ const CreateModal = ({
     "Miscellaneous",
     "Personal Care",
   ];
+  const reqFields = [
+    "category",
+    "date",
+    "paymentMode",
+    "description",
+    "amount",
+    "cashflow",
+    "time",
+  ];
 
   useEffect(() => {
     setFormData({
@@ -59,14 +68,15 @@ const CreateModal = ({
       [name]: value,
     });
 
-    const { newErrors } = Validation.validateField(name, value);
+    const { newErrors } = Validation.validateField(name, value, reqFields);
 
     setErrors({ ...errors, ...newErrors });
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    const { valid, newErrors } = Validation.validateAll(formData);
+
+    const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
     if (valid) {
       const options = {

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import SignupAPI from "../services/SignupAPI";
 import { useNavigate } from "react-router-dom";
+import Validation from "../utilities/Validation";
 
 const Signup = () => {
   let navigate = useNavigate();
@@ -15,27 +16,6 @@ const Signup = () => {
 
   const reqFields = ["name", "email", "password"];
 
-  const validateAll = (formData) => {
-    let newErrors = {};
-    let valid = true;
-
-    reqFields.forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = "Required field.";
-        valid = false;
-      }
-    });
-
-    if (!/\S+@\S+\.\S+/.test(formData["email"].trim())) {
-      newErrors.email = "Please enter a valid email address.";
-      valid = false;
-    } else {
-      console.log(newErrors.email);
-      newErrors.email = "";
-    }
-
-    return { valid, newErrors };
-  };
   const handleChange = (input) => {
     //handle change in input fields
     const { name, value } = input;
@@ -49,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     //validate login fields
-    const { valid, newErrors } = validateAll(formData);
+    const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
     if (valid) {
       const options = {
@@ -61,7 +41,7 @@ const Signup = () => {
       };
 
       const result = await SignupAPI.createUser(options); //submit user info
-      if (!result.ok) {
+      if (!result.statusText === "Created") {
         setErrors((prevErrors) => ({
           ...prevErrors,
           frm_subms: result.message,
