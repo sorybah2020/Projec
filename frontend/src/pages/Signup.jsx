@@ -25,10 +25,10 @@ const Signup = () => {
     });
   };
 
-  const handleLogin = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
-    //validate login fields
+    //validate signup fields
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
     if (valid) {
@@ -41,7 +41,7 @@ const Signup = () => {
       };
 
       const result = await SignupAPI.createUser(options); //submit user info
-      if (!result.statusText === "Created") {
+      if (result.message) {
         setErrors((prevErrors) => ({
           ...prevErrors,
           frm_subms: result.message,
@@ -119,7 +119,7 @@ const Signup = () => {
             )}
           </div>
 
-          <button onClick={(e) => handleLogin(e)}>Sign Up</button>
+          <button onClick={(e) => handleSignUp(e)}>Sign Up</button>
           <p>
             Already have an account? <Link to="/login">Login</Link>
           </p>

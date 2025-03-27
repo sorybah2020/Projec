@@ -1,8 +1,8 @@
-const createUser = async (options) => {
+const login = async (options) => {
   try {
     // Send user data to the database
     const response = await fetch(
-      "http://localhost:3000/api/users/create",
+      "http://localhost:3000/api/users/auth",
       options
     );
     const data = await response.json();
@@ -13,5 +13,5 @@ const createUser = async (options) => {
 };
 
 export default {
-  createUser,
+  login,
 };
