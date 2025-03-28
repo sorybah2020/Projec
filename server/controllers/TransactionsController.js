@@ -1,5 +1,6 @@
 import TransactionsModel from "../model/TransactionsModel.js";
 import mongoose from "mongoose";
+
 const createTransaction = async (req, res) => {
   try {
     const {
@@ -132,6 +133,7 @@ const deleteTransactions = async (req, res) => {
     return res.status(404).json({ error: "No transactions found to delete" });
   }
 };
+
 export default {
   createTransaction,
   getTransactionsById,
