@@ -1,4 +1,37 @@
-const Sidebar = () => {
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import UserAPI from "../services/UserAPI";
+
+const Sidebar = ({ auth }) => {
+  let navigate = useNavigate();
+
+  const [profile, setProfile] = useState({});
+  useEffect(() => {
+    setProfile(auth);
+  }, [auth]);
+
+  const handleLogOut = async () => {
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      };
+
+      const result = await UserAPI.logoutUser(options);
+
+      // Check if user logged out successfully
+      if (result.message) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("User verification failed:", error);
+    }
+  };
+
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -13,14 +46,14 @@ const Sidebar = () => {
           alt="Profile Picture"
           className="profile-picture"
         />
-        <h3>Nicholas Delacruz</h3>
+        <h3>{profile?.name}</h3>
         <div>
           <p className="budget">
             <img
               className="icon"
               src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
             />
-            $5,247
+            $0
           </p>
         </div>
       </div>
@@ -28,11 +61,16 @@ const Sidebar = () => {
         <ul className="sidebar-menu">
           <li className="active">Transactions</li>
           <li>Dashboard</li>
-          <li>About</li>
+          <li>Profile</li>
+          <li onClick={() => handleLogOut()}>Logout</li>
         </ul>
       </nav>
     </aside>
   );
+};
+
+Sidebar.propTypes = {
+  auth: PropTypes.object.isRequired,
 };
 
 export default Sidebar;

@@ -4,12 +4,7 @@ import { useState, useEffect } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 
-const CreateModal = ({
-  authId = "67c0ffcf02a6253bfbd4cdbb",
-  modalIsOpen,
-  setIsOpen,
-  setTransactions,
-}) => {
+const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
