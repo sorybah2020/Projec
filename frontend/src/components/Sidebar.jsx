@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "../services/UserAPI";
+import Logo from "./Logo";
 
 const Sidebar = ({ auth }) => {
   let navigate = useNavigate();
@@ -34,12 +35,7 @@ const Sidebar = ({ auth }) => {
 
   return (
     <aside className="sidebar">
-      <div className="logo">
-        <img
-          src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/title.svg"
-          alt="Logo"
-        />
-      </div>
+      <Logo />
       <div className="profile">
         <img
           src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/user.svg"

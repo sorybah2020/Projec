@@ -3,6 +3,8 @@ import { useState } from "react";
 import SignupAPI from "../services/SignupAPI";
 import { useNavigate } from "react-router-dom";
 import Validation from "../utilities/Validation";
+import Logo from "../components/Logo";
+import Footer from "../components/Footer";
 
 const Signup = () => {
   let navigate = useNavigate();
@@ -54,77 +56,105 @@ const Signup = () => {
 
   return (
     <>
-      <div id="signup-form" className="form-container">
-        <h2>Welcome Back</h2>
-        <form>
-          <div className="form-group">
-            <label className="header">
-              Username <em className="text-redText">*</em>
-            </label>
-            <div className="form-group-container diff">
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Username"
-                required
-                onChange={(e) => handleChange(e.target)}
-              />
-              {errors?.["name"] && (
-                <em className="err-message">{errors["name"]}</em>
-              )}
+      <nav className="navbar">
+        <div className="container">
+          <Logo />
+        </div>
+      </nav>
+      <div className="hero sign-up-page">
+        <div className="hero-container">
+          <div className="hero-text">
+            <div className="hero-text-container">
+              <h1>Track your finances easily</h1>
+              <p className="hero-description">
+                E-tracker helps you to track your expenses and manage your
+                finances efficiently. Sign in to get started.
+              </p>
             </div>
           </div>
-
-          <div className="form-group">
-            <label className="header">
-              Email <em className="text-redText">*</em>
-            </label>
-            <div className="form-group-container diff">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Email"
-                required
-                onChange={(e) => handleChange(e.target)}
-              />
-              {errors?.["email"] && (
-                <em className="err-message">{errors["email"]}</em>
-              )}
+          <div id="signup-form" className="form-container">
+            <div className="form-header">
+              <h2 className="form-header">Welcome</h2>
+              <p>Sign in to your E-tracker account</p>
             </div>
-          </div>
+            <form>
+              <div className="form-group">
+                <label className="header">
+                  Username <em className="text-redText">*</em>
+                </label>
+                <div className="form-group-container diff">
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Username"
+                    required
+                    onChange={(e) => handleChange(e.target)}
+                  />
+                  {errors?.["name"] && (
+                    <em className="err-message">{errors["name"]}</em>
+                  )}
+                </div>
+              </div>
 
-          <div className="form-group">
-            <label className="header">
-              Password <em className="text-redText">*</em>
-            </label>
-            <div className="form-group-container diff">
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                name="password"
-                onChange={(e) => handleChange(e.target)}
-              />
-              {errors?.["password"] && (
-                <em className="err-message">{errors["password"]}</em>
-              )}
-            </div>
-          </div>
-          <div className="form-group">
-            {errors?.["frm_subms"] && (
-              <em className="err-message">{errors["frm_subms"]}</em>
-            )}
-          </div>
+              <div className="form-group">
+                <label className="header">
+                  Email <em className="text-redText">*</em>
+                </label>
+                <div className="form-group-container diff">
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                    onChange={(e) => handleChange(e.target)}
+                  />
+                  {errors?.["email"] && (
+                    <em className="err-message">{errors["email"]}</em>
+                  )}
+                </div>
+              </div>
 
-          <button onClick={(e) => handleSignUp(e)}>Sign Up</button>
-          <p>
-            Already have an account? <Link to="/login">Login</Link>
-          </p>
-        </form>
+              <div className="form-group">
+                <label className="header">
+                  Password <em className="text-redText">*</em>
+                </label>
+                <div className="form-group-container diff">
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                    name="password"
+                    onChange={(e) => handleChange(e.target)}
+                  />
+                  {errors?.["password"] && (
+                    <em className="err-message">{errors["password"]}</em>
+                  )}
+                </div>
+              </div>
+              <div className="form-group">
+                {errors?.["frm_subms"] && (
+                  <em className="err-message">{errors["frm_subms"]}</em>
+                )}
+              </div>
+
+              <button className="btn" onClick={(e) => handleSignUp(e)}>
+                Sign Up
+              </button>
+
+              <p className="more-info">
+                {"Already have an account?"}{" "}
+                <Link to="/login" className="sign-up-link">
+                  Log In
+                </Link>
+              </p>
+            </form>
+          </div>
+        </div>
       </div>
+      <Footer />
     </>
   );
 };

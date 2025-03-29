@@ -29,7 +29,7 @@
   background-color: #5584f6;
   border-radius: 0.2em;
   color: #ffffff;
-  padding: 10px;
+  padding: 12px;
   border: none;
   cursor: pointer;
   font-size: 12px;
@@ -229,11 +229,13 @@ tr:hover {
   width: 25px;
 }
 .logo {
-  background-color: #f7f7f7;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   text-align: center;
   margin-bottom: 30px;
+}
+.sidebar .logo {
+  background-color: #f7f7f7;
 }
 .logo img {
   height: 30px;
@@ -501,7 +503,7 @@ input[type="date"]:focus-visible,
 }
 .err-message {
   color: var(--red-color);
-  font-size: 10px;
+  font-size: 11px;
   padding-top: 10px;
 }
 .text-redText {
