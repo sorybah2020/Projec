@@ -70,7 +70,7 @@ const Login = () => {
               <h1>Track your finances easily</h1>
               <p className="hero-description">
                 E-tracker helps you to track your expenses and manage your
-                finances efficiently. Log in to your account to get started.
+                finances efficiently. Log in to see if your pig is getting rich!
               </p>
             </div>
           </div>
