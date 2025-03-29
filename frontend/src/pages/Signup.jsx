@@ -68,7 +68,8 @@ const Signup = () => {
               <h1>Track your finances easily</h1>
               <p className="hero-description">
                 E-tracker helps you to track your expenses and manage your
-                finances efficiently. Sign in to get started.
+                finances efficiently. Sign in to get started and say goodbye to
+                those ‘I have no idea where my money went’ moments!
               </p>
             </div>
           </div>
