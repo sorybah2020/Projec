@@ -39,6 +39,15 @@ const EditModal = ({
     "Miscellaneous",
     "Personal Care",
   ];
+  const reqFields = [
+    "category",
+    "date",
+    "paymentMode",
+    "description",
+    "amount",
+    "cashflow",
+    "time",
+  ];
 
   function closeModal(modalName) {
     setIsOpen({ ...modalIsOpen, [modalName]: false });
@@ -53,14 +62,14 @@ const EditModal = ({
       [name]: value,
     });
 
-    const { newErrors } = Validation.validateField(name, value);
+    const { newErrors } = Validation.validateField(name, value, reqFields);
 
     setErrors({ ...errors, ...newErrors });
   };
 
   const handleEdit = async (e) => {
     e.preventDefault();
-    const { valid, newErrors } = Validation.validateAll(formData);
+    const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
     if (valid) {
       const options = {
@@ -72,7 +81,6 @@ const EditModal = ({
       };
 
       const result = await TransactionsAPI.editTransaction(options);
-      console.log(result);
       if (result?.updatedTransaction) {
         setTransactions((prevTransactions) => {
           const trans = [...prevTransactions];
