@@ -3,44 +3,15 @@ import Sidebar from "../components/Sidebar";
 import TransactionsTable from "./TransactionsTable";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import UserAPI from "../services/UserAPI";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import PropTypes from "prop-types";
 
 const Transactions = () => {
-  let navigate = useNavigate();
-  const [auth, setAuth] = useState(null);
+  const { auth } = useContext(AuthContext);
   const [transactions, setTransactions] = useState([]);
   const [transLoading, setTransLoading] = useState(true);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-
-  useEffect(() => {
-    const verifyUser = async () => {
-      try {
-        const options = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", //sending cookies
-        };
-
-        const result = await UserAPI.getUser(options);
-
-        // Check if user data is successfully retrieved
-        if (result && result._id) {
-          setAuth(result);
-        } else {
-          // If no user data, redirect to login
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error("User verification failed:", error);
-        navigate("/login");
-      }
-    };
-
-    verifyUser();
-  }, [navigate]);
 
   const fetchTransactions = useCallback(async () => {
     const options = {
@@ -72,10 +43,9 @@ const Transactions = () => {
 
   return (
     <div className="container">
-      <Sidebar auth={auth} />
+      <Sidebar />
       <main>
         <TransactionsTable
-          authId={auth?._id}
           transactions={filteredTransactions}
           setTransactions={setTransactions}
           fetchTransactions={fetchTransactions}
@@ -89,6 +59,9 @@ const Transactions = () => {
       />
     </div>
   );
+};
+Transactions.propTypes = {
+  auth: PropTypes.object.isRequired,
 };
 
 export default Transactions;

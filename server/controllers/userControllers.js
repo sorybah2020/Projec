@@ -89,9 +89,10 @@ const Update = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
+    user.budget = req.body.budget || user.budget;
+    // if (req.body.password) {
+    //   user.password = req.body.password;
+    // }
 
     const updatedUser = await user.save();
 
@@ -100,6 +101,7 @@ const Update = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      budget: updatedUser.budget,
     });
   } else {
     throw new Error("User not found");

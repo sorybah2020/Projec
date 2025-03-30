@@ -64,6 +64,7 @@ const Login = () => {
         </div>
       </nav>
       <div className="hero">
+        <div></div>
         <div className="hero-container">
           <div className="hero-text">
             <div className="hero-text-container">

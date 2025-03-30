@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-const Sidebar = ({ auth }) => {
+const Sidebar = () => {
   let navigate = useNavigate();
-
+  const { auth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
+
   useEffect(() => {
     setProfile(auth);
   }, [auth]);
@@ -49,7 +51,7 @@ const Sidebar = ({ auth }) => {
               className="icon"
               src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
             />
-            $0
+            ${auth?.budget}
           </p>
         </div>
       </div>
@@ -63,10 +65,6 @@ const Sidebar = ({ auth }) => {
       </nav>
     </aside>
   );
-};
-
-Sidebar.propTypes = {
-  auth: PropTypes.object.isRequired,
 };
 
 export default Sidebar;

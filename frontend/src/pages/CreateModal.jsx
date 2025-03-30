@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
+const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
+  const { auth } = useContext(AuthContext);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
@@ -44,13 +47,13 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
 
   useEffect(() => {
     setFormData({
-      userId: authId,
+      userId: auth?._id,
     });
-  }, [authId]);
+  }, [auth]);
 
   function closeModal(modalName) {
     setFormData({
-      userId: authId,
+      userId: auth?._id,
     });
     setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
@@ -289,6 +292,6 @@ CreateModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
-  authId: PropTypes.string.isRequired,
+  auth: PropTypes.string.isRequired,
 };
 export default CreateModal;

@@ -21,13 +21,15 @@ router.get(
   asyncHandler(async (req, res) => {
     // req.user is set by the protect middleware
     // Exclude sensitive information like password
-    const { _id, name, email } = req.user;
+    const { _id, name, email, budget } = req.user;
 
     res.status(200).json({
       _id,
       name,
       email,
+      budget,
     });
   })
 );
+router.put("/profile", protect, Update);
 export default router;

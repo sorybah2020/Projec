@@ -401,6 +401,7 @@ input[type="text"] {
 .form-group input[type="date"],
 .form-group select,
 .form-group input[type="text"],
+.form-group input[type="email"],
 .form-group input[type="time"],
 .form-group input[type="number"] {
   padding: 0px 2px 5px;
