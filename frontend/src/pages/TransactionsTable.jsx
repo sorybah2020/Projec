@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import TransactionsAPI from "../services/TransactionsAPI";
 
 const TransactionsTable = ({
+  authId,
   transactions,
   setTransactions,
   fetchTransactions,
@@ -337,6 +338,7 @@ const TransactionsTable = ({
         </table>
 
         <CreateModal
+          authId={authId}
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
           setTransactions={setTransactions}
@@ -358,5 +360,6 @@ TransactionsTable.propTypes = {
   fetchTransactions: PropTypes.func.isRequired,
   transLoading: PropTypes.bool.isRequired,
   setTransLoading: PropTypes.func.isRequired,
+  authId: PropTypes.string.isRequired,
 };
 export default TransactionsTable;

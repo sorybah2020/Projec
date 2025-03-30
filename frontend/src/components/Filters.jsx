@@ -84,7 +84,6 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
       const filtered = transactions.filter((transaction) => {
         if (filters.category && transaction.category !== filters.category)
           return false;
-        console.log(filters.cashflow);
         if (
           filters.cashflow.length > 0 &&
           !filters.cashflow.includes(transaction.cashflow.toLowerCase())
@@ -118,7 +117,6 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
 
         return true;
       });
-      console.log("Filtered Transactions:", filtered);
 
       setFilteredTransactions(filtered);
     }
