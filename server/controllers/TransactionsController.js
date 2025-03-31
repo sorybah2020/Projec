@@ -38,9 +38,10 @@ const createTransaction = async (req, res) => {
     });
     const result = await transaction.save();
     if (result._id) {
-      return res
-        .status(200)
-        .json({ success: "Transaction saved into database" });
+      return res.status(200).json({
+        success: "Transaction saved into database",
+        transaction: result,
+      });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });

@@ -152,7 +152,7 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Income"}
-                  checked={formData.cashflow === "Income"}
+                  checked={formData?.cashflow === "Income"}
                 />{" "}
                 Income
               </label>
@@ -162,7 +162,7 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Expense"}
-                  checked={formData.cashflow === "Expense"}
+                  checked={formData?.cashflow === "Expense"}
                 />{" "}
                 Expense
               </label>
@@ -183,8 +183,8 @@ const EditModal = ({
               name="date"
               onChange={(e) => handleChange(e.target)}
               value={
-                formData.date
-                  ? format(new Date(formData.date), "yyyy-MM-dd")
+                formData?.date
+                  ? format(new Date(formData?.date), "yyyy-MM-dd")
                   : ""
               }
             />
@@ -200,7 +200,7 @@ const EditModal = ({
               type="time"
               id="time"
               name="time"
-              value={formData.time}
+              value={formData?.time}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["time"] && (
@@ -219,7 +219,7 @@ const EditModal = ({
                 Select Category
               </option>
               {categories.map((category) => {
-                if (formData.category === category) {
+                if (formData?.category === category) {
                   return (
                     <option key={category} selected>
                       {category}
@@ -242,7 +242,7 @@ const EditModal = ({
               name="amount"
               min="1"
               onChange={(e) => handleChange(e.target)}
-              value={formData.amount}
+              value={formData?.amount}
             />
             {errors?.["amount"] && (
               <em className="err-message">{errors["amount"]}</em>
@@ -280,7 +280,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Cash"}
-                  checked={formData.paymentMode === "Cash"}
+                  checked={formData?.paymentMode === "Cash"}
                 />{" "}
                 Cash
               </label>
@@ -290,7 +290,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Debit Card"}
-                  checked={formData.paymentMode === "Debit Card"}
+                  checked={formData?.paymentMode === "Debit Card"}
                 />{" "}
                 Debit Card
               </label>
@@ -300,7 +300,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Credit Card"}
-                  checked={formData.paymentMode === "Credit Card"}
+                  checked={formData?.paymentMode === "Credit Card"}
                 />{" "}
                 Credit Card
               </label>

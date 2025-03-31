@@ -14,6 +14,7 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
     email: "",
     budget: "",
   });
+  Modal.setAppElement("#root");
 
   useEffect(() => {
     // Update formData whenever auth changes

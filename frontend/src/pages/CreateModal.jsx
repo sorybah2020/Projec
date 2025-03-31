@@ -18,6 +18,8 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     cashflow: "",
     time: "",
   });
+
+  //List of categories and required fields
   const categories = [
     "Rent",
     "Food",
@@ -45,12 +47,14 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     "time",
   ];
 
+  //Set the userId in the formData state
   useEffect(() => {
     setFormData({
       userId: auth?._id,
     });
   }, [auth]);
 
+  //Close the modal
   function closeModal(modalName) {
     setFormData({
       userId: auth?._id,
@@ -59,6 +63,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
 
+  //Handle form input changes
   const handleChange = (input) => {
     const { name, value } = input;
     setFormData({
@@ -66,11 +71,13 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       [name]: value,
     });
 
+    //Put errors for each field in the errors state
     const { newErrors } = Validation.validateField(name, value, reqFields);
 
     setErrors({ ...errors, ...newErrors });
   };
 
+  //Create a new transaction
   const handleCreate = async (e) => {
     e.preventDefault();
 
@@ -87,7 +94,8 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
 
       const result = await TransactionsAPI.createTransaction(options);
       if (result.success) {
-        setTransactions((prevState) => [...prevState, formData]);
+        //update transaction state
+        setTransactions((prevState) => [...prevState, result.transaction]);
         closeModal("creation");
       }
     }

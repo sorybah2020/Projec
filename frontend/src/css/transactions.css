@@ -250,9 +250,16 @@ nav ul li {
   cursor: pointer;
   margin: 10px 0px;
 }
+nav ul li a {
+  text-decoration: none;
+  color: #545454;
+}
 nav ul li.active {
   background-color: #5584f6;
   border-radius: 0.5em;
+  color: #ffffff;
+}
+nav ul li.active a {
   color: #ffffff;
 }
 nav ul {

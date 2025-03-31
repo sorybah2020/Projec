@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import UserAPI from "../services/UserAPI";
-import Logo from "./Logo";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import UserAPI from "../services/UserAPI";
+import Logo from "./Logo";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   let navigate = useNavigate();
+  let location = useLocation();
   const { auth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
 
@@ -57,10 +59,21 @@ const Sidebar = () => {
       </div>
       <nav className="sidebar-navigation">
         <ul className="sidebar-menu">
-          <li className="active">Transactions</li>
-          <li>Dashboard</li>
-          <li>Profile</li>
-          <li onClick={() => handleLogOut()}>Logout</li>
+          <li className={location.pathname === "/transactions" ? "active" : ""}>
+            <Link to="/transactions">Transactions</Link>
+          </li>
+          <li className={location.pathname === "/dashboard" ? "active" : ""}>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li className={location.pathname === "/profile" ? "active" : ""}>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li
+            className={location.pathname === "/logout" ? "active" : ""}
+            onClick={() => handleLogOut()}
+          >
+            Logout
+          </li>
         </ul>
       </nav>
     </aside>
