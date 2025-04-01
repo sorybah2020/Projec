@@ -1,61 +1,59 @@
 .container {
-    display: flex;
-  }
-  .sidebar-menu a {
-    text-decoration: none;    
-    padding: 7px 0px;
-    color: #545454;
-    cursor: pointer;
-    margin: 10px 0px;
-         
-  }
-  
-  
-  .sidebar-menu a.active {
-    background-color: #5584f6;
-    border-radius: 0.000001em;
-    color: #ffffff;
-  }
+  display: flex;
+}
 
-  
-  .content {
-    flex: 1;
-    margin-left: 250px; 
-    padding: 20px;
-    background-color: #eef4f9;
-  }
- 
-  .dashboard {
-    padding: 24px;
-    background-color: #0b1425;
-    min-height: 100vh;
-  }
-  
+.content {
+  flex: 1;
+  margin-left: 250px; 
+  padding: 20px;
+  background-color: #eef4f9;
+}
 
-  .pie-chart-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.dashboard {
+  padding: 24px;
+  background-color: #0b1425;
+  min-height: 100vh;
+}
+
+.charts-container {
+  display: flex;
+  justify-content: flex;
   
-  h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
+}
+
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 48%;
+}
+
+.pie-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.recharts-legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  margin-bottom: 8px;
+  margin-left: auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between; 
+  gap: 10px; 
+  padding: 20px;
   
-  .recharts-legend-item {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-  }
-  
-  .row {
-    display: flex;
-    justify-content: space-between; 
-    gap: 10px; 
-    padding: 20px;
-    
-  }
-  
- 
+}
+

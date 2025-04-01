@@ -7,7 +7,7 @@ const data = [
   { name: "Utilities", value: 4160, color: "#FD971F" },
   { name: "Bills", value: 3960, color: "#A368FC" },
   { name: "Shopping", value: 3375, color: "#FF79C6" },
-  { name: "Transportation", value: 3230, color: "#E91E63" },
+  { name: "Transport", value: 3230, color: "#E91E63" },
   { name: "Insurance", value: 2890, color: "#673AB7" },
   { name: "Health Care", value: 2480, color: "#009688" },
   { name: "Clothing", value: 2255, color: "#3F51B5" },
@@ -41,16 +41,17 @@ export default function Dashboard() {
       {/* Pie Chart with Labels on the Right */}
       <Card className="pie-chart-container">
       <h3>Total Expenses</h3>
-      <PieChart width={600} height={400}>
+      <PieChart width={700} height={400} margin={{ left: 200 }}>
         <Pie
           data={data}
-          cx="40%"
+          cx="20%"
           cy="50%"
-          innerRadius={100}  // Makes it a donut chart
+          innerRadius={100}  
           outerRadius={150}
           dataKey="value"
-          label
+          label={({ name }) => name}
           labelLine
+          
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
@@ -61,6 +62,7 @@ export default function Dashboard() {
           layout="vertical"
           align="right"
           verticalAlign="middle"
+          wrapperStyle={{ right: -150 }} 
           formatter={(value, entry) => {
             const total = data.reduce((sum, item) => sum + item.value, 0);
             const percent = ((entry.payload.value / total) * 100).toFixed(2);
