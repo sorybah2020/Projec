@@ -131,6 +131,30 @@ const editTransaction = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      // If the user is not found
+      throw new Error("User not found");
+    }
+
+    let newBudget = user.budget;
+
+    if (cashflow.toLowerCase() === "expense") {
+      // If the transaction is an expense
+      if (user.budget < amount) {
+        throw new Error("Insufficient budget");
+      }
+      newBudget -= amount;
+    } else if (cashflow.toLowerCase() === "income") {
+      // If the transaction is an income
+      newBudget += amount;
+    }
+
+    // Update the user's budget
+    user.budget = newBudget;
+    await user.save();
+
     const transEdited = await TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
@@ -146,7 +170,9 @@ const editTransaction = async (req, res) => {
       { new: true }
     );
     if (transEdited) {
-      return res.status(200).json({ updatedTransaction: transEdited });
+      return res
+        .status(200)
+        .json({ updatedTransaction: transEdited, newBudget: user.budget });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });

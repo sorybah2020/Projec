@@ -82,7 +82,10 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
     e.preventDefault();
 
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    setErrors(newErrors);
+    setErrors(() => ({
+      ...newErrors,
+      frm_subms: "",
+    }));
     if (valid) {
       const options = {
         method: "POST",

@@ -1,9 +1,10 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { format } from "date-fns";
+import { AuthContext } from "../context/AuthContext";
 
 const EditModal = ({
   modalIsOpen,
@@ -11,6 +12,7 @@ const EditModal = ({
   setTransactions,
   transactionToEdit,
 }) => {
+  const { setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
     category: "",
@@ -70,7 +72,11 @@ const EditModal = ({
   const handleEdit = async (e) => {
     e.preventDefault();
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    setErrors(newErrors);
+    //setErrors(newErrors);
+    setErrors(() => ({
+      ...newErrors,
+      frm_subms: "",
+    }));
     if (valid) {
       const options = {
         method: "PUT",
@@ -79,20 +85,35 @@ const EditModal = ({
         },
         body: JSON.stringify(formData),
       };
-
-      const result = await TransactionsAPI.editTransaction(options);
-      if (result?.updatedTransaction) {
-        setTransactions((prevTransactions) => {
-          const trans = [...prevTransactions];
-          trans.map((transaction, index) => {
-            if (transaction._id === result.updatedTransaction._id) {
-              trans[index] = result.updatedTransaction;
-            }
+      try {
+        const result = await TransactionsAPI.editTransaction(options);
+        if (result?.updatedTransaction) {
+          setTransactions((prevTransactions) => {
+            //update transactions
+            const trans = [...prevTransactions];
+            trans.map((transaction, index) => {
+              if (transaction._id === result.updatedTransaction._id) {
+                trans[index] = result.updatedTransaction;
+              }
+            });
+            return trans;
           });
-          return trans;
-        });
+          setAuth((prevAuth) => ({
+            //update auth budget
+            ...prevAuth,
+            budget: result.newBudget,
+          }));
+          closeModal("edition");
+        }
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          frm_subms: error.message,
+        }));
       }
-      closeModal("edition");
     }
   };
 
@@ -310,6 +331,11 @@ const EditModal = ({
               <em className="err-message">{errors["paymentMode"]}</em>
             )}
           </div>
+        </div>
+        <div className="form-group">
+          {errors?.["frm_subms"] && (
+            <em className="err-message">{errors["frm_subms"]}</em>
+          )}
         </div>
 
         <div className="btn-container">
