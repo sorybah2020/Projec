@@ -1,13 +1,13 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect } from "react";
 
 const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
@@ -96,7 +96,17 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       if (result.success) {
         //update transaction state
         setTransactions((prevState) => [...prevState, result.transaction]);
+        setAuth((prevAuth) => ({
+          ...prevAuth,
+          budget: result.newBudget,
+        }));
         closeModal("creation");
+      }
+      if (result.error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          frm_subms: result.error,
+        }));
       }
     }
   };
@@ -274,6 +284,12 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
               <em className="err-message">{errors["paymentMode"]}</em>
             )}
           </div>
+        </div>
+
+        <div className="form-group">
+          {errors?.["frm_subms"] && (
+            <em className="err-message">{errors["frm_subms"]}</em>
+          )}
         </div>
 
         <div className="btn-container">

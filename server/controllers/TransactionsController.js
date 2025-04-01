@@ -1,4 +1,5 @@
 import TransactionsModel from "../model/TransactionsModel.js";
+import User from "../model/userModel.js";
 import mongoose from "mongoose";
 
 const createTransaction = async (req, res) => {
@@ -26,7 +27,32 @@ const createTransaction = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      // If the user is not found
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let newBudget = user.budget;
+
+    if (cashflow.toLowerCase() === "expense") {
+      // If the transaction is an expense
+      if (user.budget < amount) {
+        return res.status(400).json({ error: "Insufficient budget" });
+      }
+      newBudget -= amount;
+    } else if (cashflow.toLowerCase() === "income") {
+      // If the transaction is an income
+      newBudget += amount;
+    }
+
+    // Update the user's budget
+    user.budget = newBudget;
+    await user.save();
+
     const transaction = new TransactionsModel({
+      // Create a new transaction
       userId,
       category,
       date,
@@ -36,11 +62,15 @@ const createTransaction = async (req, res) => {
       cashflow,
       time,
     });
+
     const result = await transaction.save();
+
     if (result._id) {
+      // If the transaction is saved successfully
       return res.status(200).json({
         success: "Transaction saved into database",
         transaction: result,
+        newBudget: user.budget,
       });
     }
   } catch (error) {
