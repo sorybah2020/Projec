@@ -25,13 +25,13 @@ const createTransaction = async (req, res) => {
       !cashflow ||
       !time
     ) {
-      return res.status(400).json({ message: "All fields are required" });
+      throw new Error("All fields are required");
     }
 
     const user = await User.findById(userId);
     if (!user) {
       // If the user is not found
-      return res.status(404).json({ error: "User not found" });
+      throw new Error("User not found");
     }
 
     let newBudget = user.budget;
@@ -39,7 +39,7 @@ const createTransaction = async (req, res) => {
     if (cashflow.toLowerCase() === "expense") {
       // If the transaction is an expense
       if (user.budget < amount) {
-        return res.status(400).json({ error: "Insufficient budget" });
+        throw new Error("Insufficient budget");
       }
       newBudget -= amount;
     } else if (cashflow.toLowerCase() === "income") {
@@ -74,6 +74,7 @@ const createTransaction = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error("Error creating transaction:", error); // Logs error for debugging
     return res.status(500).json({ error: error.message });
   }
 };

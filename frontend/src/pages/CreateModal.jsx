@@ -92,20 +92,25 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
         body: JSON.stringify(formData),
       };
 
-      const result = await TransactionsAPI.createTransaction(options);
-      if (result.success) {
-        //update transaction state
-        setTransactions((prevState) => [...prevState, result.transaction]);
-        setAuth((prevAuth) => ({
-          ...prevAuth,
-          budget: result.newBudget,
-        }));
-        closeModal("creation");
-      }
-      if (result.error) {
+      try {
+        const result = await TransactionsAPI.createTransaction(options);
+        if (result.success) {
+          //update transaction state
+          setTransactions((prevState) => [...prevState, result.transaction]);
+          setAuth((prevAuth) => ({
+            //update auth budget
+            ...prevAuth,
+            budget: result.newBudget,
+          }));
+          closeModal("creation");
+        }
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          frm_subms: result.error,
+          frm_subms: error.message,
         }));
       }
     }
