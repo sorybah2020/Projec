@@ -2,6 +2,26 @@ import TransactionsModel from "../model/TransactionsModel.js";
 import User from "../model/userModel.js";
 import mongoose from "mongoose";
 
+// Utility function to fetch user and update budget
+const fetchUserAndUpdateBudget = async (userId, cashflow, amount) => {
+  const user = await User.findById(userId);
+  if (!user) throw new Error("User not found");
+
+  let newBudget = user.budget;
+
+  if (cashflow.toLowerCase() === "expense") {
+    if (user.budget < amount) throw new Error("Insufficient budget");
+    newBudget -= amount;
+  } else if (cashflow.toLowerCase() === "income") {
+    newBudget = Number(newBudget) + Number(amount);
+  }
+
+  user.budget = newBudget;
+  await user.save();
+
+  return user;
+};
+
 const createTransaction = async (req, res) => {
   try {
     const {
@@ -28,29 +48,6 @@ const createTransaction = async (req, res) => {
       throw new Error("All fields are required");
     }
 
-    const user = await User.findById(userId);
-    if (!user) {
-      // If the user is not found
-      throw new Error("User not found");
-    }
-
-    let newBudget = user.budget;
-
-    if (cashflow.toLowerCase() === "expense") {
-      // If the transaction is an expense
-      if (user.budget < amount) {
-        throw new Error("Insufficient budget");
-      }
-      newBudget -= amount;
-    } else if (cashflow.toLowerCase() === "income") {
-      // If the transaction is an income
-      newBudget += amount;
-    }
-
-    // Update the user's budget
-    user.budget = newBudget;
-    await user.save();
-
     const transaction = new TransactionsModel({
       // Create a new transaction
       userId,
@@ -66,6 +63,8 @@ const createTransaction = async (req, res) => {
     const result = await transaction.save();
 
     if (result._id) {
+      const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
+
       // If the transaction is saved successfully
       return res.status(200).json({
         success: "Transaction saved into database",
@@ -132,29 +131,6 @@ const editTransaction = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const user = await User.findById(userId);
-    if (!user) {
-      // If the user is not found
-      throw new Error("User not found");
-    }
-
-    let newBudget = user.budget;
-
-    if (cashflow.toLowerCase() === "expense") {
-      // If the transaction is an expense
-      if (user.budget < amount) {
-        throw new Error("Insufficient budget");
-      }
-      newBudget -= amount;
-    } else if (cashflow.toLowerCase() === "income") {
-      // If the transaction is an income
-      newBudget += amount;
-    }
-
-    // Update the user's budget
-    user.budget = newBudget;
-    await user.save();
-
     const transEdited = await TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
@@ -170,6 +146,7 @@ const editTransaction = async (req, res) => {
       { new: true }
     );
     if (transEdited) {
+      const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
       return res
         .status(200)
         .json({ updatedTransaction: transEdited, newBudget: user.budget });
@@ -179,15 +156,50 @@ const editTransaction = async (req, res) => {
   }
 };
 
+const fetchTransactionsAndUpdateBudget = async (transIds) => {
+  // Find transactions before deleting to adjust the budget
+  const transactionsToDelete = await TransactionsModel.find({
+    _id: { $in: transIds },
+  });
+
+  if (!transactionsToDelete.length) {
+    throw new Error("No transactions found to delete");
+  }
+  // Get the user ID from one of the transactions
+  const userId = transactionsToDelete[0].userId;
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Adjust the user's budget
+  let updatedBudget = user.budget;
+  transactionsToDelete.forEach((transaction) => {
+    if (transaction.cashflow.toLowerCase() === "income") {
+      updatedBudget = Number(updatedBudget) - Number(transaction.amount); // Remove income
+    } else if (transaction.cashflow.toLowerCase() === "expense") {
+      updatedBudget = Number(updatedBudget) + Number(transaction.amount); // Refund expense
+    }
+  });
+
+  // Update the budget in the database
+  user.budget = updatedBudget;
+  await user.save();
+  return user;
+};
+
 const deleteTransactions = async (req, res) => {
   const transIds = req.body.ids.map((id) =>
     mongoose.Types.ObjectId.createFromHexString(id)
   );
 
+  const user = await fetchTransactionsAndUpdateBudget(transIds);
   const trans = await TransactionsModel.deleteMany({ _id: { $in: transIds } });
 
   if (trans.deletedCount > 0) {
-    return res.status(200).json({ success: "Transactions deleted" });
+    return res
+      .status(200)
+      .json({ success: "Transactions deleted", newBudget: user.budget });
   } else {
     return res.status(404).json({ error: "No transactions found to delete" });
   }

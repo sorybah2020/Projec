@@ -173,6 +173,7 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Income"}
+                  disabled={formData?.cashflow === "Expense"}
                   checked={formData?.cashflow === "Income"}
                 />{" "}
                 Income
@@ -183,6 +184,7 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Expense"}
+                  disabled={formData?.cashflow === "Expense"}
                   checked={formData?.cashflow === "Expense"}
                 />{" "}
                 Expense

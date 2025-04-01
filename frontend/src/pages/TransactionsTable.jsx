@@ -19,7 +19,7 @@ const TransactionsTable = ({
   setTransLoading,
 }) => {
   let navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
 
   const [transactionToEdit, setTransactionToEdit] = useState([]);
 
@@ -86,13 +86,25 @@ const TransactionsTable = ({
       body: JSON.stringify({ ids: checkedIds }),
     };
 
-    const result = await TransactionsAPI.deleteTransactions(options);
-    if (result.success) {
-      setTransactions((prevTransactions) => {
-        return prevTransactions.filter((trans) => {
-          return !checkedIds.includes(trans._id);
+    try {
+      const result = await TransactionsAPI.deleteTransactions(options);
+      if (result.success) {
+        setTransactions((prevTransactions) => {
+          return prevTransactions.filter((trans) => {
+            return !checkedIds.includes(trans._id);
+          });
         });
-      });
+        setAuth((prevAuth) => ({
+          //update auth budget
+          ...prevAuth,
+          budget: result.newBudget,
+        }));
+      }
+      if (result.error) {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
