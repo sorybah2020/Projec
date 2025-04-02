@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   let navigate = useNavigate();
   let location = useLocation();
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const Sidebar = () => {
 
       // Check if user logged out successfully
       if (result.message) {
+        setAuth(null);
         navigate("/login");
       }
     } catch (error) {

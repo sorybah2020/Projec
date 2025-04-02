@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import Validation from "../utilities/Validation";
-import { useState } from "react";
-import LoginAPI from "../services/LoginAPI";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import Validation from "../utilities/Validation";
+import LoginAPI from "../services/LoginAPI";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 
 const Login = () => {
   let navigate = useNavigate();
+  const { setAuth } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     name: "",
@@ -52,6 +55,7 @@ const Login = () => {
         }));
         return;
       } else {
+        setAuth(result);
         navigate("/transactions"); //navigate to transactions page
       }
     }

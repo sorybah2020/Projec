@@ -16,6 +16,7 @@ const Login = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      budget: user.budget,
     });
   } else {
     res.status(400);
