@@ -46,18 +46,23 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
         body: JSON.stringify(formData),
       };
 
-      const result = await UserAPI.editUser(options);
+      try {
+        const result = await UserAPI.editUser(options);
+        console.log(result);
 
-      if (!result._id) {
+        if (result.message) {
+          console.log(result.message);
+          throw new Error(result.message);
+        } else {
+          // Successfully updated, update context and close modal
+          setAuth(result);
+          closeModal();
+        }
+      } catch (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          frm_subms: result.message,
+          frm_subms: error.message,
         }));
-        return;
-      } else {
-        // Successfully updated, update context and close modal
-        setAuth(result);
-        closeModal();
       }
     }
   };
