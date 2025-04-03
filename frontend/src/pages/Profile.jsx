@@ -1,12 +1,14 @@
 import Sidebar from "../components/Sidebar";
-import PropTypes from "prop-types";
-import "../css/profile.css";
 import editIcon from "../assets/edit.svg";
-import { Link } from "react-router-dom";
 import EditProfileModalModal from "../pages/EditProfileModal";
+import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-const Profile = ({ auth }) => {
+const Profile = () => {
+  const { auth } = useContext(AuthContext);
+
   const [modalIsOpen, setIsOpen] = useState(false);
   const handleEdit = () => {
     setIsOpen(true);
@@ -85,9 +87,6 @@ const Profile = ({ auth }) => {
       />
     </>
   );
-};
-Profile.propTypes = {
-  auth: PropTypes.object.isRequired,
 };
 
 export default Profile;

@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import Validation from "../utilities/Validation";
 import LoginAPI from "../services/LoginAPI";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   let navigate = useNavigate();
