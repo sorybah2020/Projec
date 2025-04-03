@@ -1,9 +1,10 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { format } from "date-fns";
+import { AuthContext } from "../context/AuthContext";
 
 const EditModal = ({
   modalIsOpen,
@@ -11,6 +12,7 @@ const EditModal = ({
   setTransactions,
   transactionToEdit,
 }) => {
+  const { setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
     category: "",
@@ -70,7 +72,11 @@ const EditModal = ({
   const handleEdit = async (e) => {
     e.preventDefault();
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    setErrors(newErrors);
+    //setErrors(newErrors);
+    setErrors(() => ({
+      ...newErrors,
+      frm_subms: "",
+    }));
     if (valid) {
       const options = {
         method: "PUT",
@@ -79,20 +85,35 @@ const EditModal = ({
         },
         body: JSON.stringify(formData),
       };
-
-      const result = await TransactionsAPI.editTransaction(options);
-      if (result?.updatedTransaction) {
-        setTransactions((prevTransactions) => {
-          const trans = [...prevTransactions];
-          trans.map((transaction, index) => {
-            if (transaction._id === result.updatedTransaction._id) {
-              trans[index] = result.updatedTransaction;
-            }
+      try {
+        const result = await TransactionsAPI.editTransaction(options);
+        if (result?.updatedTransaction) {
+          setTransactions((prevTransactions) => {
+            //update transactions
+            const trans = [...prevTransactions];
+            trans.map((transaction, index) => {
+              if (transaction._id === result.updatedTransaction._id) {
+                trans[index] = result.updatedTransaction;
+              }
+            });
+            return trans;
           });
-          return trans;
-        });
+          setAuth((prevAuth) => ({
+            //update auth budget
+            ...prevAuth,
+            budget: result.newBudget,
+          }));
+          closeModal("edition");
+        }
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          frm_subms: error.message,
+        }));
       }
-      closeModal("edition");
     }
   };
 
@@ -152,7 +173,8 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Income"}
-                  checked={formData.cashflow === "Income"}
+                  disabled={formData?.cashflow === "Expense"}
+                  checked={formData?.cashflow === "Income"}
                 />{" "}
                 Income
               </label>
@@ -162,7 +184,8 @@ const EditModal = ({
                   name="cashflow"
                   onChange={(e) => handleChange(e.target)}
                   value={"Expense"}
-                  checked={formData.cashflow === "Expense"}
+                  disabled={formData?.cashflow === "Expense"}
+                  checked={formData?.cashflow === "Expense"}
                 />{" "}
                 Expense
               </label>
@@ -183,8 +206,8 @@ const EditModal = ({
               name="date"
               onChange={(e) => handleChange(e.target)}
               value={
-                formData.date
-                  ? format(new Date(formData.date), "yyyy-MM-dd")
+                formData?.date
+                  ? format(new Date(formData?.date), "yyyy-MM-dd")
                   : ""
               }
             />
@@ -200,7 +223,7 @@ const EditModal = ({
               type="time"
               id="time"
               name="time"
-              value={formData.time}
+              value={formData?.time}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["time"] && (
@@ -219,7 +242,7 @@ const EditModal = ({
                 Select Category
               </option>
               {categories.map((category) => {
-                if (formData.category === category) {
+                if (formData?.category === category) {
                   return (
                     <option key={category} selected>
                       {category}
@@ -242,7 +265,7 @@ const EditModal = ({
               name="amount"
               min="1"
               onChange={(e) => handleChange(e.target)}
-              value={formData.amount}
+              value={formData?.amount}
             />
             {errors?.["amount"] && (
               <em className="err-message">{errors["amount"]}</em>
@@ -280,7 +303,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Cash"}
-                  checked={formData.paymentMode === "Cash"}
+                  checked={formData?.paymentMode === "Cash"}
                 />{" "}
                 Cash
               </label>
@@ -290,7 +313,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Debit Card"}
-                  checked={formData.paymentMode === "Debit Card"}
+                  checked={formData?.paymentMode === "Debit Card"}
                 />{" "}
                 Debit Card
               </label>
@@ -300,7 +323,7 @@ const EditModal = ({
                   name="paymentMode"
                   onChange={(e) => handleChange(e.target)}
                   value={"Credit Card"}
-                  checked={formData.paymentMode === "Credit Card"}
+                  checked={formData?.paymentMode === "Credit Card"}
                 />{" "}
                 Credit Card
               </label>
@@ -310,6 +333,11 @@ const EditModal = ({
               <em className="err-message">{errors["paymentMode"]}</em>
             )}
           </div>
+        </div>
+        <div className="form-group">
+          {errors?.["frm_subms"] && (
+            <em className="err-message">{errors["frm_subms"]}</em>
+          )}
         </div>
 
         <div className="btn-container">

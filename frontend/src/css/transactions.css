@@ -260,9 +260,11 @@ tr:hover {
   text-align: center;
   margin-bottom: 30px;
 }
+
 .sidebar .logo {
   background-color: #f7f7f7;
 }
+
 .logo img {
   height: 30px;
 }
@@ -279,9 +281,18 @@ nav ul li {
   margin: 10px 0px;
 }
 
+nav ul li a {
+  text-decoration: none;
+  color: #545454;
+}
+
 nav ul li.active {
   background-color: #5584f6;
   border-radius: 0.5em;
+  color: #ffffff;
+}
+
+nav ul li.active a {
   color: #ffffff;
 }
 
@@ -440,6 +451,7 @@ input[type="text"] {
 .form-group input[type="date"],
 .form-group select,
 .form-group input[type="text"],
+.form-group input[type="email"],
 .form-group input[type="time"],
 .form-group input[type="number"] {
   padding: 0px 2px 5px;

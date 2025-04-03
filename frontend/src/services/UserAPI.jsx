@@ -38,4 +38,23 @@ const logoutUser = async (options) => {
     throw error; // Re-throw to be handled by caller
   }
 };
-export default { getUser, logoutUser };
+
+const editUser = async (options) => {
+  try {
+    const response = await fetch("http://localhost:3000/api/users/profile", {
+      ...options,
+    });
+
+    if (!response.ok) {
+      // If response is not successful, throw an error
+      throw new Error("Failed to fetch user profile");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error; // Re-throw to be handled by caller
+  }
+};
+export default { getUser, logoutUser, editUser };
