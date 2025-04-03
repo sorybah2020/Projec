@@ -6,6 +6,8 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
       </Routes>
     </Router>
   );
