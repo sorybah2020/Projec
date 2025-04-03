@@ -60,11 +60,11 @@ const createTransaction = async (req, res) => {
       time,
     });
 
+    const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
+
     const result = await transaction.save();
 
     if (result._id) {
-      const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
-
       // If the transaction is saved successfully
       return res.status(200).json({
         success: "Transaction saved into database",
