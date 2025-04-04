@@ -3,22 +3,27 @@
   width: 100%;
   height: 100%;
 }
+
 .sidebar {
   width: 250px;
   background: #ffffff;
 }
+
 .sidebar h2 {
   color: #007bff;
 }
+
 .profile {
   text-align: center;
   padding: 30px;
 }
+
 .profile h3 {
   font-weight: 500;
   font-size: 16px;
   color: var(--table-header);
 }
+
 .profile img.profile-picture {
   width: 80px;
   height: 80px;
@@ -36,17 +41,20 @@
   font-weight: 600;
   text-transform: capitalize;
 }
+
 main {
   flex: 1;
   padding: 0px 20px 20px;
   background-color: #eef4f9;
 }
+
 header {
   display: flex;
   flex-direction: column;
   align-items: start;
   margin-bottom: 20px;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -56,19 +64,23 @@ table {
   border: none !important;
   max-width: 1280px;
 }
+
 thead tr:first-child {
   background-color: transparent;
 }
+
 table,
 th,
 td {
   border: 1px solid #ddd;
 }
+
 th,
 td {
   padding: 10px;
   text-align: left;
 }
+
 /* Table Styling */
 table {
   width: 100%;
@@ -94,11 +106,13 @@ th {
   color: var(--table-header);
   font-size: 14px;
 }
+
 tbody tr td {
   color: var(--table-content);
   font-size: 14px;
   border: none;
 }
+
 thead th,
 thead tr {
   border: none;
@@ -118,9 +132,11 @@ tr:hover {
   color: var(--red-color);
   font-weight: bold;
 }
+
 .header-table {
   text-align: end;
 }
+
 .table-action-link {
   text-decoration: none;
   margin-right: 20px;
@@ -128,9 +144,11 @@ tr:hover {
   display: inline-flex;
   gap: 5px;
 }
+
 .table-action-link:last-child {
   margin-right: 0px;
 }
+
 /* Pagination Styling */
 .pagination {
   display: flex;
@@ -180,15 +198,18 @@ tr:hover {
   color: #212121;
   padding: 8px 5px;
 }
+
 .pagination-nav {
   display: flex;
   justify-content: space-between;
   height: 30px;
   align-items: center;
 }
+
 .page-info {
   color: #212121;
 }
+
 /* Page Info */
 .page-info {
   text-align: center;
@@ -202,14 +223,17 @@ tr:hover {
   background: #f9f9f9;
   /* padding: 20px; */
 }
+
 .filters h3 {
   margin-top: 0;
   margin-bottom: 0px;
   color: #485058;
 }
+
 .filter-section {
   padding: 20px;
 }
+
 .budget {
   display: flex;
   align-items: center;
@@ -225,50 +249,62 @@ tr:hover {
   color: #545454;
   font-size: 15px;
 }
+
 .budget .icon {
   width: 25px;
 }
+
 .logo {
   padding-top: 5px;
   padding-bottom: 5px;
   text-align: center;
   margin-bottom: 30px;
 }
+
 .sidebar .logo {
   background-color: #f7f7f7;
 }
+
 .logo img {
   height: 30px;
 }
+
 nav ul {
   list-style: none;
   margin: auto;
 }
+
 nav ul li {
   padding: 7px 0px;
   color: #545454;
   cursor: pointer;
   margin: 10px 0px;
 }
+
 nav ul li a {
   text-decoration: none;
   color: #545454;
 }
+
 nav ul li.active {
   background-color: #5584f6;
   border-radius: 0.5em;
   color: #ffffff;
 }
+
 nav ul li.active a {
   color: #ffffff;
 }
+
 nav ul {
   text-align: center;
   padding-left: 0px;
 }
+
 .sidebar-navigation {
   padding: 30px;
 }
+
 .sidebar-navigation .sidebar-menu {
   margin: 0px;
   width: 100%;
@@ -313,6 +349,7 @@ nav ul {
   color: #666;
   margin-top: 10px;
 }
+
 .checkbox-group {
   margin-top: 10px;
 }
@@ -366,6 +403,7 @@ input[type="checkbox"] {
   color: #688496;
   padding: 0px;
 }
+
 .search {
   display: flex;
   width: 100%;
@@ -373,6 +411,7 @@ input[type="checkbox"] {
   border: none;
   max-width: 1280px;
 }
+
 .search .search-keyword {
   flex: 1;
   border: none;
@@ -380,6 +419,7 @@ input[type="checkbox"] {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   border-radius: 0.2em;
 }
+
 .search .search-keyword:focus-visible {
   outline: unset;
 }
@@ -392,6 +432,7 @@ input[type="text"] {
 .date-picker {
   cursor: pointer;
 }
+
 .date-picker-container {
   top: 35px;
   position: absolute;
@@ -400,9 +441,11 @@ input[type="text"] {
   background-color: transparent;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
+
 .filter-date {
   position: relative;
 }
+
 .filter-date .date-picker,
 .category-select,
 .form-group input[type="date"],
@@ -423,6 +466,7 @@ input[type="text"] {
   color: var(--table-header);
   border-radius: unset;
 }
+
 .category-select:focus-visible,
 input[type="date"]:focus-visible,
 .form-group select:focus-visible,
@@ -430,11 +474,13 @@ input[type="date"]:focus-visible,
 .form-group input[type="number"]:focus-visible {
   outline: unset;
 }
+
 .filter-date .date-icon {
   position: absolute;
   right: 3px;
   top: 2px;
 }
+
 .filter-date-section {
   height: 35px;
   position: relative;
@@ -461,6 +507,7 @@ input[type="date"]:focus-visible,
   height: 16px;
   cursor: pointer;
 }
+
 .modal-header {
   margin: 0px;
 }
@@ -479,6 +526,7 @@ input[type="date"]:focus-visible,
 .ReactModal__Overlay {
   background-color: #3e3d3dbf !important;
 }
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -487,6 +535,7 @@ input[type="date"]:focus-visible,
   display: flex;
   gap: 50px;
 }
+
 .form-group-col {
   display: flex;
   flex-direction: column;
@@ -501,22 +550,27 @@ input[type="date"]:focus-visible,
 .form-group .desc {
   width: 100%;
 }
+
 .form-group .check-wrapper {
   display: flex;
   gap: 50px;
 }
+
 .form-group-container.diff {
   flex-direction: column;
   gap: 0px;
 }
+
 .err-message {
   color: var(--red-color);
   font-size: 11px;
   padding-top: 10px;
 }
+
 .text-redText {
   color: var(--red-color);
 }
+
 .btn-container {
   display: flex;
   justify-content: end;
