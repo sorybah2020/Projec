@@ -69,18 +69,17 @@ const Login = () => {
       </nav>
       <main>
         <div className="hero">
-          <div></div>
           <div className="hero-container">
             <div className="hero-text">
               <div className="hero-text-container">
                 <h1>Track your finances easily</h1>
                 <p className="hero-description">
                   E-tracker helps you to track your expenses and manage your
-                  finances efficiently. Log in to see if your pig is getting
-                  rich!
+                  finances efficiently. Log in to your account to get started.
                 </p>
               </div>
             </div>
+
             <div id="signup-form" className="form-container">
               <div className="form-header">
                 <h2 className="form-header">Welcome</h2>
