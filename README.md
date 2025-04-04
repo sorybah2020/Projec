@@ -35,7 +35,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-GIF created with ... GIF tool here
+<img src='https://github.com/sorybah2020/Projec/blob/main/frontend/src/assets/website.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Notes
 
