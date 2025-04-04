@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
+import ProfileImg from "../assets/profile.svg";
 
 const Sidebar = () => {
   let navigate = useNavigate();
@@ -43,7 +44,7 @@ const Sidebar = () => {
       <Logo />
       <div className="profile">
         <img
-          src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/user.svg"
+          src={ProfileImg}
           alt="Profile Picture"
           className="profile-picture"
         />
