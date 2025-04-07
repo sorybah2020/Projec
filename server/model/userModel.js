@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a password"],
     },
+    budget: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -7,15 +7,20 @@ import CreateModal from "./CreateModal";
 import EditModal from "../pages/EditModal";
 import PropTypes from "prop-types";
 import TransactionsAPI from "../services/TransactionsAPI";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const TransactionsTable = ({
-  authId,
   transactions,
   setTransactions,
   fetchTransactions,
   transLoading,
   setTransLoading,
 }) => {
+  let navigate = useNavigate();
+  const { auth, setAuth } = useContext(AuthContext);
+
   const [transactionToEdit, setTransactionToEdit] = useState([]);
 
   const [actLink, setActLink] = useState({
@@ -26,7 +31,6 @@ const TransactionsTable = ({
   const [checkedIds, setChecked] = useState([]);
 
   //Pagination
-
   const rowsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -47,6 +51,9 @@ const TransactionsTable = ({
   });
 
   function openModal(modalName) {
+    if (auth.budget === 0 && modalName === "creation") {
+      navigate("/profile");
+    }
     setIsOpen({ ...modalIsOpen, [modalName]: true });
   }
 
@@ -79,13 +86,25 @@ const TransactionsTable = ({
       body: JSON.stringify({ ids: checkedIds }),
     };
 
-    const result = await TransactionsAPI.deleteTransactions(options);
-    if (result.success) {
-      setTransactions((prevTransactions) => {
-        return prevTransactions.filter((trans) => {
-          return !checkedIds.includes(trans._id);
+    try {
+      const result = await TransactionsAPI.deleteTransactions(options);
+      if (result.success) {
+        setTransactions((prevTransactions) => {
+          return prevTransactions.filter((trans) => {
+            return !checkedIds.includes(trans._id);
+          });
         });
-      });
+        setAuth((prevAuth) => ({
+          //update auth budget
+          ...prevAuth,
+          budget: result.newBudget,
+        }));
+      }
+      if (result.error) {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -338,7 +357,6 @@ const TransactionsTable = ({
         </table>
 
         <CreateModal
-          authId={authId}
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
           setTransactions={setTransactions}
@@ -360,6 +378,6 @@ TransactionsTable.propTypes = {
   fetchTransactions: PropTypes.func.isRequired,
   transLoading: PropTypes.bool.isRequired,
   setTransLoading: PropTypes.func.isRequired,
-  authId: PropTypes.string.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 export default TransactionsTable;

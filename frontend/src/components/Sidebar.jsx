@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
-import Plaid from "./Plaid";
+import { Link } from "react-router-dom";
+import ProfileImg from "../assets/profile.svg";
 
-const Sidebar = ({ auth }) => {
+
+const Sidebar = () => {
   let navigate = useNavigate();
-
+  let location = useLocation();
+  const { auth, setAuth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
+
   useEffect(() => {
     setProfile(auth);
   }, [auth]);
@@ -27,6 +32,7 @@ const Sidebar = ({ auth }) => {
 
       // Check if user logged out successfully
       if (result.message) {
+        setAuth(null);
         navigate("/login");
       }
     } catch (error) {
@@ -39,7 +45,7 @@ const Sidebar = ({ auth }) => {
       <Logo />
       <div className="profile">
         <img
-          src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/user.svg"
+          src={ProfileImg}
           alt="Profile Picture"
           className="profile-picture"
         />
@@ -50,25 +56,33 @@ const Sidebar = ({ auth }) => {
               className="icon"
               src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
             />
-            $0
+            ${auth?.budget}
           </p>
         </div>
       </div>
       <nav className="sidebar-navigation">
         <ul className="sidebar-menu">
-          <button className="btn btn-primary">Plaid</button>
-          <li className="active">Transactions</li>
-          <li>Dashboard</li>
-          <li>Profile</li>
-          <li onClick={() => handleLogOut()}>Logout</li>
+
+          <li className={location.pathname === "/transactions" ? "active" : ""}>
+            <Link to="/transactions">Transactions</Link>
+          </li>
+          <li className={location.pathname === "/dashboard" ? "active" : ""}>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li className={location.pathname === "/profile" ? "active" : ""}>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li
+            className={location.pathname === "/logout" ? "active" : ""}
+            onClick={() => handleLogOut()}
+          >
+            Logout
+          </li>
+
         </ul>
       </nav>
     </aside>
   );
-};
-
-Sidebar.propTypes = {
-  auth: PropTypes.object.isRequired,
 };
 
 export default Sidebar;

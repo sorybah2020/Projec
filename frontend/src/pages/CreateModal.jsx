@@ -1,10 +1,13 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect } from "react";
 
-const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
+const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
+  const { auth, setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
@@ -15,6 +18,8 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
     cashflow: "",
     time: "",
   });
+
+  //List of categories and required fields
   const categories = [
     "Rent",
     "Food",
@@ -42,20 +47,23 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
     "time",
   ];
 
+  //Set the userId in the formData state
   useEffect(() => {
     setFormData({
-      userId: authId,
+      userId: auth?._id,
     });
-  }, [authId]);
+  }, [auth]);
 
+  //Close the modal
   function closeModal(modalName) {
     setFormData({
-      userId: authId,
+      userId: auth?._id,
     });
     setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
 
+  //Handle form input changes
   const handleChange = (input) => {
     const { name, value } = input;
     setFormData({
@@ -63,16 +71,21 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
       [name]: value,
     });
 
+    //Put errors for each field in the errors state
     const { newErrors } = Validation.validateField(name, value, reqFields);
 
     setErrors({ ...errors, ...newErrors });
   };
 
+  //Create a new transaction
   const handleCreate = async (e) => {
     e.preventDefault();
 
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    setErrors(newErrors);
+    setErrors(() => ({
+      ...newErrors,
+      frm_subms: "",
+    }));
     if (valid) {
       const options = {
         method: "POST",
@@ -82,10 +95,26 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
         body: JSON.stringify(formData),
       };
 
-      const result = await TransactionsAPI.createTransaction(options);
-      if (result.success) {
-        setTransactions((prevState) => [...prevState, formData]);
-        closeModal("creation");
+      try {
+        const result = await TransactionsAPI.createTransaction(options);
+        if (result.success) {
+          //update transaction state
+          setTransactions((prevState) => [...prevState, result.transaction]);
+          setAuth((prevAuth) => ({
+            //update auth budget
+            ...prevAuth,
+            budget: result.newBudget,
+          }));
+          closeModal("creation");
+        }
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          frm_subms: error.message,
+        }));
       }
     }
   };
@@ -265,6 +294,12 @@ const CreateModal = ({ authId, modalIsOpen, setIsOpen, setTransactions }) => {
           </div>
         </div>
 
+        <div className="form-group">
+          {errors?.["frm_subms"] && (
+            <em className="err-message">{errors["frm_subms"]}</em>
+          )}
+        </div>
+
         <div className="btn-container">
           <input
             type="submit"
@@ -289,6 +324,6 @@ CreateModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
-  authId: PropTypes.string.isRequired,
+  auth: PropTypes.string.isRequired,
 };
 export default CreateModal;

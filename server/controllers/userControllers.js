@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../model/userModel.js";
 import generateJWT from "../utils/jwtToken.js";
-
+import TransactionsModel from "../model/TransactionsModel.js";
 // POST request
 // Description: Login User controller.
 // Used by: api/users/auth
@@ -16,6 +16,7 @@ const Login = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      budget: user.budget,
     });
     console.log(`User ${user.name} logged in successfully`);
   } else {
@@ -90,10 +91,22 @@ const Update = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
+    user.budget = Number(req.body.budget) || user.budget;
+    // if (req.body.password) {
+    //   user.password = req.body.password;
+    // }
+    const userTransactions = await TransactionsModel.find({ userId: user._id });
 
+    const total = userTransactions.reduce((accumulator, current) => {
+      return accumulator + Number(current.amount);
+    }, 0);
+
+    if (total >= user.budget) {
+      res.status(400);
+      throw new Error(
+        `Total of your transactions is: ${total}. Your budget must be greater than this total.`
+      );
+    }
     const updatedUser = await user.save();
 
     generateJWT(res, updatedUser._id);
@@ -101,6 +114,7 @@ const Update = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      budget: updatedUser.budget,
     });
   } else {
     throw new Error("User not found");
