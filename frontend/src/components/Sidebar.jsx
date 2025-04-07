@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
+import Plaid from "./Plaid";
 
 const Sidebar = ({ auth }) => {
   let navigate = useNavigate();
@@ -55,6 +56,7 @@ const Sidebar = ({ auth }) => {
       </div>
       <nav className="sidebar-navigation">
         <ul className="sidebar-menu">
+          <button className="btn btn-primary">Plaid</button>
           <li className="active">Transactions</li>
           <li>Dashboard</li>
           <li>Profile</li>

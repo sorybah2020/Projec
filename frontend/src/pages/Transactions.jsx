@@ -25,6 +25,7 @@ const Transactions = () => {
         };
 
         const result = await UserAPI.getUser(options);
+        console.log(result);
 
         // Check if user data is successfully retrieved
         if (result && result._id) {

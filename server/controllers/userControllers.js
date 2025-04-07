@@ -17,6 +17,7 @@ const Login = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
     });
+    console.log(`User ${user.name} logged in successfully`);
   } else {
     res.status(400);
     throw new Error("Invalid email or password");

@@ -5,6 +5,7 @@ const login = async (options) => {
       "http://localhost:3000/api/users/auth",
       options
     );
+
     const data = await response.json();
     return data;
   } catch (error) {

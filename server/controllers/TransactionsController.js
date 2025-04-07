@@ -2,6 +2,7 @@ import TransactionsModel from "../model/TransactionsModel.js";
 import mongoose from "mongoose";
 
 const createTransaction = async (req, res) => {
+  //console.log(req);
   try {
     const {
       userId,
