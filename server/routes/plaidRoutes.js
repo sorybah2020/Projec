@@ -1,8 +1,11 @@
 import express from "express";
-import { createLinkToken, plaidTest } from "../controllers/PlaidController.js";
+import {
+  createLinkToken,
+  exchangeToken,
+} from "../controllers/PlaidController.js";
 
 const router = express.Router();
 router.post("/token", createLinkToken);
-router.get("/test", plaidTest);
+router.post("/exchange", exchangeToken);
 
 export default router;

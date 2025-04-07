@@ -6,7 +6,7 @@ import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import ProfileImg from "../assets/profile.svg";
-
+import PlaidLink from "./Plaid";
 
 const Sidebar = () => {
   let navigate = useNavigate();
@@ -62,7 +62,9 @@ const Sidebar = () => {
       </div>
       <nav className="sidebar-navigation">
         <ul className="sidebar-menu">
-
+          <li className={location.pathname === "/" ? "active" : ""}>
+            <PlaidLink />
+          </li>
           <li className={location.pathname === "/transactions" ? "active" : ""}>
             <Link to="/transactions">Transactions</Link>
           </li>
@@ -78,7 +80,6 @@ const Sidebar = () => {
           >
             Logout
           </li>
-
         </ul>
       </nav>
     </aside>

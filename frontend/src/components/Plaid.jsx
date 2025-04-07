@@ -1,56 +1,125 @@
-// APP COMPONENT
-// Upon rendering of App component, make a request to create and
-// obtain a link token to be used in the Link component
-import React, { useEffect, useState } from "react";
-import { usePlaidLink } from "react-plaid-link";
+import { useCallback, useState, useEffect } from "react";
+import axios from "axios";
 
-const App = () => {
-  const [linkToken, setLinkToken] = useState(null);
+import {
+  usePlaidLink,
+  //PlaidLinkOnSuccess,
+  //PlaidLinkOnEvent,
+  //PlaidLinkOnExit,
+  //PlaidLinkOptions,
+} from "react-plaid-link";
+import "../css/Plaid.css";
+import { FaChevronRight } from "react-icons/fa";
 
-  const generateToken = async () => {
-    const response = await fetch("/api/create_link_token", {
-      method: "POST",
-    });
-    const data = await response.json();
-    setLinkToken(data.link_token);
-  };
+const PlaidLink = () => {
+  const [token, setToken] = useState(null);
 
+  // get a link_token from your API when component mounts
   useEffect(() => {
-    generateToken();
+    const email = localStorage.email;
+    const createLinkToken = async () => {
+      try {
+        const response = await axios.post("/api/plaid/token", { email });
+        const link_token = response.data.link_token;
+
+        setToken(link_token);
+      } catch (error) {
+        console.log(error, "YOU FAILED TO GET A TOKEN");
+      }
+    };
+    createLinkToken();
   }, []);
 
-  return linkToken != null ? <Link linkToken={linkToken} /> : <></>;
-};
+  const onSuccess = useCallback((publicToken, metadata) => {
+    const exchangeToken = async (publicToken) => {
+      const email = localStorage.email;
+      try {
+        const response = await axios.post("/api/plaid/exchange", {
+          publicToken,
+          email,
+        });
 
-// LINK COMPONENT
-// Use Plaid Link and pass link token and onSuccess function
-// in configuration to initialize Plaid Link
-const Link = (props) => {
-  const onSuccess = React.useCallback((public_token, metadata) => {
-    // send public_token to server
-    const response = fetch("/api/set_access_token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ public_token }),
-    });
-    // Handle response ...
-    console.log(response);
+        const transactionsResponse = await axios.get(
+          "/api/plaid/transactions",
+          { params: { email: email } }
+        );
+
+        const userPlaidAccounts = transactionsResponse.data.accounts.map(
+          ({ balances, ...accountData }) => ({
+            ...accountData,
+            balances: balances.current,
+          })
+        );
+
+        const userPlaidTransactions =
+          transactionsResponse.data.transactions.map(
+            ({
+              account_id,
+              amount,
+              iso_currency_code,
+              category,
+              category_id,
+              date,
+              name,
+              merchant_name,
+              pending,
+            }) => ({
+              account_id,
+              amount,
+              iso_currency_code,
+              category: category[0],
+              category_id,
+              date,
+              name,
+              merchant_name,
+              pending,
+            })
+          );
+
+        await axios.post("/api/account/plaidAccount", {
+          accounts: userPlaidAccounts,
+          email: email,
+        });
+
+        await axios.post("/api/expense/plaidExpense", {
+          expenses: userPlaidTransactions,
+        });
+
+        window.location.reload();
+      } catch (error) {
+        console.log(error, "YOU FAILED TO GET ACCESS TOKEN");
+      }
+    };
+    exchangeToken(publicToken);
   }, []);
 
   const config = {
-    token: props.linkToken,
+    token,
     onSuccess,
+    // onEvent,
+    // onExit,
   };
 
-  const { open, ready } = usePlaidLink(config);
+  const {
+    open,
+    //ready,
+    // error,
+    // exit
+  } = usePlaidLink(config);
 
   return (
-    <button onClick={() => open()} disabled={!ready}>
-      Link account
-    </button>
+    <div>
+      <button className="plaid-button" onClick={() => open()}>
+        <span className="button-wrapper">
+          <span className="button-text">Plaid</span>
+          <span className="button-pic">
+            <i className="arrow-icon">
+              <FaChevronRight />
+            </i>
+          </span>
+        </span>
+      </button>
+    </div>
   );
 };
-
-export default App;
+export default PlaidLink;
