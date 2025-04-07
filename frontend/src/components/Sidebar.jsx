@@ -7,6 +7,7 @@ import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import ProfileImg from "../assets/profile.svg";
 
+
 const Sidebar = () => {
   let navigate = useNavigate();
   let location = useLocation();
@@ -61,6 +62,7 @@ const Sidebar = () => {
       </div>
       <nav className="sidebar-navigation">
         <ul className="sidebar-menu">
+
           <li className={location.pathname === "/transactions" ? "active" : ""}>
             <Link to="/transactions">Transactions</Link>
           </li>
@@ -76,6 +78,7 @@ const Sidebar = () => {
           >
             Logout
           </li>
+
         </ul>
       </nav>
     </aside>
