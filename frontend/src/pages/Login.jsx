@@ -55,6 +55,7 @@ const Login = () => {
         }));
         return;
       } else {
+        localStorage.setItem("email", result.email);
         setAuth(result);
         navigate("/transactions"); //navigate to transactions page
       }

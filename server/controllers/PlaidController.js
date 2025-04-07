@@ -47,8 +47,26 @@ const createLinkToken = asyncHandler(async (req, res) => {
   }
 });
 
-const plaidTest = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "Plaid test route" });
+const exchangeToken = asyncHandler(async (req, res) => {
+  const { email, publicToken } = req.body;
+
+  const request = {
+    public_token: publicToken,
+  };
+
+  try {
+    const response = await plaidClient.itemPublicTokenExchange(request);
+    const responseData = response.data;
+
+    await User.findOneAndUpdate(
+      { email: email },
+      { access_token: response.data.access_token }
+    );
+
+    res.send(responseData);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-export { createLinkToken, plaidTest };
+export { createLinkToken, exchangeToken };
