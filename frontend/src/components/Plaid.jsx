@@ -10,6 +10,7 @@ import {
 } from "react-plaid-link";
 import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
+import { tr } from "date-fns/locale";
 
 const PlaidLink = () => {
   const [token, setToken] = useState(null);
@@ -21,7 +22,6 @@ const PlaidLink = () => {
       try {
         const response = await axios.post("/api/plaid/token", { email });
         const link_token = response.data.link_token;
-
         setToken(link_token);
       } catch (error) {
         console.log(error, "YOU FAILED TO GET A TOKEN");
@@ -34,58 +34,62 @@ const PlaidLink = () => {
     const exchangeToken = async (publicToken) => {
       const email = localStorage.email;
       try {
-        const response = await axios.post("/api/plaid/exchange", {
+        const tokenExchange = await axios.post("/api/plaid/exchange", {
           publicToken,
           email,
         });
 
         const transactionsResponse = await axios.get(
           "/api/plaid/transactions",
-          { params: { email: email } }
+          {
+            params: { email: email },
+          }
         );
 
-        const userPlaidAccounts = transactionsResponse.data.accounts.map(
-          ({ balances, ...accountData }) => ({
-            ...accountData,
-            balances: balances.current,
-          })
-        );
+        console.log(transactionsResponse);
 
-        const userPlaidTransactions =
-          transactionsResponse.data.transactions.map(
-            ({
-              account_id,
-              amount,
-              iso_currency_code,
-              category,
-              category_id,
-              date,
-              name,
-              merchant_name,
-              pending,
-            }) => ({
-              account_id,
-              amount,
-              iso_currency_code,
-              category: category[0],
-              category_id,
-              date,
-              name,
-              merchant_name,
-              pending,
-            })
-          );
+        // const userPlaidAccounts = transactionsResponse.data.accounts.map(
+        //   ({ balances, ...accountData }) => ({
+        //     ...accountData,
+        //     balances: balances.current,
+        //   })
+        // );
 
-        await axios.post("/api/account/plaidAccount", {
-          accounts: userPlaidAccounts,
-          email: email,
-        });
+        // const userPlaidTransactions =
+        //   transactionsResponse.data.transactions.map(
+        //     ({
+        //       account_id,
+        //       amount,
+        //       iso_currency_code,
+        //       category,
+        //       category_id,
+        //       date,
+        //       name,
+        //       merchant_name,
+        //       pending,
+        //     }) => ({
+        //       account_id,
+        //       amount,
+        //       iso_currency_code,
+        //       category: category[0],
+        //       category_id,
+        //       date,
+        //       name,
+        //       merchant_name,
+        //       pending,
+        //     })
+        //   );
 
-        await axios.post("/api/expense/plaidExpense", {
-          expenses: userPlaidTransactions,
-        });
+        // await axios.post("/api/account/plaidAccount", {
+        //   accounts: userPlaidAccounts,
+        //   email: email,
+        // });
 
-        window.location.reload();
+        // await axios.post("/api/expense/plaidExpense", {
+        //   expenses: userPlaidTransactions,
+        // });
+
+        // window.location.reload();
       } catch (error) {
         console.log(error, "YOU FAILED TO GET ACCESS TOKEN");
       }
@@ -102,14 +106,14 @@ const PlaidLink = () => {
 
   const {
     open,
-    //ready,
+    ready,
     // error,
     // exit
   } = usePlaidLink(config);
 
   return (
     <div>
-      <button className="plaid-button" onClick={() => open()}>
+      <button className="plaid-button" onClick={() => open()} disabled={!ready}>
         <span className="button-wrapper">
           <span className="button-text">Plaid</span>
           <span className="button-pic">

@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../model/userModel.js";
 import { Configuration, PlaidApi, PlaidEnvironments } from "plaid";
+import moment from "moment";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -30,7 +31,7 @@ const createLinkToken = asyncHandler(async (req, res) => {
       client_user_id: clientUserId,
     },
     client_name: "Plaid Test App",
-    products: ["auth"],
+    products: ["auth", "transactions"],
     language: "en",
     // webhook: "https://webhook.example.com",
     // redirect_uri: "https://domainname.com/oauth-page.html",
@@ -63,10 +64,34 @@ const exchangeToken = asyncHandler(async (req, res) => {
       { access_token: response.data.access_token }
     );
 
-    res.send(responseData);
+    res.json(`Access token exchanged successfully}`);
   } catch (error) {
     console.log(error);
   }
 });
 
-export { createLinkToken, exchangeToken };
+const getTransactions = asyncHandler(async (req, res) => {
+  const { email } = req.query;
+  const user = await User.findOne({ email });
+  const access_token = user.access_token;
+
+  const startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+  const endDate = moment().format("YYYY-MM-DD");
+
+  try {
+    const transactionResponse = await plaidClient.transactionsGet({
+      access_token: access_token,
+      start_date: startDate,
+      end_date: endDate,
+      options: { count: 10 },
+    });
+
+    console.log(transactionResponse.data);
+
+    res.json(transactionResponse.data);
+  } catch (error) {
+    throw new Error(error.response.data.error_message);
+  }
+});
+
+export { createLinkToken, exchangeToken, getTransactions };
