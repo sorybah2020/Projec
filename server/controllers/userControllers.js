@@ -79,7 +79,15 @@ const Logout = asyncHandler(async (req, res) => {
 // Description: Gets user information.
 // Used by: api/users/profile
 const getUser = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Gets Profile ${req.params.name}!` });
+  const { _id, name, email, budget } = req.user;
+  res.status(200).json({
+    _id,
+    name,
+    email,
+    budget,
+  });
+
+  //res.status(200).json({ message: `Gets Profile ${req.params.name}!` });
 });
 
 // PUT request
