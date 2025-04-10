@@ -5,7 +5,9 @@ const createTransaction = async (options) => {
       "http://localhost:3000/api/transaction/create",
       options
     );
+
     const data = await response.json();
+
     return data;
   } catch (error) {
     return error;

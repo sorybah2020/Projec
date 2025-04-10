@@ -4,6 +4,7 @@ dotenv.config();
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/mongodb.js";
 import userRoutes from "./routes/userRoutes.js";
+import plaidRoutes from "./routes/plaidRoutes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -29,9 +30,12 @@ app.use(bodyParser.json());
 
 app.use("/api/users", userRoutes);
 app.use("/api", TransactionsRouter);
+app.use("/api/plaid", plaidRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 app.use(notFound);
 app.use(errorHandler);
 

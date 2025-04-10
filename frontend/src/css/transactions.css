@@ -47,6 +47,7 @@ main {
   padding: 0px 20px 20px;
   background-color: #eef4f9;
 }
+
 header {
   display: flex;
   flex-direction: column;
@@ -294,6 +295,7 @@ nav ul li.active {
 nav ul li.active a {
   color: #ffffff;
 }
+
 nav ul {
   text-align: center;
   padding-left: 0px;
@@ -519,6 +521,7 @@ input[type="date"]:focus-visible,
   height: 16px;
   cursor: pointer;
 }
+
 .modal-header {
   margin: 0px;
 }
