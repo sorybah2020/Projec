@@ -146,6 +146,9 @@ const EditModal = ({
       isOpen={modalIsOpen.edition}
       onRequestClose={() => closeModal("edition")}
       contentLabel="Edit Transaction"
+      lassName="ReactModal__Content"
+      overlayClassName="ReactModal__Overlay"
+      closeTimeoutMS={300}
     >
       <div className="modal-container">
         <h3 className="header-main modal-header">{"Edit Transaction"}</h3>

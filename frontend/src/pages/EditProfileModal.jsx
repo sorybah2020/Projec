@@ -76,6 +76,9 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
       isOpen={modalIsOpen}
       onRequestClose={() => closeModal()}
       contentLabel="Edit Profile"
+      lassName="ReactModal__Content"
+      overlayClassName="ReactModal__Overlay"
+      closeTimeoutMS={300}
     >
       <div className="modal-container">
         <h3 className="header-main modal-header">Edit Profile</h3>
