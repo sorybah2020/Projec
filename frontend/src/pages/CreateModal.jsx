@@ -126,6 +126,9 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       isOpen={modalIsOpen.creation}
       onRequestClose={() => closeModal("creation")}
       contentLabel="Create Transaction"
+      lassName="ReactModal__Content"
+      overlayClassName="ReactModal__Overlay"
+      closeTimeoutMS={300}
     >
       <div className="modal-container">
         <h3 className="header-main modal-header">{"New Transaction"}</h3>

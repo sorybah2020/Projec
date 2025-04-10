@@ -72,7 +72,6 @@ const EditModal = ({
   const handleEdit = async (e) => {
     e.preventDefault();
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    //setErrors(newErrors);
     setErrors(() => ({
       ...newErrors,
       frm_subms: "",
