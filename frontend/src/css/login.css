@@ -18,6 +18,10 @@
 #signup-form .btn {
   width: 100%;
   margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
 #signup-form .form-header h2 {

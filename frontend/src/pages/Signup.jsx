@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import Validation from "../utilities/Validation";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import Spinner from "../components/Spinner";
 
 const Signup = () => {
   let navigate = useNavigate();
-
+  const [loading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     name: "",
@@ -29,6 +30,7 @@ const Signup = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     //validate signup fields
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
@@ -50,7 +52,10 @@ const Signup = () => {
         }));
         return;
       }
-      navigate("/login"); //navigate to login page
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/login"); //navigate to login page
+      }, 1500);
     }
   };
 
@@ -143,7 +148,7 @@ const Signup = () => {
                 </div>
 
                 <button className="btn" onClick={(e) => handleSignUp(e)}>
-                  Sign Up
+                  Sign Up {loading && <Spinner widthVal="25px" />}
                 </button>
 
                 <p className="more-info">
