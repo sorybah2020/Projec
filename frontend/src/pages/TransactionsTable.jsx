@@ -10,6 +10,7 @@ import TransactionsAPI from "../services/TransactionsAPI";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import searchIcon from "../assets/search.svg";
 
 const TransactionsTable = ({
   transactions,
@@ -156,12 +157,15 @@ const TransactionsTable = ({
       </header>
       <div>
         <div className="search">
-          <input
-            type="text"
-            placeholder="Search"
-            className="search-keyword"
-            onInput={(e) => handleSearch(e.target.value)}
-          />
+          <label className="search-icon">
+            <img src={searchIcon} />
+            <input
+              type="text"
+              placeholder="Search"
+              className="search-keyword"
+              onInput={(e) => handleSearch(e.target.value)}
+            />
+          </label>
           <input
             type="submit"
             className="btn add-transaction"

@@ -411,11 +411,25 @@ input[type="checkbox"] {
 }
 
 .search .search-keyword {
-  flex: 1;
   border: none;
-  padding: 13px;
+  width: -webkit-fill-available;
+  padding: 13px 13px 13px 38px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   border-radius: 0.2em;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.search .search-icon {
+  margin-bottom: 0px;
+  position: relative;
+  flex: 1;
+}
+
+.search img {
+  position: absolute;
+  top: 9px;
+  left: 13px;
 }
 
 .search .search-keyword:focus-visible {
