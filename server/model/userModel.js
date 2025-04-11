@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    access_token: {
+      type: String,
+    },
   },
   {
     timestamps: true,
