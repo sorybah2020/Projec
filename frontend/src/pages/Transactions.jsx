@@ -1,6 +1,6 @@
 import Filters from "../components/Filters";
 import Sidebar from "../components/Sidebar";
-import TransactionsTable from "./TransactionsTable";
+import TransactionsContent from "./TransactionsContent";
 import PropTypes from "prop-types";
 import TransactionsProvider from "../context/TransactionsProvider";
 
@@ -10,7 +10,7 @@ const Transactions = () => {
       <Sidebar />
       <TransactionsProvider>
         <main>
-          <TransactionsTable />
+          <TransactionsContent />
         </main>
         <Filters />
       </TransactionsProvider>

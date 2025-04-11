@@ -8,7 +8,7 @@ import { TransactionsContext } from "../context/TransactionsContext";
 
 const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
   const { setAuth } = useContext(AuthContext);
-  const { setTransactions, setFilteredTransactions } =
+  const { setTransactions, setFilteredTransactions, setTransLoading } =
     useContext(TransactionsContext);
 
   const [actLink, setActLink] = useState({
@@ -35,6 +35,7 @@ const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
       },
       body: JSON.stringify({ ids: checkedIds }),
     };
+    setTransLoading(true);
 
     try {
       const result = await TransactionsAPI.deleteTransactions(options);

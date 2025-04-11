@@ -8,7 +8,7 @@ import { TransactionsContext } from "../context/TransactionsContext";
 
 const CreateModal = ({ modalIsOpen, setIsOpen }) => {
   const { auth, setAuth } = useContext(AuthContext);
-  const { setTransactions } = useContext(TransactionsContext);
+  const { setTransactions, setTransLoading } = useContext(TransactionsContext);
 
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
@@ -89,6 +89,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
       frm_subms: "",
     }));
     if (valid) {
+      setTransLoading(true);
       const options = {
         method: "POST",
         headers: {

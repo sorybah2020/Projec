@@ -27,9 +27,11 @@ const Filters = () => {
     paymentMode: ["cash", "debit card", "credit card"],
     amount: { min: 0, max: 10000 },
   };
-  const { transactions, setFilters } = useContext(TransactionsContext);
+  const { transactions, setFilters, setTransLoading } =
+    useContext(TransactionsContext);
 
   const filterReducer = (state, action) => {
+    setTransLoading(true);
     switch (action.type) {
       case "SET_CATEGORY": {
         if (action.payload.toLowerCase() === "all") {

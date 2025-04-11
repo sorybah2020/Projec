@@ -3,8 +3,11 @@ import { useContext } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
 
 const Search = () => {
-  const { setKeyword } = useContext(TransactionsContext);
-
+  const { setKeyword, setTransLoading } = useContext(TransactionsContext);
+  const handleKeywordChange = (value) => {
+    setTransLoading(true); // start loading
+    setKeyword(value);
+  };
   return (
     <label className="search-icon">
       <img src={searchIcon} />
@@ -12,7 +15,7 @@ const Search = () => {
         type="text"
         placeholder="Search"
         className="search-keyword"
-        onInput={(e) => setKeyword(e.target.value)}
+        onInput={(e) => handleKeywordChange(e.target.value)}
       />
     </label>
   );

@@ -9,7 +9,7 @@ import { TransactionsContext } from "../context/TransactionsContext";
 
 const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
   const { setAuth } = useContext(AuthContext);
-  const { setTransactions } = useContext(TransactionsContext);
+  const { setTransactions, setTransLoading } = useContext(TransactionsContext);
 
   const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
@@ -75,6 +75,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
       frm_subms: "",
     }));
     if (valid) {
+      setTransLoading(true);
       const options = {
         method: "PUT",
         headers: {

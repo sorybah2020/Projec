@@ -91,7 +91,10 @@ const TransactionsProvider = ({ children }) => {
       });
     }
 
-    setFilteredTransactions(result);
+    setTimeout(() => {
+      setFilteredTransactions(result);
+      setTransLoading(false);
+    }, 1000);
   }, [filters, keyword, transactions]);
 
   return (
