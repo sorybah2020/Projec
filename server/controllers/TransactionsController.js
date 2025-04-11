@@ -3,17 +3,31 @@ import User from "../model/userModel.js";
 import mongoose from "mongoose";
 
 // Utility function to fetch user and update budget
-const fetchUserAndUpdateBudget = async (userId, cashflow, amount) => {
+const fetchUserAndUpdateBudget = async (
+  userId,
+  cashflow,
+  amount,
+  currentAmount = 0
+) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
-  let newBudget = user.budget;
+  let newBudget = Number(user.budget);
+  let diff = Number(amount) - Number(currentAmount);
 
   if (cashflow.toLowerCase() === "expense") {
     if (user.budget < amount) throw new Error("Insufficient budget");
-    newBudget -= amount;
+    if (diff > 0) {
+      newBudget -= diff;
+    } else {
+      newBudget += Math.abs(diff);
+    }
   } else if (cashflow.toLowerCase() === "income") {
-    newBudget = Number(newBudget) + Number(amount);
+    if (diff > 0) {
+      newBudget += diff;
+    } else {
+      newBudget -= Math.abs(diff);
+    }
   }
 
   user.budget = newBudget;
@@ -132,6 +146,18 @@ const editTransaction = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const existingTransaction = await TransactionsModel.findById(_id);
+
+    if (!existingTransaction) {
+      throw new Error("Transaction not found");
+    }
+
+    // 2. Access current amount
+    const currentAmount = existingTransaction.amount;
+
+    // You can log it or do anything with it
+    console.log("Current Amount:", currentAmount);
+
     const transEdited = await TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
@@ -147,7 +173,12 @@ const editTransaction = async (req, res) => {
       { new: true }
     );
     if (transEdited) {
-      const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
+      const user = await fetchUserAndUpdateBudget(
+        userId,
+        cashflow,
+        amount,
+        currentAmount
+      );
       return res
         .status(200)
         .json({ updatedTransaction: transEdited, newBudget: user.budget });
@@ -174,12 +205,14 @@ const fetchTransactionsAndUpdateBudget = async (transIds) => {
   }
 
   // Adjust the user's budget
-  let updatedBudget = user.budget;
+  let updatedBudget = Number(user.budget);
+  let transType = transaction.cashflow.toLowerCase();
+
   transactionsToDelete.forEach((transaction) => {
-    if (transaction.cashflow.toLowerCase() === "income") {
-      updatedBudget = Number(updatedBudget) - Number(transaction.amount); // Remove income
-    } else if (transaction.cashflow.toLowerCase() === "expense") {
-      updatedBudget = Number(updatedBudget) + Number(transaction.amount); // Refund expense
+    if (transType === "income") {
+      updatedBudget -= Number(transaction.amount); // Remove income
+    } else if (transType === "expense") {
+      updatedBudget += Number(transaction.amount); // Refund expense
     }
   });
 
