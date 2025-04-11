@@ -2,7 +2,7 @@ import Spinner from "../components/Spinner";
 import CreateModal from "./CreateModal";
 import EditModal from "../pages/EditModal";
 import PropTypes from "prop-types";
-import searchIcon from "../assets/search.svg";
+import Search from "./Search";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
 import { useState } from "react";
@@ -12,10 +12,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const TransactionsTable = ({
+  transactions,
   filteredTransactions,
   setFilteredTransactions,
   setTransactions,
-  fetchTransactions,
   transLoading,
   setTransLoading,
 }) => {
@@ -63,24 +63,6 @@ const TransactionsTable = ({
     setChecked([]);
   };
 
-  const handleSearch = (keyword) => {
-    if (keyword.trim() !== "") {
-      setTransLoading(true);
-      //search by category, paymentmode and description
-      const searchResult = filteredTransactions.filter((transaction) =>
-        ["category", "paymentMode", "description"].some((key) =>
-          transaction[key].toLowerCase().includes(keyword.toLowerCase())
-        )
-      );
-      setTimeout(() => {
-        setFilteredTransactions(searchResult);
-        setTransLoading(false);
-      }, 300);
-      return;
-    }
-    fetchTransactions(); //get again all available transactions
-  };
-
   return (
     <>
       <header>
@@ -90,15 +72,12 @@ const TransactionsTable = ({
       </header>
       <div>
         <div className="search">
-          <label className="search-icon">
-            <img src={searchIcon} />
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-keyword"
-              onInput={(e) => handleSearch(e.target.value)}
-            />
-          </label>
+          <Search
+            transactions={transactions}
+            filteredTransactions={filteredTransactions}
+            setFilteredTransactions={setFilteredTransactions}
+            setTransLoading={setTransLoading}
+          />
           <input
             type="submit"
             className="btn add-transaction"
@@ -202,10 +181,10 @@ const TransactionsTable = ({
   );
 };
 TransactionsTable.propTypes = {
+  transactions: PropTypes.array.isRequired,
   filteredTransactions: PropTypes.array.isRequired,
   setFilteredTransactions: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
-  fetchTransactions: PropTypes.func.isRequired,
   transLoading: PropTypes.bool.isRequired,
   setTransLoading: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,

@@ -46,6 +46,7 @@ const Transactions = () => {
       <Sidebar />
       <main>
         <TransactionsTable
+          transactions={transactions}
           filteredTransactions={filteredTransactions}
           setFilteredTransactions={setFilteredTransactions}
           setTransactions={setTransactions}
