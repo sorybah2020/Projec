@@ -1,7 +1,10 @@
 import searchIcon from "../assets/search.svg";
-import PropTypes from "prop-types";
+import { useContext } from "react";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const Search = ({ setKeyword }) => {
+const Search = () => {
+  const { setKeyword } = useContext(TransactionsContext);
+
   return (
     <label className="search-icon">
       <img src={searchIcon} />
@@ -15,7 +18,4 @@ const Search = ({ setKeyword }) => {
   );
 };
 
-Search.propTypes = {
-  setKeyword: PropTypes.func.isRequired,
-};
 export default Search;

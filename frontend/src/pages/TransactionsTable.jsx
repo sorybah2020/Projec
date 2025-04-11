@@ -1,7 +1,6 @@
 import Spinner from "../components/Spinner";
 import CreateModal from "./CreateModal";
 import EditModal from "../pages/EditModal";
-import PropTypes from "prop-types";
 import Search from "./Search";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
@@ -10,19 +9,14 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const TransactionsTable = ({
-  transactions,
-  filteredTransactions,
-  setFilteredTransactions,
-  setTransactions,
-  transLoading,
-  setTransLoading,
-  setKeyword,
-  keyword,
-}) => {
+const TransactionsTable = () => {
   let navigate = useNavigate();
   const { auth } = useContext(AuthContext);
+  const { filteredTransactions, transLoading } =
+    useContext(TransactionsContext);
+
   const [transactionToEdit, setTransactionToEdit] = useState([]);
   const [checkedIds, setChecked] = useState([]);
   //Pagination
@@ -74,15 +68,7 @@ const TransactionsTable = ({
       </header>
       <div>
         <div className="search">
-          <Search
-            transactions={transactions}
-            setTransactions={setTransactions}
-            filteredTransactions={filteredTransactions}
-            setFilteredTransactions={setFilteredTransactions}
-            setTransLoading={setTransLoading}
-            keyword={keyword}
-            setKeyword={setKeyword}
-          />
+          <Search />
           <input
             type="submit"
             className="btn add-transaction"
@@ -96,9 +82,7 @@ const TransactionsTable = ({
             <tr>
               <td colSpan="6" className="header-table">
                 <ActionsLinks
-                  setTransactions={setTransactions}
                   checkedIds={checkedIds}
-                  setFilteredTransactions={setFilteredTransactions}
                   setTransactionToEdit={setTransactionToEdit}
                   openModal={openModal}
                 />
@@ -163,38 +147,22 @@ const TransactionsTable = ({
                 <Pagination
                   filteredTransactions={filteredTransactions}
                   setCurrentRows={setCurrentRows}
-                  rowsPerPage={2}
+                  rowsPerPage={20}
                 />
               </td>
             </tr>
           </tfoot>
         </table>
 
-        <CreateModal
-          modalIsOpen={modalIsOpen}
-          setIsOpen={setIsOpen}
-          setTransactions={setTransactions}
-        />
+        <CreateModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
 
         <EditModal
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
-          setTransactions={setTransactions}
           transactionToEdit={transactionToEdit}
         />
       </div>
     </>
   );
-};
-TransactionsTable.propTypes = {
-  transactions: PropTypes.array.isRequired,
-  filteredTransactions: PropTypes.array.isRequired,
-  setFilteredTransactions: PropTypes.func.isRequired,
-  setTransactions: PropTypes.func.isRequired,
-  transLoading: PropTypes.bool.isRequired,
-  setTransLoading: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  keyword: PropTypes.string.isRequired,
-  setKeyword: PropTypes.func.isRequired,
 };
 export default TransactionsTable;

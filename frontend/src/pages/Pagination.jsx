@@ -3,10 +3,14 @@ import firstPage from "../assets/first_page.svg";
 import nextPage from "../assets/next_page.svg";
 import lastPage from "../assets/last_page.svg";
 import PropTypes from "prop-types";
+import { useContext } from "react";
 import { useEffect, useState } from "react";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const Pagination = ({ filteredTransactions, setCurrentRows, rowsPerPage }) => {
+const Pagination = ({ setCurrentRows, rowsPerPage }) => {
   //Pagination
+  const { filteredTransactions } = useContext(TransactionsContext);
+
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filteredTransactions?.length / rowsPerPage);
 
@@ -83,7 +87,6 @@ const Pagination = ({ filteredTransactions, setCurrentRows, rowsPerPage }) => {
 };
 
 Pagination.propTypes = {
-  filteredTransactions: PropTypes.array.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   setCurrentRows: PropTypes.func.isRequired,
 };

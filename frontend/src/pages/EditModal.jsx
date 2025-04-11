@@ -5,14 +5,12 @@ import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { format } from "date-fns";
 import { AuthContext } from "../context/AuthContext";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const EditModal = ({
-  modalIsOpen,
-  setIsOpen,
-  setTransactions,
-  transactionToEdit,
-}) => {
+const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
   const { setAuth } = useContext(AuthContext);
+  const { setTransactions } = useContext(TransactionsContext);
+
   const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
     category: "",

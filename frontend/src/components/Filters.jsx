@@ -1,8 +1,8 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useContext } from "react";
 import DatePicker from "./DatePicker";
-import PropTypes from "prop-types";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const Filters = ({ transactions, setFilters }) => {
+const Filters = () => {
   const categories = [
     "Rent",
     "Food",
@@ -27,6 +27,8 @@ const Filters = ({ transactions, setFilters }) => {
     paymentMode: ["cash", "debit card", "credit card"],
     amount: { min: 0, max: 10000 },
   };
+  const { transactions, setFilters } = useContext(TransactionsContext);
+
   const filterReducer = (state, action) => {
     switch (action.type) {
       case "SET_CATEGORY": {
@@ -224,11 +226,6 @@ const Filters = ({ transactions, setFilters }) => {
       </div>
     </aside>
   );
-};
-Filters.propTypes = {
-  transactions: PropTypes.array.isRequired,
-  setFilters: PropTypes.func.isRequired,
-  setFilteredTransactions: PropTypes.func.isRequired,
 };
 
 export default Filters;

@@ -2,12 +2,14 @@ import Modal from "react-modal";
 import PropTypes from "prop-types";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useState, useEffect } from "react";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
+const CreateModal = ({ modalIsOpen, setIsOpen }) => {
   const { auth, setAuth } = useContext(AuthContext);
+  const { setTransactions } = useContext(TransactionsContext);
+
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",

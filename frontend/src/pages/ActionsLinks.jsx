@@ -4,15 +4,12 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const ActionsLinks = ({
-  setTransactions,
-  checkedIds,
-  setFilteredTransactions,
-  setTransactionToEdit,
-  openModal,
-}) => {
+const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
   const { setAuth } = useContext(AuthContext);
+  const { setTransactions, setFilteredTransactions } =
+    useContext(TransactionsContext);
 
   const [actLink, setActLink] = useState({
     edit: false,
