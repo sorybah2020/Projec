@@ -39,7 +39,12 @@ const TransactionsProvider = ({ children }) => {
     }
   }, [auth, fetchTransactions]);
 
-  //on change of filters and keyword, filter the transactions
+  // format the date to yyyy-MM-dd
+  const formatDate = (date) => {
+    return format(parseISO(date), "yyyy-MM-dd");
+  };
+
+  // on change of filters and keyword, filter the transactions
   useEffect(() => {
     if (transactions.length === 0) return;
 
@@ -65,9 +70,9 @@ const TransactionsProvider = ({ children }) => {
       )
         return false;
       if (filters.date.startDate && filters.date.endDate) {
-        const txDate = format(parseISO(transaction.date), "yyyy-MM-dd");
-        const start = format(parseISO(filters.date.startDate), "yyyy-MM-dd");
-        const end = format(parseISO(filters.date.endDate), "yyyy-MM-dd");
+        const txDate = formatDate(transaction.date);
+        const start = formatDate(filters.date.startDate);
+        const end = formatDate(filters.date.endDate);
 
         if (txDate < start || txDate > end) return false;
       }
