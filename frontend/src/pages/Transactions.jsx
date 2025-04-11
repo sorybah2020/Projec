@@ -46,7 +46,8 @@ const Transactions = () => {
       <Sidebar />
       <main>
         <TransactionsTable
-          transactions={filteredTransactions}
+          filteredTransactions={filteredTransactions}
+          setFilteredTransactions={setFilteredTransactions}
           setTransactions={setTransactions}
           fetchTransactions={fetchTransactions}
           transLoading={transLoading}
