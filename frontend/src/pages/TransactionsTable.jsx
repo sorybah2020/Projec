@@ -18,6 +18,8 @@ const TransactionsTable = ({
   setTransactions,
   transLoading,
   setTransLoading,
+  setKeyword,
+  keyword,
 }) => {
   let navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -74,9 +76,12 @@ const TransactionsTable = ({
         <div className="search">
           <Search
             transactions={transactions}
+            setTransactions={setTransactions}
             filteredTransactions={filteredTransactions}
             setFilteredTransactions={setFilteredTransactions}
             setTransLoading={setTransLoading}
+            keyword={keyword}
+            setKeyword={setKeyword}
           />
           <input
             type="submit"
@@ -91,6 +96,7 @@ const TransactionsTable = ({
             <tr>
               <td colSpan="6" className="header-table">
                 <ActionsLinks
+                  setTransactions={setTransactions}
                   checkedIds={checkedIds}
                   setFilteredTransactions={setFilteredTransactions}
                   setTransactionToEdit={setTransactionToEdit}
@@ -157,7 +163,7 @@ const TransactionsTable = ({
                 <Pagination
                   filteredTransactions={filteredTransactions}
                   setCurrentRows={setCurrentRows}
-                  rowsPerPage={10}
+                  rowsPerPage={2}
                 />
               </td>
             </tr>
@@ -188,5 +194,7 @@ TransactionsTable.propTypes = {
   transLoading: PropTypes.bool.isRequired,
   setTransLoading: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
+  keyword: PropTypes.string.isRequired,
+  setKeyword: PropTypes.func.isRequired,
 };
 export default TransactionsTable;

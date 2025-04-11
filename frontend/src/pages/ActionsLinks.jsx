@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const ActionsLinks = ({
+  setTransactions,
   checkedIds,
   setFilteredTransactions,
   setTransactionToEdit,
@@ -41,11 +42,16 @@ const ActionsLinks = ({
     try {
       const result = await TransactionsAPI.deleteTransactions(options);
       if (result.success) {
-        setFilteredTransactions((prevTransactions) => {
+        //update the transactions when deleted
+        const newTransactions = (prevTransactions) => {
           return prevTransactions.filter((trans) => {
             return !checkedIds.includes(trans._id);
           });
-        });
+        };
+
+        setFilteredTransactions(newTransactions);
+        setTransactions(newTransactions);
+
         setAuth((prevAuth) => ({
           //update auth budget
           ...prevAuth,
@@ -109,6 +115,7 @@ const ActionsLinks = ({
   );
 };
 ActionsLinks.propTypes = {
+  setTransactions: PropTypes.func.isRequired,
   checkedIds: PropTypes.array.isRequired,
   setFilteredTransactions: PropTypes.func.isRequired,
   setTransactionToEdit: PropTypes.func.isRequired,

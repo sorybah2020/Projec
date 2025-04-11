@@ -24,6 +24,9 @@ const Pagination = ({ filteredTransactions, setCurrentRows, rowsPerPage }) => {
       indexOfLastRow
     );
     setCurrentRows(currentRows);
+    if (filteredTransactions?.length == rowsPerPage) {
+      setCurrentPage(1);
+    }
   }, [currentPage, filteredTransactions, rowsPerPage, setCurrentRows]);
 
   return (
