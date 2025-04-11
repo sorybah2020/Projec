@@ -48,7 +48,7 @@ const TransactionsTable = () => {
     //check all checkboxes or uncheck all
     if (target.checked) {
       const checkboxes = [...checkedIds];
-      filteredTransactions.map((transaction) => {
+      currentRows.map((transaction) => {
         if (!checkedIds.includes(transaction._id)) {
           checkboxes.push(transaction._id);
         }
@@ -93,8 +93,8 @@ const TransactionsTable = () => {
                 <input
                   type="checkbox"
                   checked={
-                    checkedIds.length === filteredTransactions?.length &&
-                    filteredTransactions?.length > 0
+                    currentRows.length > 0 &&
+                    currentRows.every((tx) => checkedIds.includes(tx._id))
                   }
                   onChange={(e) => handleCheckAll(e.target)}
                 />
