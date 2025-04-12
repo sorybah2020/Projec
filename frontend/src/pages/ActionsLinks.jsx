@@ -6,7 +6,12 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { TransactionsContext } from "../context/TransactionsContext";
 
-const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
+const ActionsLinks = ({
+  checkedIds,
+  setChecked,
+  setTransactionToEdit,
+  openModal,
+}) => {
   const { setAuth } = useContext(AuthContext);
   const { setTransactions, setFilteredTransactions, setTransLoading } =
     useContext(TransactionsContext);
@@ -55,6 +60,7 @@ const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
           ...prevAuth,
           budget: result.newBudget,
         }));
+        setChecked([]);
       }
       if (result.error) {
         throw new Error(result.error);
@@ -113,9 +119,8 @@ const ActionsLinks = ({ checkedIds, setTransactionToEdit, openModal }) => {
   );
 };
 ActionsLinks.propTypes = {
-  setTransactions: PropTypes.func.isRequired,
   checkedIds: PropTypes.array.isRequired,
-  setFilteredTransactions: PropTypes.func.isRequired,
+  setChecked: PropTypes.func.isRequired,
   setTransactionToEdit: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
 };

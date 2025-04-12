@@ -17,8 +17,8 @@ const TransactionsTable = ({
 
   const [checkedIds, setChecked] = useState([]);
 
+  //check the checkboxes for edit and delete
   const handleCheck = (id) => {
-    //check the checkboxes for edit and delete
     if (checkedIds.includes(id)) {
       setChecked(checkedIds.filter((item) => item !== id));
       return;
@@ -26,8 +26,8 @@ const TransactionsTable = ({
     setChecked([...checkedIds, id]);
   };
 
+  //check all checkboxes or uncheck all
   const handleCheckAll = (target) => {
-    //check all checkboxes or uncheck all
     if (target.checked) {
       const checkboxes = [...checkedIds];
       currentRows.map((transaction) => {
@@ -48,6 +48,7 @@ const TransactionsTable = ({
           <td colSpan="6" className="header-table">
             <ActionsLinks
               checkedIds={checkedIds}
+              setChecked={setChecked}
               setTransactionToEdit={setTransactionToEdit}
               openModal={openModal}
             />
@@ -59,7 +60,8 @@ const TransactionsTable = ({
               type="checkbox"
               checked={
                 currentRows.length >= 0 &&
-                currentRows.every((tx) => checkedIds.includes(tx._id))
+                currentRows.every((tx) => checkedIds.includes(tx._id)) &&
+                checkedIds.length !== 0
               }
               onChange={(e) => handleCheckAll(e.target)}
             />

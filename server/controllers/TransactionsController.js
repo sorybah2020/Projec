@@ -155,9 +155,6 @@ const editTransaction = async (req, res) => {
     // 2. Access current amount
     const currentAmount = existingTransaction.amount;
 
-    // You can log it or do anything with it
-    console.log("Current Amount:", currentAmount);
-
     const transEdited = await TransactionsModel.findOneAndUpdate(
       { _id: _id },
       {
@@ -205,14 +202,12 @@ const fetchTransactionsAndUpdateBudget = async (transIds) => {
   }
 
   // Adjust the user's budget
-  let updatedBudget = Number(user.budget);
-  let transType = transaction.cashflow.toLowerCase();
-
+  let updatedBudget = user.budget;
   transactionsToDelete.forEach((transaction) => {
-    if (transType === "income") {
-      updatedBudget -= Number(transaction.amount); // Remove income
-    } else if (transType === "expense") {
-      updatedBudget += Number(transaction.amount); // Refund expense
+    if (transaction.cashflow.toLowerCase() === "income") {
+      updatedBudget = Number(updatedBudget) - Number(transaction.amount); // Remove income
+    } else if (transaction.cashflow.toLowerCase() === "expense") {
+      updatedBudget = Number(updatedBudget) + Number(transaction.amount); // Refund expense
     }
   });
 
