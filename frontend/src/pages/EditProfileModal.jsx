@@ -48,16 +48,14 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
 
       try {
         const result = await UserAPI.editUser(options);
-        console.log(result);
 
         if (result.message) {
-          console.log(result.message);
           throw new Error(result.message);
-        } else {
-          // Successfully updated, update context and close modal
-          setAuth(result);
-          closeModal();
         }
+
+        // Successfully updated, update context and close modal
+        setAuth(result);
+        closeModal();
       } catch (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -69,7 +67,17 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
 
   function closeModal() {
     setIsOpen(false);
+    setErrors({
+      frm_subms: "",
+    });
   }
+
+  useEffect(() => {
+    if (modalIsOpen) {
+      //when the modal is open, get auth as form
+      setFormData(auth);
+    }
+  }, [modalIsOpen, auth]);
 
   return (
     <Modal
@@ -167,7 +175,7 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
             onClick={(e) => handleEditProfile(e)}
           />
           <input
-            type="submit"
+            type="button"
             className="btn second-btn close-btn"
             value="Close"
             onClick={() => closeModal()}

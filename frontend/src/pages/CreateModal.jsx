@@ -316,7 +316,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
             }}
           />
           <input
-            type="submit"
+            type="button"
             className="btn second-btn close-btn"
             value="Close"
             onClick={() => closeModal("creation")}

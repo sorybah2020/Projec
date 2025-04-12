@@ -45,11 +45,6 @@ const editUser = async (options) => {
       ...options,
     });
 
-    if (!response.ok) {
-      // If response is not successful, throw an error
-      throw new Error("Failed to fetch user profile");
-    }
-
     const data = await response.json();
     return data;
   } catch (error) {

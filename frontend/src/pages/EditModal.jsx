@@ -351,7 +351,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
             }}
           />
           <input
-            type="submit"
+            type="button"
             className="btn second-btn close-btn"
             value="Close"
             onClick={() => closeModal("edition")}

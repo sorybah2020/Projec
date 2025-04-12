@@ -155,21 +155,20 @@ const editTransaction = async (req, res) => {
     // 2. Access current amount
     const currentAmount = existingTransaction.amount;
 
-    const transEdited = await TransactionsModel.findOneAndUpdate(
-      { _id: _id },
-      {
-        userId: userId,
-        category: category,
-        date: date,
-        paymentMode: paymentMode,
-        description: description,
-        amount: amount,
-        cashflow: cashflow,
-        time: time,
-      },
-      { new: true }
-    );
-    if (transEdited) {
+    // Update fields directly on the document
+    existingTransaction.userId = userId;
+    existingTransaction.category = category;
+    existingTransaction.date = date;
+    existingTransaction.paymentMode = paymentMode;
+    existingTransaction.description = description;
+    existingTransaction.amount = amount;
+    existingTransaction.cashflow = cashflow;
+    existingTransaction.time = time;
+
+    // Save updated transaction
+    const updatedTransaction = await existingTransaction.save();
+
+    if (updatedTransaction) {
       const user = await fetchUserAndUpdateBudget(
         userId,
         cashflow,
