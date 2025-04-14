@@ -46,49 +46,6 @@ const PlaidLink = () => {
         );
 
         console.log(transactionsResponse.data.transactions);
-
-        // const userPlaidAccounts = transactionsResponse.data.accounts.map(
-        //   ({ balances, ...accountData }) => ({
-        //     ...accountData,
-        //     balances: balances.current,
-        //   })
-        // );
-
-        const userPlaidTransactions =
-          transactionsResponse.data.transactions.map(
-            ({
-              account_id,
-              amount,
-              iso_currency_code,
-              category,
-              category_id,
-              date,
-              name,
-              merchant_name,
-              pending,
-            }) => ({
-              account_id,
-              amount,
-              iso_currency_code,
-              category: category[0],
-              category_id,
-              date,
-              name,
-              merchant_name,
-              pending,
-            })
-          );
-
-        // await axios.post("/api/account/plaidAccount", {
-        //   accounts: userPlaidAccounts,
-        //   email: email,
-        // });
-
-        // await axios.post("/api/expense/plaidExpense", {
-        //   expenses: userPlaidTransactions,
-        // });
-
-        // window.location.reload();
       } catch (error) {
         console.log(error, "YOU FAILED TO GET ACCESS TOKEN");
       }
