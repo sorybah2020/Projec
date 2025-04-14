@@ -55,6 +55,21 @@ header {
   margin-bottom: 20px;
 }
 
+header button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-navigation .header {
+  color: #688496;
+  padding: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -397,11 +412,6 @@ input[type="checkbox"] {
   padding: 0 10px;
   font-size: 18px;
   color: #666;
-}
-
-.top-navigation .header {
-  color: #688496;
-  padding: 0px;
 }
 
 .search {

@@ -2,9 +2,14 @@ import Spinner from "../components/Spinner";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
 import PropTypes from "prop-types";
+import PlaidLink from "../components/Plaid";
+import TransactionsAPI from "../services/TransactionsAPI";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { format } from "date-fns";
 import { useContext, useState } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
+
 
 const TransactionsTable = ({
   setTransactionToEdit,
