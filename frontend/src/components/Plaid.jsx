@@ -10,7 +10,6 @@ import {
 } from "react-plaid-link";
 import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
-import { tr } from "date-fns/locale";
 
 const PlaidLink = () => {
   const [token, setToken] = useState(null);
@@ -46,7 +45,7 @@ const PlaidLink = () => {
           }
         );
 
-        console.log(transactionsResponse);
+        console.log(transactionsResponse.data.transactions);
 
         // const userPlaidAccounts = transactionsResponse.data.accounts.map(
         //   ({ balances, ...accountData }) => ({
@@ -55,30 +54,30 @@ const PlaidLink = () => {
         //   })
         // );
 
-        // const userPlaidTransactions =
-        //   transactionsResponse.data.transactions.map(
-        //     ({
-        //       account_id,
-        //       amount,
-        //       iso_currency_code,
-        //       category,
-        //       category_id,
-        //       date,
-        //       name,
-        //       merchant_name,
-        //       pending,
-        //     }) => ({
-        //       account_id,
-        //       amount,
-        //       iso_currency_code,
-        //       category: category[0],
-        //       category_id,
-        //       date,
-        //       name,
-        //       merchant_name,
-        //       pending,
-        //     })
-        //   );
+        const userPlaidTransactions =
+          transactionsResponse.data.transactions.map(
+            ({
+              account_id,
+              amount,
+              iso_currency_code,
+              category,
+              category_id,
+              date,
+              name,
+              merchant_name,
+              pending,
+            }) => ({
+              account_id,
+              amount,
+              iso_currency_code,
+              category: category[0],
+              category_id,
+              date,
+              name,
+              merchant_name,
+              pending,
+            })
+          );
 
         // await axios.post("/api/account/plaidAccount", {
         //   accounts: userPlaidAccounts,

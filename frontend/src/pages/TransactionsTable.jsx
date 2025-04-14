@@ -6,6 +6,7 @@ import CreateModal from "./CreateModal";
 //import TransactionsAPI from "../services/TransactionsAPI";
 import EditModal from "../pages/EditModal";
 import PropTypes from "prop-types";
+import PlaidLink from "../components/Plaid";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -152,6 +153,7 @@ const TransactionsTable = ({
       <header>
         <div className="top-navigation">
           <p className="header">All Transactions</p>
+          <PlaidLink />
         </div>
       </header>
       <div>
