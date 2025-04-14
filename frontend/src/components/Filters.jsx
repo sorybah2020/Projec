@@ -1,9 +1,8 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useContext } from "react";
 import DatePicker from "./DatePicker";
-import PropTypes from "prop-types";
-import { parseISO, format } from "date-fns";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const Filters = ({ transactions, setFilteredTransactions }) => {
+const Filters = () => {
   const categories = [
     "Rent",
     "Food",
@@ -28,7 +27,11 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
     paymentMode: ["cash", "debit card", "credit card"],
     amount: { min: 0, max: 10000 },
   };
+  const { transactions, setFilters, setTransLoading } =
+    useContext(TransactionsContext);
+
   const filterReducer = (state, action) => {
+    setTransLoading(true);
     switch (action.type) {
       case "SET_CATEGORY": {
         if (action.payload.toLowerCase() === "all") {
@@ -80,47 +83,8 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
   const [filters, dispatch] = useReducer(filterReducer, filtersInitialState);
 
   useEffect(() => {
-    if (transactions.length > 0) {
-      const filtered = transactions.filter((transaction) => {
-        if (filters.category && transaction.category !== filters.category)
-          return false;
-        if (
-          filters.cashflow.length > 0 &&
-          !filters.cashflow.includes(transaction.cashflow.toLowerCase())
-        )
-          return false;
-        if (
-          filters.paymentMode.length > 0 &&
-          !filters.paymentMode.includes(transaction.paymentMode.toLowerCase())
-        )
-          return false;
-        if (
-          transaction.amount < filters.amount?.min ||
-          transaction.amount > filters.amount?.max
-        )
-          return false;
-
-        if (filters.date.startDate && filters.date.endDate) {
-          const transactionYear = format(
-            parseISO(transaction.date),
-            "yyyy-MM-dd"
-          );
-          const startYear = format(
-            parseISO(filters.date.startDate),
-            "yyyy-MM-dd"
-          );
-          const endYear = format(parseISO(filters.date.endDate), "yyyy-MM-dd");
-
-          if (transactionYear < startYear || transactionYear > endYear)
-            return false;
-        }
-
-        return true;
-      });
-
-      setFilteredTransactions(filtered);
-    }
-  }, [filters, transactions, setFilteredTransactions]);
+    setFilters(filters);
+  }, [filters, setFilters]);
 
   return (
     <aside className="filters">
@@ -264,10 +228,6 @@ const Filters = ({ transactions, setFilteredTransactions }) => {
       </div>
     </aside>
   );
-};
-Filters.propTypes = {
-  transactions: PropTypes.array.isRequired,
-  setFilteredTransactions: PropTypes.func.isRequired,
 };
 
 export default Filters;

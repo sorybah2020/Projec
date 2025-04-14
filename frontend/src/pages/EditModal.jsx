@@ -5,14 +5,12 @@ import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
 import { format } from "date-fns";
 import { AuthContext } from "../context/AuthContext";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const EditModal = ({
-  modalIsOpen,
-  setIsOpen,
-  setTransactions,
-  transactionToEdit,
-}) => {
+const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
   const { setAuth } = useContext(AuthContext);
+  const { setTransactions, setTransLoading } = useContext(TransactionsContext);
+
   const [formData, setFormData] = useState([]);
   const [errors, setErrors] = useState({
     category: "",
@@ -72,12 +70,12 @@ const EditModal = ({
   const handleEdit = async (e) => {
     e.preventDefault();
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
-    //setErrors(newErrors);
     setErrors(() => ({
       ...newErrors,
       frm_subms: "",
     }));
     if (valid) {
+      setTransLoading(true);
       const options = {
         method: "PUT",
         headers: {
@@ -147,6 +145,9 @@ const EditModal = ({
       isOpen={modalIsOpen.edition}
       onRequestClose={() => closeModal("edition")}
       contentLabel="Edit Transaction"
+      lassName="ReactModal__Content"
+      overlayClassName="ReactModal__Overlay"
+      closeTimeoutMS={300}
     >
       <div className="modal-container">
         <h3 className="header-main modal-header">{"Edit Transaction"}</h3>
@@ -350,7 +351,7 @@ const EditModal = ({
             }}
           />
           <input
-            type="submit"
+            type="button"
             className="btn second-btn close-btn"
             value="Close"
             onClick={() => closeModal("edition")}

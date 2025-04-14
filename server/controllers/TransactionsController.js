@@ -3,17 +3,31 @@ import User from "../model/userModel.js";
 import mongoose from "mongoose";
 
 // Utility function to fetch user and update budget
-const fetchUserAndUpdateBudget = async (userId, cashflow, amount) => {
+const fetchUserAndUpdateBudget = async (
+  userId,
+  cashflow,
+  amount,
+  currentAmount = 0
+) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
-  let newBudget = user.budget;
+  let newBudget = Number(user.budget);
+  let diff = Number(amount) - Number(currentAmount);
 
   if (cashflow.toLowerCase() === "expense") {
     if (user.budget < amount) throw new Error("Insufficient budget");
-    newBudget -= amount;
+    if (diff > 0) {
+      newBudget -= diff;
+    } else {
+      newBudget += Math.abs(diff);
+    }
   } else if (cashflow.toLowerCase() === "income") {
-    newBudget = Number(newBudget) + Number(amount);
+    if (diff > 0) {
+      newBudget += diff;
+    } else {
+      newBudget -= Math.abs(diff);
+    }
   }
 
   user.budget = newBudget;
@@ -132,22 +146,35 @@ const editTransaction = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const transEdited = await TransactionsModel.findOneAndUpdate(
-      { _id: _id },
-      {
-        userId: userId,
-        category: category,
-        date: date,
-        paymentMode: paymentMode,
-        description: description,
-        amount: amount,
-        cashflow: cashflow,
-        time: time,
-      },
-      { new: true }
-    );
-    if (transEdited) {
-      const user = await fetchUserAndUpdateBudget(userId, cashflow, amount);
+    const existingTransaction = await TransactionsModel.findById(_id);
+
+    if (!existingTransaction) {
+      throw new Error("Transaction not found");
+    }
+
+    // 2. Access current amount
+    const currentAmount = existingTransaction.amount;
+
+    // Update fields directly on the document
+    existingTransaction.userId = userId;
+    existingTransaction.category = category;
+    existingTransaction.date = date;
+    existingTransaction.paymentMode = paymentMode;
+    existingTransaction.description = description;
+    existingTransaction.amount = amount;
+    existingTransaction.cashflow = cashflow;
+    existingTransaction.time = time;
+
+    // Save updated transaction
+    const updatedTransaction = await existingTransaction.save();
+
+    if (updatedTransaction) {
+      const user = await fetchUserAndUpdateBudget(
+        userId,
+        cashflow,
+        amount,
+        currentAmount
+      );
       return res
         .status(200)
         .json({ updatedTransaction: transEdited, newBudget: user.budget });

@@ -32,8 +32,9 @@ const Sidebar = () => {
 
       // Check if user logged out successfully
       if (result.message) {
-        setAuth(null);
-        navigate("/login");
+        setTimeout(() => {
+          setAuth(null);
+        }, 1000);
       }
     } catch (error) {
       console.error("User verification failed:", error);

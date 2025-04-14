@@ -2,6 +2,7 @@ import Validation from "../utilities/Validation";
 import LoginAPI from "../services/LoginAPI";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ import { AuthContext } from "../context/AuthContext";
 const Login = () => {
   let navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
-
+  const [loading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     name: "",
@@ -31,7 +32,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     //validate login fields
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
@@ -55,10 +56,17 @@ const Login = () => {
         }));
         return;
       } else {
+        //login successful
         localStorage.setItem("email", result.email);
-        setAuth(result);
-        navigate("/transactions"); //navigate to transactions page
+        setTimeout(() => {
+          setAuth(result);
+          setIsLoading(false);
+          navigate("/transactions"); //navigate to transactions page
+        }, 1500);
       }
+    } else {
+      setIsLoading(false);
+      return;
     }
   };
   return (
@@ -132,7 +140,7 @@ const Login = () => {
                 </div>
 
                 <button className="btn" onClick={(e) => handleLogin(e)}>
-                  Login
+                  Login {loading && <Spinner widthVal="25px" />}
                 </button>
                 <p className="more-info">
                   {"Don't have an account?"}{" "}

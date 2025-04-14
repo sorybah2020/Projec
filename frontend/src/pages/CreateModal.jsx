@@ -2,12 +2,14 @@ import Modal from "react-modal";
 import PropTypes from "prop-types";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useState, useEffect } from "react";
+import { TransactionsContext } from "../context/TransactionsContext";
 
-const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
+const CreateModal = ({ modalIsOpen, setIsOpen }) => {
   const { auth, setAuth } = useContext(AuthContext);
+  const { setTransactions, setTransLoading } = useContext(TransactionsContext);
+
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
@@ -87,6 +89,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       frm_subms: "",
     }));
     if (valid) {
+      setTransLoading(true);
       const options = {
         method: "POST",
         headers: {
@@ -126,6 +129,9 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
       isOpen={modalIsOpen.creation}
       onRequestClose={() => closeModal("creation")}
       contentLabel="Create Transaction"
+      lassName="ReactModal__Content"
+      overlayClassName="ReactModal__Overlay"
+      closeTimeoutMS={300}
     >
       <div className="modal-container">
         <h3 className="header-main modal-header">{"New Transaction"}</h3>
@@ -310,7 +316,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen, setTransactions }) => {
             }}
           />
           <input
-            type="submit"
+            type="button"
             className="btn second-btn close-btn"
             value="Close"
             onClick={() => closeModal("creation")}
