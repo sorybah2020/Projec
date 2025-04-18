@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Background circle -->
-  <circle cx="100" cy="100" r="100" fill="#e8ecef"/>
-
-  <!-- Abstract user icon -->
-  <circle cx="100" cy="80" r="35" fill="white" opacity="0.9"/>
-  <path d="M50 150 C50 120 150 120 150 150 L150 170 C150 180 50 180 50 170 Z" fill="white" opacity="0.9"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user w-full h-full p-2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

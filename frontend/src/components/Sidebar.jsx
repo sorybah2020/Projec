@@ -45,11 +45,13 @@ const Sidebar = () => {
     <aside className="sidebar">
       <Logo />
       <div className="profile">
-        <img
-          src={ProfileImg}
-          alt="Profile Picture"
-          className="profile-picture"
-        />
+        <div className="profile-header">
+          <img
+            src={ProfileImg}
+            alt="Profile Picture"
+            className="profile-picture"
+          />
+        </div>
         <h3>{profile?.name}</h3>
         <div>
           <p className="budget">
