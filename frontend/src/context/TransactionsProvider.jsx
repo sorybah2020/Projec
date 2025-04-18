@@ -26,7 +26,7 @@ const TransactionsProvider = ({ children }) => {
       setTimeout(() => {
         setTransactions(result);
         setTransLoading(false);
-      }, 500);
+      }, 300);
     } else {
       setTransLoading(false);
     }
