@@ -10,7 +10,6 @@ import {
 } from "react-plaid-link";
 import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
-import { tr } from "date-fns/locale";
 
 const PlaidLink = () => {
   const [token, setToken] = useState(null);
@@ -46,50 +45,7 @@ const PlaidLink = () => {
           }
         );
 
-        console.log(transactionsResponse);
-
-        // const userPlaidAccounts = transactionsResponse.data.accounts.map(
-        //   ({ balances, ...accountData }) => ({
-        //     ...accountData,
-        //     balances: balances.current,
-        //   })
-        // );
-
-        // const userPlaidTransactions =
-        //   transactionsResponse.data.transactions.map(
-        //     ({
-        //       account_id,
-        //       amount,
-        //       iso_currency_code,
-        //       category,
-        //       category_id,
-        //       date,
-        //       name,
-        //       merchant_name,
-        //       pending,
-        //     }) => ({
-        //       account_id,
-        //       amount,
-        //       iso_currency_code,
-        //       category: category[0],
-        //       category_id,
-        //       date,
-        //       name,
-        //       merchant_name,
-        //       pending,
-        //     })
-        //   );
-
-        // await axios.post("/api/account/plaidAccount", {
-        //   accounts: userPlaidAccounts,
-        //   email: email,
-        // });
-
-        // await axios.post("/api/expense/plaidExpense", {
-        //   expenses: userPlaidTransactions,
-        // });
-
-        // window.location.reload();
+        console.log(transactionsResponse.data.transactions);
       } catch (error) {
         console.log(error, "YOU FAILED TO GET ACCESS TOKEN");
       }

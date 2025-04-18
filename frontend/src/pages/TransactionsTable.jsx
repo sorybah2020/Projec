@@ -2,6 +2,7 @@ import Spinner from "../components/Spinner";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
 import PropTypes from "prop-types";
+import PlaidLink from "../components/Plaid";
 import { format } from "date-fns";
 import { useContext, useState } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
