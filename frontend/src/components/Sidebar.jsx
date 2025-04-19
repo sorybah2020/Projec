@@ -10,7 +10,7 @@ import PlaidLink from "./Plaid";
 import PropTypes from "prop-types";
 import CloseIcon from "../assets/close.svg";
 
-const Sidebar = ({ sidebarOpened, handleOpenProfile }) => {
+const Sidebar = ({ sidebarOpened = true, handleOpenProfile }) => {
   let navigate = useNavigate();
   let location = useLocation();
   const { auth, setAuth } = useContext(AuthContext);
@@ -110,7 +110,7 @@ const Sidebar = ({ sidebarOpened, handleOpenProfile }) => {
 };
 
 Sidebar.propTypes = {
-  handleOpenProfile: PropTypes.func.isRequired,
+  handleOpenProfile: PropTypes.func,
   sidebarOpened: PropTypes.bool,
 };
 export default Sidebar;

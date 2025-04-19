@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   height: 100%;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); */
   transition: transform 0.3s ease-in-out;
   z-index: 100;
 }
@@ -74,10 +74,18 @@
 
 main {
   flex: 1;
-  /* padding: 20px; */
+  padding: 20px;
   background-color: #eef4f9;
   height: 100%;
   min-height: 100vh;
+}
+
+.main-content {
+  width: -webkit-fill-available;
+}
+
+.main-content main {
+  padding: 0px;
 }
 
 header {
@@ -872,5 +880,9 @@ input[type="date"]:focus-visible,
 
   .sidebar-closed {
     transform: translateX(0%);
+  }
+
+  .sidebar {
+    box-shadow: none;
   }
 }

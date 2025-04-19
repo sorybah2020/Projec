@@ -31,13 +31,15 @@ const Transactions = () => {
         handleOpenProfile={handleOpenProfile}
       />
       <TransactionsProvider>
-        <main>
-          <TransactionsContent
-            sidebarOpened={sidebarOpened}
-            handleOpenFilters={handleOpenFilters}
-            handleOpenProfile={handleOpenProfile}
-          />
-        </main>
+        <div className="main-content">
+          <main>
+            <TransactionsContent
+              sidebarOpened={sidebarOpened}
+              handleOpenFilters={handleOpenFilters}
+              handleOpenProfile={handleOpenProfile}
+            />
+          </main>
+        </div>
         <Filters
           sidebarOpened={sidebarOpened}
           handleOpenFilters={handleOpenFilters}
