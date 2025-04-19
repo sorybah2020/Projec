@@ -1,8 +1,11 @@
 import { useEffect, useReducer, useContext } from "react";
-import DatePicker from "./DatePicker";
 import { TransactionsContext } from "../context/TransactionsContext";
+import DatePicker from "./DatePicker";
+import Checkbox from "./Checkbox";
+import CloseIcon from "../assets/close.svg";
+import PropTypes from "prop-types";
 
-const Filters = () => {
+const Filters = ({ sidebarOpened, handleOpenFilters }) => {
   const categories = [
     "Rent",
     "Food",
@@ -87,147 +90,145 @@ const Filters = () => {
   }, [filters, setFilters]);
 
   return (
-    <aside className="filters">
-      <div className="filter-header">
-        <span className="filter-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="#5f6368"
+    <>
+      <div
+        className={`overlay ${
+          sidebarOpened.filters ? "filters-open" : "filters-closed"
+        }`}
+      ></div>
+
+      <aside
+        className={`filters ${
+          sidebarOpened.filters ? "filters-open" : "filters-closed"
+        }`}
+      >
+        <div className="filter-header">
+          <span className="filter-icon" onClick={handleOpenFilters}>
+            <img src={CloseIcon} />
+          </span>
+          <h3>Filters</h3>
+        </div>
+
+        <div className="filter-group">
+          <DatePicker dispatch={dispatch} />
+        </div>
+
+        <div className="filter-group">
+          <label className="filter-title">Category</label>
+          <select
+            className="category-select"
+            onChange={(e) => {
+              dispatch({ type: "SET_CATEGORY", payload: e.target.value });
+            }}
           >
-            <path d="M440-120v-240h80v80h320v80H520v80h-80Zm-320-80v-80h240v80H120Zm160-160v-80H120v-80h160v-80h80v240h-80Zm160-80v-80h400v80H440Zm160-160v-240h80v80h160v80H680v80h-80Zm-480-80v-80h400v80H120Z" />
-          </svg>
-        </span>
-        <h3>Filters</h3>
-      </div>
+            <option selected>All</option>
+            {categories.map((category) => {
+              return <option key={category}>{category}</option>;
+            })}
+          </select>
+        </div>
 
-      <div className="filter-group">
-        <DatePicker dispatch={dispatch} />
-      </div>
-
-      <div className="filter-group">
-        <label className="filter-title">Category</label>
-        <select
-          className="category-select"
-          onChange={(e) => {
-            dispatch({ type: "SET_CATEGORY", payload: e.target.value });
-          }}
-        >
-          <option selected>All</option>
-          {categories.map((category) => {
-            return <option key={category}>{category}</option>;
-          })}
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label className="filter-title">Cashflow</label>
-        <div className="checkbox-group">
-          <label>
-            <input
-              type="checkbox"
+        <div className="filter-group">
+          <label className="filter-title">Cashflow</label>
+          <div className="checkbox-group">
+            <Checkbox
+              label="Income"
               name="cashflow"
-              onChange={(e) =>
-                dispatch({ type: "SET_CASHFLOW", payload: e.target })
-              }
-              value={"Income"}
               checked={filters.cashflow?.includes("income")}
-            />{" "}
-            Income
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="cashflow"
-              onChange={(e) =>
+              action={(e) =>
                 dispatch({ type: "SET_CASHFLOW", payload: e.target })
               }
+            />
+            <Checkbox
+              label="Expense"
+              name="cashflow"
+              actionType="SET_CASHFLOW"
               checked={filters.cashflow?.includes("expense")}
-              value={"Expense"}
-            />{" "}
-            Expense
-          </label>
-        </div>
-      </div>
-
-      <div className="filter-group">
-        <label className="filter-title">Payment Mode</label>
-        <div className="checkbox-group">
-          <label>
-            <input
-              type="checkbox"
-              name="paymentMode"
-              onChange={(e) =>
-                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
-              }
-              value={"Cash"}
-              checked={filters.paymentMode.includes("cash")}
-            />{" "}
-            Cash
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="paymentMode"
-              onChange={(e) =>
-                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
-              }
-              value={"Debit Card"}
-              checked={filters.paymentMode.includes("debit card")}
-            />{" "}
-            Debit Card
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="paymentMode"
-              onChange={(e) =>
-                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
-              }
-              value={"Credit Card"}
-              checked={filters.paymentMode.includes("credit card")}
-            />{" "}
-            Credit Card
-          </label>
-        </div>
-      </div>
-
-      <div className="filter-group">
-        <label className="filter-title">Amount</label>
-        <div className="amount-range">
-          <label>
-            Min:{" "}
-            <input
-              type="text"
-              value={filters.amount.min}
-              onChange={(e) =>
-                dispatch({
-                  type: "SET_AMOUNT_RANGE",
-                  payload: { min: e.target.value },
-                })
+              action={(e) =>
+                dispatch({ type: "SET_CASHFLOW", payload: e.target })
               }
             />
-          </label>
-          <span className="separator">—</span>
-          <label>
-            Max:{" "}
-            <input
-              type="text"
-              value={filters.amount.max}
-              onChange={(e) =>
-                dispatch({
-                  type: "SET_AMOUNT_RANGE",
-                  payload: { max: e.target.value },
-                })
-              }
-            />
-          </label>
+          </div>
         </div>
-      </div>
-    </aside>
+
+        <div className="filter-group">
+          <label className="filter-title">Payment Mode</label>
+          <div className="checkbox-group">
+            <Checkbox
+              label="Cash"
+              name="cash"
+              action={(e) =>
+                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
+              }
+              checked={filters.paymentMode?.includes("cash")}
+            />
+            <Checkbox
+              label="Debit Card"
+              name="paymentMode"
+              action={(e) =>
+                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
+              }
+              checked={filters.paymentMode?.includes("debit card")}
+            />
+            <Checkbox
+              label="Credit Card"
+              name="paymentMode"
+              action={(e) =>
+                dispatch({ type: "SET_PAYMENT_MODE", payload: e.target })
+              }
+              checked={filters.paymentMode?.includes("credit card")}
+            />
+          </div>
+        </div>
+
+        <div className="filter-group">
+          <label className="filter-title">Amount</label>
+          <div className="amount-range">
+            <label>
+              <input
+                type="text"
+                value={filters.amount.min ? filters.amount.min : 0}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_AMOUNT_RANGE",
+                    payload: { min: e.target.value ? e.target.value : 0 },
+                  })
+                }
+              />
+            </label>
+            <span className="separator">—</span>
+            <label>
+              <input
+                type="text"
+                value={filters.amount.max > 0 ? filters.amount.max : "10000"}
+                onChange={(e) =>
+                  dispatch({
+                    type: "SET_AMOUNT_RANGE",
+                    payload: {
+                      max: e.target.value > 0 ? e.target.value : "10000",
+                    },
+                  })
+                }
+              />
+            </label>
+          </div>
+        </div>
+      </aside>
+      {/* <img
+        src={FiltersIcon}
+        className="filtersIcon"
+        style={{ opacity: filterOpened ? 0 : 1 }}
+        onClick={handleOpenFilters}
+      /> */}
+    </>
   );
+};
+
+Filters.propTypes = {
+  filterOpened: PropTypes.bool.isRequired,
+  handleOpenFilters: PropTypes.func.isRequired,
+  setFilters: PropTypes.func.isRequired,
+  sidebarOpened: PropTypes.object.isRequired,
 };
 
 export default Filters;

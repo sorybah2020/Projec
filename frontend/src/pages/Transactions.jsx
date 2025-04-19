@@ -3,16 +3,45 @@ import Sidebar from "../components/Sidebar";
 import TransactionsContent from "./TransactionsContent";
 import PropTypes from "prop-types";
 import TransactionsProvider from "../context/TransactionsProvider";
+import { useState } from "react";
 
 const Transactions = () => {
+  const [sidebarOpened, setSidebarOpened] = useState({
+    filters: false,
+    profile: false,
+  });
+  const handleOpenFilters = () => {
+    setSidebarOpened({
+      ...sidebarOpened,
+      filters: !sidebarOpened.filters,
+    });
+  };
+
+  const handleOpenProfile = () => {
+    setSidebarOpened({
+      ...sidebarOpened,
+      profile: !sidebarOpened.profile,
+    });
+  };
+
   return (
     <div className="container">
-      <Sidebar />
+      <Sidebar
+        sidebarOpened={sidebarOpened}
+        handleOpenProfile={handleOpenProfile}
+      />
       <TransactionsProvider>
         <main>
-          <TransactionsContent />
+          <TransactionsContent
+            sidebarOpened={sidebarOpened}
+            handleOpenFilters={handleOpenFilters}
+            handleOpenProfile={handleOpenProfile}
+          />
         </main>
-        <Filters />
+        <Filters
+          sidebarOpened={sidebarOpened}
+          handleOpenFilters={handleOpenFilters}
+        />
       </TransactionsProvider>
     </div>
   );

@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import PropTypes from "prop-types";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
+import RadioButton from "../components/RadioButton";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { TransactionsContext } from "../context/TransactionsContext";
@@ -152,24 +153,17 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
           </label>
           <div className="form-group-container diff">
             <div className="check-wrapper">
-              <label>
-                <input
-                  type="radio"
-                  name="cashflow"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Income"}
-                />{" "}
-                Income
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="cashflow"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Expense"}
-                />{" "}
-                Expense
-              </label>
+              <RadioButton
+                name="cashflow"
+                action={(e) => handleChange(e.target)}
+                label="Income"
+              />
+
+              <RadioButton
+                name="cashflow"
+                action={(e) => handleChange(e.target)}
+                label="Expense"
+              />
             </div>
             {errors?.["cashflow"] && (
               <em className="err-message">{errors["cashflow"]}</em>
@@ -265,33 +259,21 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
           </label>
           <div className="form-group-container diff">
             <div className="check-wrapper">
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Cash"}
-                />{" "}
-                Cash
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Debit Card"}
-                />{" "}
-                Debit Card
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Debit Card"}
-                />{" "}
-                Credit Card
-              </label>
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Cash"
+              />
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Debit Card"
+              />
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Credit Card"
+              />
             </div>
 
             {errors?.["paymentMode"] && (

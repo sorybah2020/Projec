@@ -8,12 +8,14 @@
 @import "react-date-range/dist/theme/default.css";
 @import "./css/login.css";
 @import "./css/profile.css";
+@import "./css/filters.css";
+
 :root {
   --icon-color: #151515;
-  --gray-color: #545454;
+  --gray-color: #757575;
   --blue-color: #618bf9;
   --table-header: #000000de;
-  --table-content: #696969;
+  --table-content: #757575;
   --border-color: #e0e0e0;
   --red-color: #ff5e65;
   --green-color: #04cd93;

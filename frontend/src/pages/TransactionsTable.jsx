@@ -2,10 +2,10 @@ import Spinner from "../components/Spinner";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
 import PropTypes from "prop-types";
-import PlaidLink from "../components/Plaid";
 import { format } from "date-fns";
 import { useContext, useState } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
+import Checkbox from "../components/Checkbox";
 
 const TransactionsTable = ({
   setTransactionToEdit,
@@ -57,14 +57,14 @@ const TransactionsTable = ({
         </tr>
         <tr>
           <th>
-            <input
-              type="checkbox"
+            <Checkbox
+              name="all"
               checked={
                 currentRows.length >= 0 &&
                 currentRows.every((tx) => checkedIds.includes(tx._id)) &&
                 checkedIds.length !== 0
               }
-              onChange={(e) => handleCheckAll(e.target)}
+              action={(e) => handleCheckAll(e.target)}
             />
           </th>
           <th>Category</th>
@@ -86,11 +86,10 @@ const TransactionsTable = ({
           currentRows?.map((transaction, index) => (
             <tr key={index}>
               <td>
-                <input
-                  type="checkbox"
+                <Checkbox
                   value={transaction._id}
                   checked={checkedIds.includes(transaction._id)}
-                  onClick={() => handleCheck(transaction._id)}
+                  action={() => handleCheck(transaction._id)}
                 />
               </td>
               <td>{transaction.category}</td>

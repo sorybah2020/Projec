@@ -7,8 +7,10 @@ import Logo from "./Logo";
 import { Link } from "react-router-dom";
 import ProfileImg from "../assets/profile.svg";
 import PlaidLink from "./Plaid";
+import PropTypes from "prop-types";
+import CloseIcon from "../assets/close.svg";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarOpened, handleOpenProfile }) => {
   let navigate = useNavigate();
   let location = useLocation();
   const { auth, setAuth } = useContext(AuthContext);
@@ -42,51 +44,73 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
-      <Logo />
-      <div className="profile">
-        <div className="profile-header">
-          <img
-            src={ProfileImg}
-            alt="Profile Picture"
-            className="profile-picture"
-          />
-        </div>
-        <h3>{profile?.name}</h3>
-        <div>
-          <p className="budget">
-            <img
-              className="icon"
-              src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
-            />
-            ${auth?.budget}
-          </p>
-        </div>
+    <>
+      <div
+        className={`overlay ${
+          sidebarOpened.profile ? "sidebar-open" : "sidebar-closed"
+        }`}
+      >
+        ...
       </div>
-      <nav className="sidebar-navigation">
-        <ul className="sidebar-menu">
-          <li className={location.pathname === "/" ? "active" : ""}>
-            <PlaidLink />
-          </li>
-          <li className={location.pathname === "/transactions" ? "active" : ""}>
-            <Link to="/transactions">Transactions</Link>
-          </li>
-          <li className={location.pathname === "/dashboard" ? "active" : ""}>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li className={location.pathname === "/profile" ? "active" : ""}>
-            <Link to="/profile">Profile</Link>
-          </li>
-          <li
-            className={location.pathname === "/logout" ? "active" : ""}
-            onClick={() => handleLogOut()}
-          >
-            Logout
-          </li>
-        </ul>
-      </nav>
-    </aside>
+      <aside
+        className={`sidebar ${
+          sidebarOpened.profile ? "sidebar-open" : "sidebar-closed"
+        }`}
+      >
+        <span className="close-sibebar-icon" onClick={handleOpenProfile}>
+          <img src={CloseIcon} />
+        </span>
+        <Logo />
+        <div className="profile">
+          <div className="profile-header">
+            <img
+              src={ProfileImg}
+              alt="Profile Picture"
+              className="profile-picture"
+            />
+          </div>
+          <h3>{profile?.name}</h3>
+          <div>
+            <p className="budget">
+              <img
+                className="icon"
+                src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
+              />
+              ${auth?.budget}
+            </p>
+          </div>
+        </div>
+        <nav className="sidebar-navigation">
+          <ul className="sidebar-menu">
+            <li className={location.pathname === "/" ? "active" : ""}>
+              <PlaidLink />
+            </li>
+            <li
+              className={location.pathname === "/transactions" ? "active" : ""}
+            >
+              <Link to="/transactions">Transactions</Link>
+            </li>
+            <li className={location.pathname === "/dashboard" ? "active" : ""}>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li className={location.pathname === "/profile" ? "active" : ""}>
+              <Link to="/profile">Profile</Link>
+            </li>
+            <li
+              className={location.pathname === "/logout" ? "active" : ""}
+              onClick={() => handleLogOut()}
+            >
+              Logout
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 };
 
+Sidebar.propTypes = {
+  handleOpenProfile: PropTypes.func.isRequired,
+  sidebarOpened: PropTypes.bool,
+};
 export default Sidebar;

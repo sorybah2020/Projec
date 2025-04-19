@@ -10,7 +10,7 @@ const Search = () => {
   };
   return (
     <label className="search-icon">
-      <img src={searchIcon} />
+      <img src={searchIcon} className="search-icon" />
       <input
         type="text"
         placeholder="Search"

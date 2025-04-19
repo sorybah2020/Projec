@@ -1,3 +1,5 @@
+import LogoIcon from "../assets/logo.svg";
+
 const Logo = () => {
   return (
     <div className="logo">
