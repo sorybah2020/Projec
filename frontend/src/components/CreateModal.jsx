@@ -1,17 +1,17 @@
 import Modal from "react-modal";
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback, useContext } from "react";
 import Validation from "../utilities/Validation";
 import TransactionsAPI from "../services/TransactionsAPI";
-import { format } from "date-fns";
+import RadioButton from "./RadioButton";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { TransactionsContext } from "../context/TransactionsContext";
 
-const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
-  const { setAuth } = useContext(AuthContext);
+const CreateModal = ({ modalIsOpen, setIsOpen }) => {
+  const { auth, setAuth } = useContext(AuthContext);
   const { setTransactions, setTransLoading } = useContext(TransactionsContext);
 
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({
     category: "",
     date: "",
@@ -22,6 +22,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     time: "",
   });
 
+  //List of categories and required fields
   const categories = [
     "Rent",
     "Food",
@@ -49,12 +50,23 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     "time",
   ];
 
+  //Set the userId in the formData state
+  useEffect(() => {
+    setFormData({
+      userId: auth?._id,
+    });
+  }, [auth]);
+
+  //Close the modal
   function closeModal(modalName) {
+    setFormData({
+      userId: auth?._id,
+    });
+    setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
-    //setFormData([]);
-    //setErrors({});
   }
 
+  //Handle form input changes
   const handleChange = (input) => {
     const { name, value } = input;
     setFormData({
@@ -62,13 +74,16 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
       [name]: value,
     });
 
+    //Put errors for each field in the errors state
     const { newErrors } = Validation.validateField(name, value, reqFields);
 
     setErrors({ ...errors, ...newErrors });
   };
 
-  const handleEdit = async (e) => {
+  //Create a new transaction
+  const handleCreate = async (e) => {
     e.preventDefault();
+
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(() => ({
       ...newErrors,
@@ -76,32 +91,26 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     }));
     if (valid) {
       const options = {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       };
+
       try {
-        const result = await TransactionsAPI.editTransaction(options);
-        if (result?.updatedTransaction) {
+        const result = await TransactionsAPI.createTransaction(options);
+        if (result.success) {
           setTransLoading(true);
-          setTransactions((prevTransactions) => {
-            //update transactions
-            const trans = [...prevTransactions];
-            trans.map((transaction, index) => {
-              if (transaction._id === result.updatedTransaction._id) {
-                trans[index] = result.updatedTransaction;
-              }
-            });
-            return trans;
-          });
+
+          //update transaction state
+          setTransactions((prevState) => [...prevState, result.transaction]);
           setAuth((prevAuth) => ({
             //update auth budget
             ...prevAuth,
             budget: result.newBudget,
           }));
-          closeModal("edition");
+          closeModal("creation");
         }
         if (result.error) {
           throw new Error(result.error);
@@ -115,48 +124,25 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     }
   };
 
-  const fetchTransaction = useCallback(async () => {
-    //get transaction by id
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const result = await TransactionsAPI.getTransaction(
-      transactionToEdit,
-      options
-    );
-
-    if (result.length > 0) {
-      setFormData(result[0]);
-    }
-  }, [transactionToEdit]);
-
-  useEffect(() => {
-    if (modalIsOpen.edition) {
-      //when the modal is open, get the transaction
-      fetchTransaction();
-    }
-  }, [modalIsOpen.edition, fetchTransaction]);
+  Modal.setAppElement("#root");
 
   return (
     <Modal
-      isOpen={modalIsOpen.edition}
-      onRequestClose={() => closeModal("edition")}
-      contentLabel="Edit Transaction"
+      isOpen={modalIsOpen.creation}
+      onRequestClose={() => closeModal("creation")}
+      contentLabel="Create Transaction"
       lassName="ReactModal__Content"
       overlayClassName="ReactModal__Overlay"
       closeTimeoutMS={300}
     >
       <div className="modal-container">
-        <h3 className="header-main modal-header">{"Edit Transaction"}</h3>
+        <h3 className="header-main modal-header">{"New Transaction"}</h3>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -960 960 960"
           className="modal-close"
           fill="#000000de"
-          onClick={() => closeModal("edition")}
+          onClick={() => closeModal("creation")}
         >
           <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
         </svg>
@@ -168,28 +154,17 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
           </label>
           <div className="form-group-container diff">
             <div className="check-wrapper">
-              <label>
-                <input
-                  type="radio"
-                  name="cashflow"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Income"}
-                  disabled={formData?.cashflow === "Expense"}
-                  checked={formData?.cashflow === "Income"}
-                />{" "}
-                Income
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="cashflow"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Expense"}
-                  disabled={formData?.cashflow === "Expense"}
-                  checked={formData?.cashflow === "Expense"}
-                />{" "}
-                Expense
-              </label>
+              <RadioButton
+                name="cashflow"
+                action={(e) => handleChange(e.target)}
+                label="Income"
+              />
+
+              <RadioButton
+                name="cashflow"
+                action={(e) => handleChange(e.target)}
+                label="Expense"
+              />
             </div>
             {errors?.["cashflow"] && (
               <em className="err-message">{errors["cashflow"]}</em>
@@ -206,11 +181,6 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               type="date"
               name="date"
               onChange={(e) => handleChange(e.target)}
-              value={
-                formData?.date
-                  ? format(new Date(formData?.date), "yyyy-MM-dd")
-                  : ""
-              }
             />
             {errors?.["date"] && (
               <em className="err-message">{errors["date"]}</em>
@@ -224,7 +194,6 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               type="time"
               id="time"
               name="time"
-              value={formData?.time}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["time"] && (
@@ -239,19 +208,12 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               Category <em className="text-redText">*</em>
             </label>
             <select name="category" onChange={(e) => handleChange(e.target)}>
-              <option value="" disabled>
+              <option value="" disabled selected>
                 Select Category
               </option>
-              {categories.map((category) => {
-                if (formData?.category === category) {
-                  return (
-                    <option key={category} selected>
-                      {category}
-                    </option>
-                  );
-                }
-                return <option key={category}>{category}</option>;
-              })}
+              {categories.map((category) => (
+                <option key={category}>{category}</option>
+              ))}
             </select>
             {errors?.["category"] && (
               <em className="err-message">{errors["category"]}</em>
@@ -266,7 +228,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               name="amount"
               min="1"
               onChange={(e) => handleChange(e.target)}
-              value={formData?.amount}
+              value={formData.amount}
             />
             {errors?.["amount"] && (
               <em className="err-message">{errors["amount"]}</em>
@@ -283,7 +245,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               type="text"
               className="desc"
               name="description"
-              value={formData?.description || ""}
+              value={formData.description}
               onChange={(e) => handleChange(e.target)}
             />
             {errors?.["description"] && (
@@ -298,36 +260,21 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
           </label>
           <div className="form-group-container diff">
             <div className="check-wrapper">
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Cash"}
-                  checked={formData?.paymentMode === "Cash"}
-                />{" "}
-                Cash
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Debit Card"}
-                  checked={formData?.paymentMode === "Debit Card"}
-                />{" "}
-                Debit Card
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="paymentMode"
-                  onChange={(e) => handleChange(e.target)}
-                  value={"Credit Card"}
-                  checked={formData?.paymentMode === "Credit Card"}
-                />{" "}
-                Credit Card
-              </label>
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Cash"
+              />
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Debit Card"
+              />
+              <RadioButton
+                name="paymentMode"
+                action={(e) => handleChange(e.target)}
+                label="Credit Card"
+              />
             </div>
 
             {errors?.["paymentMode"] && (
@@ -335,6 +282,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
             )}
           </div>
         </div>
+
         <div className="form-group">
           {errors?.["frm_subms"] && (
             <em className="err-message">{errors["frm_subms"]}</em>
@@ -345,26 +293,26 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
           <input
             type="submit"
             className="btn create-btn"
-            value="Edit"
+            value="Create"
             onClick={(e) => {
-              handleEdit(e);
+              handleCreate(e);
             }}
           />
           <input
             type="button"
             className="btn second-btn close-btn"
             value="Close"
-            onClick={() => closeModal("edition")}
+            onClick={() => closeModal("creation")}
           />
         </div>
       </form>
     </Modal>
   );
 };
-EditModal.propTypes = {
+CreateModal.propTypes = {
   modalIsOpen: PropTypes.object.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   setTransactions: PropTypes.func.isRequired,
-  transactionToEdit: PropTypes.array.isRequired,
+  auth: PropTypes.string.isRequired,
 };
-export default EditModal;
+export default CreateModal;

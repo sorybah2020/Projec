@@ -1,6 +1,6 @@
 import Sidebar from "../components/Sidebar";
 import editIcon from "../assets/edit.svg";
-import EditProfileModalModal from "../pages/EditProfileModal";
+import EditProfileModalModal from "../components/EditProfileModal";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";

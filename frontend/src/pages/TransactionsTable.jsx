@@ -1,6 +1,6 @@
 import Spinner from "../components/Spinner";
-import Pagination from "./Pagination";
-import ActionsLinks from "./ActionsLinks";
+import Pagination from "../components/Pagination";
+import ActionsLinks from "../components/ActionsLinks";
 import PropTypes from "prop-types";
 import Checkbox from "../components/Checkbox";
 import { format } from "date-fns";

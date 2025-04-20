@@ -1,14 +1,14 @@
-import CreateModal from "./CreateModal";
-import EditModal from "./EditModal";
-import Search from "./Search";
+import CreateModal from "../components/CreateModal";
+import EditModal from "../components/EditModal";
+import Search from "../components/Search";
 import TransactionsTable from "./TransactionsTable";
 import PropTypes from "prop-types";
 import PlusIcon from "../assets/plus.svg";
+import Header from "../components/Header";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import Header from "../components/Header";
 
 const TransactionsContent = () => {
   let navigate = useNavigate();
