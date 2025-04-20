@@ -6,6 +6,8 @@ import Validation from "../utilities/Validation";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 import Spinner from "../components/Spinner";
+import RaundedCharts from "../assets/rounded_charts.svg";
+import Charts from "../assets/charts.svg";
 
 const Signup = () => {
   let navigate = useNavigate();
@@ -62,16 +64,20 @@ const Signup = () => {
   return (
     <>
       <nav className="navbar">
-        <div className="container">
+        <div className="container login">
           <Logo />
         </div>
       </nav>
       <main>
         <div className="hero sign-up-page">
           <div className="hero-container">
+            <img src={RaundedCharts} className="rounded-chart" />
+            <img src={Charts} className="lined-chart" />
             <div className="hero-text">
               <div className="hero-text-container">
-                <h1>Track your finances easily</h1>
+                <h1>
+                  Track your finances <p className="new-line">Easily</p>
+                </h1>
                 <p className="hero-description">
                   E-tracker helps you to track your expenses and manage your
                   finances efficiently. Sign Up in to your account to get

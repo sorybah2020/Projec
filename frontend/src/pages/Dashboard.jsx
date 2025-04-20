@@ -5,16 +5,18 @@ import NavigationProvider from "../context/NavigationProvider";
 
 const Dashboard = () => {
   return (
-    <div className="container">
-      <NavigationProvider>
-        <Sidebar />
-        <main>
-          <div className="page-content">
-            <DashboardTable />
-            <Charts />
-          </div>
-        </main>
-      </NavigationProvider>
+    <div className="page">
+      <div className="container">
+        <NavigationProvider>
+          <Sidebar />
+          <main>
+            <div className="page-content">
+              <DashboardTable />
+              <Charts />
+            </div>
+          </main>
+        </NavigationProvider>
+      </div>
     </div>
   );
 };

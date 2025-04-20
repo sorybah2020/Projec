@@ -7,17 +7,19 @@ import NavigationProvider from "../context/NavigationProvider";
 
 const Transactions = () => {
   return (
-    <div className="container">
-      <NavigationProvider>
-        <Sidebar />
-        <TransactionsProvider>
-          <main>
-            <TransactionsContent />
-          </main>
+    <div className="page">
+      <div className="container">
+        <NavigationProvider>
+          <Sidebar />
+          <TransactionsProvider>
+            <main>
+              <TransactionsContent />
+            </main>
 
-          <Filters />
-        </TransactionsProvider>
-      </NavigationProvider>
+            <Filters />
+          </TransactionsProvider>
+        </NavigationProvider>
+      </div>
     </div>
   );
 };

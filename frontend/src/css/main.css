@@ -8,13 +8,21 @@ body {
   width: 100%;
   font-family: "Inter";
   min-height: 100%;
-  background-color: #ededed;
 }
 
 #root .container {
   max-width: 1700px;
   margin: auto;
   background: #eef4f9;
+}
+
+#root .container.login {
+  max-width: 1280px;
+  background-color: #ffffff;
+}
+
+.page {
+  background-color: #ededed;
 }
 
 .loading-container {

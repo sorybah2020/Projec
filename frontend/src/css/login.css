@@ -49,7 +49,7 @@
 }
 
 .navbar {
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   border-bottom: 2px solid var(--btn-color);
 }
 
@@ -81,9 +81,24 @@ input:focus-visible {
   border: 4px solid #ffffff;
   border: none;
   padding: 35px 20px 100px 20px;
-  height: 431px;
+  height: 600px;
+  position: relative;
 }
 
+.hero .rounded-chart {
+  width: 158px;
+  bottom: 0px;
+  position: absolute;
+  right: 0px;
+  display: none;
+}
+
+.hero .lined-chart {
+  width: 600px;
+  position: absolute;
+  top: 90px;
+  display: none;
+}
 .hero .hero-container {
   display: flex;
   margin: auto;
@@ -91,6 +106,7 @@ input:focus-visible {
   gap: 50px;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .hero .hero-text {
@@ -101,7 +117,6 @@ input:focus-visible {
 }
 
 .hero .hero-text-container {
-  width: 420px;
   text-align: center;
 }
 
@@ -109,7 +124,7 @@ input:focus-visible {
   font-weight: 600;
   text-transform: capitalize;
   font-family: "Inter";
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .hero .hero-text-container .hero-text {
@@ -132,7 +147,7 @@ input:focus-visible {
   height: 100%;
   max-width: 1280px;
   margin: auto;
-  border-top: 1px solid #d1d1d1;
+  /* border-top: 1px solid #d1d1d1; */
   justify-content: center;
 }
 
@@ -152,7 +167,7 @@ main {
 }
 
 .footer {
-  margin: 200px auto auto auto;
+  margin: auto auto auto auto;
   width: 100%;
   background-color: #ffffff;
 }
@@ -166,11 +181,15 @@ main {
   gap: 5px;
 }
 
+.new-line {
+  color: var(--btn-color);
+  margin: 0px;
+}
 @media screen and (min-width: 1200px) {
   .hero {
     padding: 115px 0px 0px 0px;
     border: none;
-    height: 326px;
+    height: 550px;
   }
 
   .hero .hero-container {
@@ -195,11 +214,20 @@ main {
     width: 300px;
     padding: 35px 40px 50px 40px;
   }
-  .footer {
-    margin: 200px auto auto auto;
-  }
 
   .footer .container {
     justify-content: left;
+  }
+  .hero .rounded-chart,
+  .hero .lined-chart {
+    display: block;
+  }
+
+  .hero .hero-text-container {
+    width: 420px;
+  }
+
+  .hero .hero-text-container h1 {
+    font-size: 26px;
   }
 }
