@@ -157,12 +157,15 @@ main {
   background-color: #ffffff;
 }
 
-/*Responsivity*/
-/* @media screen and (min-width: 767px) {
-  .hero {
-    padding: 200px 0px 0px 0px;
-  }
-} */
+.logout {
+  color: var(--red-color);
+  font-weight: 600;
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 5px;
+}
+
 @media screen and (min-width: 1200px) {
   .hero {
     padding: 115px 0px 0px 0px;

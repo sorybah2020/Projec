@@ -43,6 +43,7 @@
   font-weight: 500;
   font-size: 16px;
   color: var(--table-header);
+  margin-bottom: 20px;
 }
 
 .profile img.profile-picture {
@@ -369,7 +370,7 @@ thead tr td.header-table {
   display: flex;
   align-items: center;
   border: 1px solid #d1d1d1;
-  padding: 5px;
+  padding: 10px;
   border-radius: 0.4em;
   background-color: #f9f9f9;
   width: 100%;
@@ -422,6 +423,8 @@ nav ul li {
 nav ul li a {
   text-decoration: none;
   color: var(--gray-color);
+  display: flex;
+  gap: 10px;
 }
 
 nav ul li.active {

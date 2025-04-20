@@ -1,47 +1,20 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 import { NavigationContext } from "../context/NavigationContext";
-import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
 import ProfileImg from "../assets/profile.svg";
-import PlaidLink from "./Plaid";
 import CloseIcon from "../assets/close.svg";
+import SidebarNavigation from "./SidebarNavigation";
 
 const Sidebar = () => {
-  let location = useLocation();
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
   const { sidebarOpened, handleOpenProfile } = useContext(NavigationContext);
 
   useEffect(() => {
     setProfile(auth);
   }, [auth]);
-
-  const handleLogOut = async () => {
-    try {
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      };
-
-      const result = await UserAPI.logoutUser(options);
-
-      // Check if user logged out successfully
-      if (result.message) {
-        setTimeout(() => {
-          setAuth(null);
-        }, 1000);
-      }
-    } catch (error) {
-      console.error("User verification failed:", error);
-    }
-  };
 
   return (
     <>
@@ -80,30 +53,7 @@ const Sidebar = () => {
             </p>
           </div>
         </div>
-        <nav className="sidebar-navigation">
-          <ul className="sidebar-menu">
-            <li className={location.pathname === "/" ? "active" : ""}>
-              <PlaidLink />
-            </li>
-            <li
-              className={location.pathname === "/transactions" ? "active" : ""}
-            >
-              <Link to="/transactions">Transactions</Link>
-            </li>
-            <li className={location.pathname === "/dashboard" ? "active" : ""}>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li className={location.pathname === "/profile" ? "active" : ""}>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li
-              className={location.pathname === "/logout" ? "active" : ""}
-              onClick={() => handleLogOut()}
-            >
-              Logout
-            </li>
-          </ul>
-        </nav>
+        <SidebarNavigation />
       </aside>
     </>
   );
