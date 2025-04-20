@@ -75,7 +75,6 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
       frm_subms: "",
     }));
     if (valid) {
-      setTransLoading(true);
       const options = {
         method: "PUT",
         headers: {
@@ -86,6 +85,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
       try {
         const result = await TransactionsAPI.editTransaction(options);
         if (result?.updatedTransaction) {
+          setTransLoading(true);
           setTransactions((prevTransactions) => {
             //update transactions
             const trans = [...prevTransactions];

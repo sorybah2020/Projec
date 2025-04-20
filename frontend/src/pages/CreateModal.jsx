@@ -90,7 +90,6 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
       frm_subms: "",
     }));
     if (valid) {
-      setTransLoading(true);
       const options = {
         method: "POST",
         headers: {
@@ -102,6 +101,8 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
       try {
         const result = await TransactionsAPI.createTransaction(options);
         if (result.success) {
+          setTransLoading(true);
+
           //update transaction state
           setTransactions((prevState) => [...prevState, result.transaction]);
           setAuth((prevAuth) => ({
