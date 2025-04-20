@@ -2,20 +2,15 @@ import CreateModal from "./CreateModal";
 import EditModal from "./EditModal";
 import Search from "./Search";
 import TransactionsTable from "./TransactionsTable";
-import Toggle from "../assets/toggle.svg";
-import FiltersIcon from "../assets/filter.svg";
 import PropTypes from "prop-types";
 import PlusIcon from "../assets/plus.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Header from "../components/Header";
 
-const TransactionsContent = ({
-  sidebarOpened,
-  handleOpenFilters,
-  handleOpenProfile,
-}) => {
+const TransactionsContent = () => {
   let navigate = useNavigate();
   const { auth } = useContext(AuthContext);
 
@@ -38,38 +33,22 @@ const TransactionsContent = ({
 
   return (
     <>
-      <header>
-        <div className="top-navigation">
-          <div className="top-navigation-left">
-            <img
-              src={Toggle}
-              className="toggleIcon"
-              style={{ opacity: sidebarOpened.profile ? 0 : 1 }}
-              onClick={handleOpenProfile}
-            />
-            <h1>E-tracker</h1>
-          </div>
-          <img
-            src={FiltersIcon}
-            className="filtersIcon"
-            style={{ opacity: sidebarOpened.filters ? 0 : 1 }}
-            onClick={handleOpenFilters}
-          />
-        </div>
-      </header>
-      <div className="transactions-content">
+      <Header />
+      <div className="page-content">
         <div>
           <p className="header">All Transactions</p>
         </div>
         <div className="search">
           <Search />
-          <div className="add-transaction-container btn">
+          <div
+            className="add-transaction-container btn"
+            onClick={() => openModal("creation")}
+          >
             <img src={PlusIcon} />
             <input
               type="submit"
               className="add-transaction"
               value="add transaction"
-              onClick={() => openModal("creation")}
             />
           </div>
         </div>
@@ -78,7 +57,6 @@ const TransactionsContent = ({
           currentRows={currentRows}
           setCurrentRows={setCurrentRows}
           openModal={openModal}
-          handleOpenProfile={handleOpenProfile}
         />
 
         <CreateModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />

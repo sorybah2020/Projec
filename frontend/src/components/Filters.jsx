@@ -4,8 +4,9 @@ import DatePicker from "./DatePicker";
 import Checkbox from "./Checkbox";
 import CloseIcon from "../assets/close.svg";
 import PropTypes from "prop-types";
-
-const Filters = ({ sidebarOpened, handleOpenFilters }) => {
+import { NavigationContext } from "../context/NavigationContext";
+const Filters = () => {
+  const { sidebarOpened, handleOpenFilters } = useContext(NavigationContext);
   const categories = [
     "Rent",
     "Food",
@@ -103,7 +104,7 @@ const Filters = ({ sidebarOpened, handleOpenFilters }) => {
         }`}
       >
         <div className="filter-header">
-          <span className="filter-icon" onClick={handleOpenFilters}>
+          <span className="filter-icon close" onClick={handleOpenFilters}>
             <img src={CloseIcon} />
           </span>
           <h3>Filters</h3>

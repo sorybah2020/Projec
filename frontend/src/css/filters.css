@@ -68,6 +68,10 @@ html {
     pointer-events: none;
   }
 
+  .filter-icon.close {
+    display: none;
+  }
+
   .filters {
     width: 350px;
   }

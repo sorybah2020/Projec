@@ -2,11 +2,19 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  height: 100vh;
+  height: 100%;
 }
 #root {
   width: 100%;
   font-family: "Inter";
+  min-height: 100%;
+  background-color: #ededed;
+}
+
+#root .container {
+  max-width: 1700px;
+  margin: auto;
+  background: #eef4f9;
 }
 
 .loading-container {

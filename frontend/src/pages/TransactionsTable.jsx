@@ -2,10 +2,10 @@ import Spinner from "../components/Spinner";
 import Pagination from "./Pagination";
 import ActionsLinks from "./ActionsLinks";
 import PropTypes from "prop-types";
+import Checkbox from "../components/Checkbox";
 import { format } from "date-fns";
 import { useContext, useState } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
-import Checkbox from "../components/Checkbox";
 
 const TransactionsTable = ({
   setTransactionToEdit,
@@ -92,7 +92,13 @@ const TransactionsTable = ({
                   action={() => handleCheck(transaction._id)}
                 />
               </td>
-              <td>{transaction.category}</td>
+              <td>
+                {transaction.category}
+                <div className="only-mobile">
+                  <p>{transaction.paymentMode}</p>
+                  <p>{format(new Date(transaction.date), "MM-dd-yyyy")}</p>
+                </div>
+              </td>
               <td>{format(new Date(transaction.date), "MM-dd-yyyy")}</td>
               <td>{transaction.paymentMode}</td>
               <td>{transaction.description}</td>

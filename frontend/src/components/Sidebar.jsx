@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
+import { NavigationContext } from "../context/NavigationContext";
 import UserAPI from "../services/UserAPI";
 import Logo from "./Logo";
-import { Link } from "react-router-dom";
 import ProfileImg from "../assets/profile.svg";
 import PlaidLink from "./Plaid";
-import PropTypes from "prop-types";
 import CloseIcon from "../assets/close.svg";
 
-const Sidebar = ({ sidebarOpened = true, handleOpenProfile }) => {
-  let navigate = useNavigate();
+const Sidebar = () => {
   let location = useLocation();
   const { auth, setAuth } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
+  const { sidebarOpened, handleOpenProfile } = useContext(NavigationContext);
 
   useEffect(() => {
     setProfile(auth);
@@ -109,8 +109,4 @@ const Sidebar = ({ sidebarOpened = true, handleOpenProfile }) => {
   );
 };
 
-Sidebar.propTypes = {
-  handleOpenProfile: PropTypes.func,
-  sidebarOpened: PropTypes.bool,
-};
 export default Sidebar;

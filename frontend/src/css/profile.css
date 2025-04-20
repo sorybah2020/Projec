@@ -33,9 +33,8 @@
 }
 
 .section-title {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--table-header);
-
   text-align: left;
 }
 
@@ -57,7 +56,7 @@ label {
 .profile-section .form-group select,
 .profile-section .form-group input[type="email"],
 .profile-section .form-group input[type="number"] {
-  width: 50%;
+  width: auto;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
@@ -86,5 +85,23 @@ label {
 
 .wrapper {
   max-width: 1150px;
-  padding: 0px 20px;
+}
+
+.profile-page .filtersIcon {
+  display: none;
+}
+
+@media screen and (min-width: 767px) {
+  .profile-section .form-group input[type="text"],
+  .profile-section .form-group select,
+  .profile-section .form-group input[type="email"],
+  .profile-section .form-group input[type="number"] {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .section-title {
+    font-size: 18px;
+  }
 }
