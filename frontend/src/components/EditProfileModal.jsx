@@ -153,7 +153,7 @@ const EditProfileModal = ({ modalIsOpen, setIsOpen }) => {
               name="budget"
               required
               onChange={(e) => handleChange(e.target)}
-              value={formData?.budget || ""}
+              value={formData?.budget ?? ""}
             />
             {errors?.["budget"] && (
               <em className="err-message">{errors["budget"]}</em>

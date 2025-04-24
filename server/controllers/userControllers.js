@@ -97,24 +97,36 @@ const Update = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.budget = Number(req.body.budget) || user.budget;
-    // if (req.body.password) {
-    //   user.password = req.body.password;
-    // }
-    const userTransactions = await TransactionsModel.find({ userId: user._id });
+    const newName = req.body.name || user.name;
+    const newEmail = req.body.email || user.email;
+    const newBudget =
+      req.body.budget !== undefined ? Number(req.body.budget) : user.budget;
 
-    const total = userTransactions.reduce((accumulator, current) => {
-      return accumulator + Number(current.amount);
-    }, 0);
+    // Only validate budget if it was changed
+    if (newBudget !== user.budget) {
+      const userTransactions = await TransactionsModel.find({
+        userId: user._id,
+        cashflow: "Expense",
+      });
 
-    if (total >= user.budget) {
-      res.status(400);
-      throw new Error(
-        `Total of your transactions is: ${total}. Your budget must be greater than this total.`
+      const total = userTransactions.reduce(
+        (acc, curr) => acc + Number(curr.amount),
+        0
       );
+
+      if (newBudget < total) {
+        res.status(400);
+        throw new Error(
+          `Your total expenses are $${total}. Your budget must be at least this amount.`
+        );
+      }
     }
+
+    // Update fields
+    user.name = newName;
+    user.email = newEmail;
+    user.budget = newBudget;
+
     const updatedUser = await user.save();
 
     generateJWT(res, updatedUser._id);
