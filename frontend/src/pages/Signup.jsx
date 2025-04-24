@@ -8,6 +8,8 @@ import Footer from "../components/Footer";
 import Spinner from "../components/Spinner";
 import RaundedCharts from "../assets/rounded_charts.svg";
 import Charts from "../assets/charts.svg";
+import VisibleIcon from "../assets/eye-open.svg";
+import VisibleClosed from "../assets/eye-closed.svg";
 
 const Signup = () => {
   let navigate = useNavigate();
@@ -18,7 +20,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
-
+  const [showPassword, setShowPassword] = useState(false);
   const reqFields = ["name", "email", "password"];
 
   const handleChange = (input) => {
@@ -52,12 +54,15 @@ const Signup = () => {
           ...prevErrors,
           frm_subms: result.message,
         }));
+        setIsLoading(false);
         return;
       }
       setTimeout(() => {
         setIsLoading(false);
         navigate("/login"); //navigate to login page
       }, 1500);
+    } else {
+      setIsLoading(false);
     }
   };
 
@@ -135,12 +140,18 @@ const Signup = () => {
                   </label>
                   <div className="form-group-container diff">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       placeholder="Password"
                       required
                       name="password"
                       onChange={(e) => handleChange(e.target)}
+                    />
+                    <img
+                      src={showPassword ? VisibleIcon : VisibleClosed}
+                      alt="eye"
+                      className="eye-icon"
+                      onClick={() => setShowPassword(!showPassword)}
                     />
                     {errors?.["password"] && (
                       <em className="err-message">{errors["password"]}</em>

@@ -3,12 +3,14 @@ import LoginAPI from "../services/LoginAPI";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 import Spinner from "../components/Spinner";
+import RaundedCharts from "../assets/rounded_charts.svg";
+import Charts from "../assets/charts.svg";
+import VisibleIcon from "../assets/eye-open.svg";
+import VisibleClosed from "../assets/eye-closed.svg";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import RaundedCharts from "../assets/rounded_charts.svg";
-import Charts from "../assets/charts.svg";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -20,6 +22,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const reqFields = ["email", "password"];
 
@@ -34,10 +37,10 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     //validate login fields
     const { valid, newErrors } = Validation.validateAll(formData, reqFields);
     setErrors(newErrors);
+    setIsLoading(true);
     if (valid) {
       const options = {
         method: "POST",
@@ -56,6 +59,7 @@ const Login = () => {
           ...prevErrors,
           frm_subms: result.message,
         }));
+        setIsLoading(false);
         return;
       } else {
         //login successful
@@ -127,12 +131,18 @@ const Login = () => {
                   </label>
                   <div className="form-group-container diff">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       placeholder="Password"
                       required
                       name="password"
                       onChange={(e) => handleChange(e.target)}
+                    />
+                    <img
+                      src={showPassword ? VisibleIcon : VisibleClosed}
+                      alt="eye"
+                      className="eye-icon"
+                      onClick={() => setShowPassword(!showPassword)}
                     />
                     {errors?.["password"] && (
                       <em className="err-message">{errors["password"]}</em>

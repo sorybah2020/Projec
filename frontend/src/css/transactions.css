@@ -771,6 +771,7 @@ input[type="date"]:focus-visible,
 .form-group-container {
   display: flex;
   gap: 50px;
+  position: relative;
 }
 
 .form-group-col {

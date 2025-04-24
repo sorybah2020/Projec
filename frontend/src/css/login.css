@@ -3,7 +3,7 @@
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
-  padding: 13px;
+  padding: 13px 31px 13px 13px;
 }
 
 #signup-form {
@@ -184,6 +184,13 @@ main {
 .new-line {
   color: var(--btn-color);
   margin: 0px;
+}
+
+img.eye-icon {
+  width: 21px;
+  position: absolute;
+  right: 10px;
+  top: 13px;
 }
 @media screen and (min-width: 1200px) {
   .hero {
