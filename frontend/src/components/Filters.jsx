@@ -81,14 +81,25 @@ const Filters = () => {
             amount: { ...state.amount, ...action.payload },
           };
         }
+        break;
+      case "RESET":
+        return filtersInitialState;
+      default:
+        return state;
     }
   };
 
   const [filters, dispatch] = useReducer(filterReducer, filtersInitialState);
 
   useEffect(() => {
+    //Set filters when filters change
     setFilters(filters);
   }, [filters, setFilters]);
+
+  const handleReset = () => {
+    //Reset filters to initial state
+    dispatch({ type: "RESET" });
+  };
 
   return (
     <>
@@ -214,13 +225,16 @@ const Filters = () => {
             </label>
           </div>
         </div>
+
+        <div className="filter-group">
+          <button
+            onClick={() => handleReset()}
+            className="btn second-btn close-btn"
+          >
+            Reset Filters
+          </button>
+        </div>
       </aside>
-      {/* <img
-        src={FiltersIcon}
-        className="filtersIcon"
-        style={{ opacity: filterOpened ? 0 : 1 }}
-        onClick={handleOpenFilters}
-      /> */}
     </>
   );
 };

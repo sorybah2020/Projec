@@ -470,6 +470,10 @@ nav ul {
   margin-bottom: 40px;
 }
 
+.filter-group.reset-filters {
+  text-align: end;
+}
+
 .filter-title {
   font-size: 16px;
   color: var(--blue-color);
