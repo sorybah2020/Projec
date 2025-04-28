@@ -16,11 +16,10 @@ const TrancationsSchema = new mongoose.Schema({
   },
   paymentMode: {
     type: String,
-    required: true,
+    default: "Credit Card",
   },
   description: {
     type: String,
-    required: true,
   },
   amount: {
     type: Number,
@@ -29,10 +28,12 @@ const TrancationsSchema = new mongoose.Schema({
   cashflow: {
     type: String,
     required: true,
+    default: "expense",
   },
   time: {
     type: String,
     required: true,
+    default: "00:00",
   },
 });
 

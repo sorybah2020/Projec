@@ -39,17 +39,10 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     "Miscellaneous",
     "Personal Care",
   ];
-  const reqFields = [
-    "category",
-    "date",
-    "paymentMode",
-    "description",
-    "amount",
-    "cashflow",
-    "time",
-  ];
+  const reqFields = ["category", "date", "amount", "cashflow"];
 
   function closeModal(modalName) {
+    setErrors({});
     setIsOpen({ ...modalIsOpen, [modalName]: false });
   }
 
@@ -273,9 +266,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
         </div>
 
         <div className="form-group">
-          <label className="header">
-            Description <em className="text-redText">*</em>
-          </label>
+          <label className="header">Description</label>
           <div className="form-group-container diff">
             <input
               type="text"
@@ -291,9 +282,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
         </div>
 
         <div className="form-group">
-          <label className="header">
-            Payment Mode <em className="text-redText">*</em>
-          </label>
+          <label className="header">Payment Mode</label>
           <div className="form-group-container diff">
             <div className="check-wrapper">
               <label>

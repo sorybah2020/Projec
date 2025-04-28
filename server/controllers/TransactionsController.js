@@ -50,16 +50,7 @@ const createTransaction = async (req, res) => {
       time,
     } = req.body;
 
-    if (
-      !userId ||
-      !category ||
-      !date ||
-      !paymentMode ||
-      !description ||
-      !amount ||
-      !cashflow ||
-      !time
-    ) {
+    if (!userId || !category || !date || !amount || !cashflow) {
       throw new Error("All fields are required");
     }
 
@@ -132,17 +123,7 @@ const editTransaction = async (req, res) => {
       _id,
     } = req.body;
 
-    if (
-      !userId ||
-      !category ||
-      !date ||
-      !paymentMode ||
-      !description ||
-      !amount ||
-      !cashflow ||
-      !time ||
-      !_id
-    ) {
+    if (!userId || !category || !date || !amount || !cashflow || !_id) {
       return res.status(400).json({ message: "All fields are required" });
     }
 

@@ -56,12 +56,12 @@ const TransactionsProvider = ({ children }) => {
         return false;
       if (
         filters.cashflow.length > 0 &&
-        !filters.cashflow.includes(transaction.cashflow.toLowerCase())
+        !filters.cashflow.includes(transaction.cashflow?.toLowerCase())
       )
         return false;
       if (
         filters.paymentMode.length > 0 &&
-        !filters.paymentMode.includes(transaction.paymentMode.toLowerCase())
+        !filters.paymentMode.includes(transaction.paymentMode?.toLowerCase())
       )
         return false;
       if (
@@ -86,7 +86,7 @@ const TransactionsProvider = ({ children }) => {
         return (
           transaction.category.toLowerCase().includes(value) ||
           transaction.paymentMode.toLowerCase().includes(value) ||
-          transaction.description.toLowerCase().includes(value)
+          transaction.description?.toLowerCase().includes(value)
         );
       });
     }
