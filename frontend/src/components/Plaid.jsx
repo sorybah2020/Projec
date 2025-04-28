@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
+import { TransactionsContext } from "../context/TransactionsContext";
 import axios from "axios";
 
 import {
@@ -45,9 +46,29 @@ const PlaidLink = () => {
           }
         );
 
-        console.log(transactionsResponse.data.transactions);
+        const transaction = transactionsResponse.data.transactions.map(
+          ({ category, date, amount }) => ({
+            userId: email,
+            category: category[0],
+            date,
+            amount,
+            paymentMode: "Debit",
+            description: "None",
+            cashflow: "Expense",
+            time: "00",
+          })
+        );
+
+        console.log(transaction, "TRANSACTION DATA");
+
+        const createTransactions = await axios.post(
+          "/api/transaction/multiple",
+          {
+            transactions: transaction,
+          }
+        );
       } catch (error) {
-        console.log(error, "YOU FAILED TO GET ACCESS TOKEN");
+        console.log(error);
       }
     };
     exchangeToken(publicToken);

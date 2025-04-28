@@ -20,7 +20,6 @@ const TrancationsSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   amount: {
     type: Number,
@@ -32,7 +31,6 @@ const TrancationsSchema = new mongoose.Schema({
   },
   time: {
     type: String,
-    required: true,
   },
 });
 

@@ -4,7 +4,7 @@ dotenv.config();
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/mongodb.js";
 import userRoutes from "./routes/userRoutes.js";
-import plaidRoutes from "./routes/plaidRoutes.js";
+import plaidRoutes from "./routes/PlaidRoutes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
