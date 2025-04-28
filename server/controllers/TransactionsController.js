@@ -93,6 +93,20 @@ const createTransaction = async (req, res) => {
   }
 };
 
+//for plaid api fetch
+const createMultipleTransactions = async (req, res) => {
+  const multipleTransactions = req.body.expenses;
+
+  try {
+    const newMultipleTransactions = await TransactionsModel.insertMany(
+      multipleTransactions
+    );
+  } catch (error) {
+    console.error("Error creating multiple transactions:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 const getTransactionsById = async (req, res) => {
   try {
     const userId = req.params.authId;
@@ -235,6 +249,7 @@ const deleteTransactions = async (req, res) => {
 
 export default {
   createTransaction,
+  createMultipleTransactions,
   getTransactionsById,
   getTransactionById,
   editTransaction,
