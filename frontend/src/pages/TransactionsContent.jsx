@@ -25,14 +25,14 @@ const TransactionsContent = () => {
   });
 
   function openModal(modalName) {
-    if (auth.budget === 0 && modalName === "creation") {
-      navigate("/profile", {
-        state: {
-          message:
-            "Your budget is currently $0. Please set a budget before adding any transactions.",
-        },
-      });
-    }
+    // if (auth.budget === 0 && modalName === "creation") {
+    //   navigate("/profile", {
+    //     state: {
+    //       message:
+    //         "Your budget is currently $0. Please set a budget before adding any transactions.",
+    //     },
+    //   });
+    // }
     setIsOpen({ ...modalIsOpen, [modalName]: true });
   }
 

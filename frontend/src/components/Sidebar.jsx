@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import ProfileImg from "../assets/profile.svg";
 import CloseIcon from "../assets/close.svg";
 import SidebarNavigation from "./SidebarNavigation";
+import WalletIcon from "../assets/wallet.svg";
 
 const Sidebar = () => {
   const { auth } = useContext(AuthContext);
@@ -44,12 +45,17 @@ const Sidebar = () => {
           </div>
           <h3>{profile?.name}</h3>
           <div>
-            <p className="budget">
-              <img
-                className="icon"
-                src="https://ej2.syncfusion.com/showcase/typescript/expensetracker/styles/images/cash-wallet.svg"
-              />
-              ${auth?.budget}
+            <p
+              className="budget"
+              style={{
+                border: `1px solid ${auth?.budget < 0 ? "#ff5e65" : "#d1d1d1"}`,
+                background: `${auth?.budget < 0 ? "#f9ecec" : "#f9f9f9"}`,
+              }}
+            >
+              <img className="icon" src={WalletIcon} />
+              {auth?.budget < 0
+                ? `-$${Math.abs(auth.budget).toFixed(2)}`
+                : `$${auth?.budget.toFixed(2)}`}
             </p>
           </div>
         </div>
