@@ -20,6 +20,7 @@ html {
 
 .filters-open {
   transform: translateX(0);
+  overflow: auto;
 }
 
 .filtersIcon,
