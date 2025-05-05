@@ -208,9 +208,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
             )}
           </div>
           <div className="form-group-col">
-            <label className="header">
-              Choose a Time <em className="text-redText">*</em>
-            </label>
+            <label className="header">Choose a Time</label>
             <input
               type="time"
               id="time"

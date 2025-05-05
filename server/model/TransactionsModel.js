@@ -32,7 +32,6 @@ const TrancationsSchema = new mongoose.Schema({
   },
   time: {
     type: String,
-    required: true,
     default: "00:00",
   },
 });
