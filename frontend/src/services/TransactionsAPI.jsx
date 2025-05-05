@@ -14,6 +14,21 @@ const createTransaction = async (options) => {
   }
 };
 
+const createMultipleTransactions = async (options) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/transaction/multiple",
+      options
+    );
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
 const getTransactionsById = async (authId, options) => {
   try {
     const response = await fetch(
@@ -69,6 +84,7 @@ const deleteTransactions = async (options) => {
 
 export default {
   createTransaction,
+  createMultipleTransactions,
   getTransactionsById,
   getTransaction,
   editTransaction,

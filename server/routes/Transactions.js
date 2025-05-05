@@ -3,6 +3,11 @@ const router = express.Router();
 import TransactionsController from "../controllers/TransactionsController.js";
 
 router.post("/transaction/create", TransactionsController.createTransaction);
+
+router.post(
+  "/transaction/multiple",
+  TransactionsController.createMultipleTransactions
+);
 router.get(
   "/get/transactions/:authId",
   TransactionsController.getTransactionsById
