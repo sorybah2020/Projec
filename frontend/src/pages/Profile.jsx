@@ -2,29 +2,18 @@ import Sidebar from "../components/Sidebar";
 import editIcon from "../assets/edit.svg";
 import EditProfileModalModal from "../components/EditProfileModal";
 import { Link } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import NavigationProvider from "../context/NavigationProvider";
-import { useLocation } from "react-router-dom";
 
 const Profile = () => {
   const { auth } = useContext(AuthContext);
-  const location = useLocation();
-  const [notification, setNotification] = useState("");
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const handleEdit = () => {
     setIsOpen(true);
   };
-
-  useEffect(() => {
-    if (location.state?.message) {
-      setNotification(location.state.message);
-      // Optionally clear message after 3s
-      setTimeout(() => setNotification(""), 5000);
-    }
-  }, [location.state]);
 
   return (
     <>
@@ -40,9 +29,6 @@ const Profile = () => {
                 </div>
 
                 <div className="wrapper">
-                  {notification && (
-                    <div className="notification">{notification}</div>
-                  )}
                   <div className="profile-section">
                     <div className="section-header">
                       <h2 className="section-title">Personal Information</h2>

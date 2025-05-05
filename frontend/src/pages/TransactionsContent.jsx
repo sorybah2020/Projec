@@ -6,14 +6,8 @@ import PropTypes from "prop-types";
 import PlusIcon from "../assets/plus.svg";
 import Header from "../components/Header";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 
 const TransactionsContent = () => {
-  let navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
-
   const [transactionToEdit, setTransactionToEdit] = useState([]);
   //Pagination
   const [currentRows, setCurrentRows] = useState([]);
@@ -25,14 +19,6 @@ const TransactionsContent = () => {
   });
 
   function openModal(modalName) {
-    // if (auth.budget === 0 && modalName === "creation") {
-    //   navigate("/profile", {
-    //     state: {
-    //       message:
-    //         "Your budget is currently $0. Please set a budget before adding any transactions.",
-    //     },
-    //   });
-    // }
     setIsOpen({ ...modalIsOpen, [modalName]: true });
   }
 
