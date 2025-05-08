@@ -86,7 +86,7 @@ const getTransactions = asyncHandler(async (req, res) => {
       options: { count: 10 },
     });
 
-    console.log(transactionResponse.data);
+    // console.log(transactionResponse.data);
 
     res.json(transactionResponse.data);
   } catch (error) {

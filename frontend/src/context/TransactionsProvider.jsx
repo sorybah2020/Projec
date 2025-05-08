@@ -22,6 +22,7 @@ const TransactionsProvider = ({ children }) => {
       },
     };
     const result = await TransactionsAPI.getTransactionsById(auth._id, options);
+    console.log(result, "RESULT");
     if (result.length > 0) {
       setTimeout(() => {
         setTransactions(result);
