@@ -51,7 +51,7 @@ const PlaidLink = () => {
             category: "Miscellaneous",
             date,
             amount,
-            paymentMode: "Debit",
+            paymentMode: "Debit Card",
             description: "None",
             cashflow: "Expense",
             time: "00:00",
