@@ -32,3 +32,40 @@ body {
   height: 100vh; /* Full viewport height */
   width: 100vw; /* Full viewport width */
 }
+
+.chat-icon {
+  width: 70px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4.5em;
+  border: 2px solid #5584f6;
+
+  /* Add floating animation */
+  animation: float 3s ease-in-out infinite;
+}
+
+.chat-icon:hover {
+  transform: translateY(-5px);
+}
+
+/* Floating keyframes */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .chat-icon {
+    bottom: 50px;
+    right: 50px;
+  }
+}

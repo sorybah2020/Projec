@@ -4,6 +4,7 @@ import TransactionsContent from "./TransactionsContent";
 import PropTypes from "prop-types";
 import TransactionsProvider from "../context/TransactionsProvider";
 import NavigationProvider from "../context/NavigationProvider";
+import ChatBot from "../components/ChatBot";
 
 const Transactions = () => {
   return (
@@ -19,6 +20,7 @@ const Transactions = () => {
             <Filters />
           </TransactionsProvider>
         </NavigationProvider>
+        <ChatBot />
       </div>
     </div>
   );
