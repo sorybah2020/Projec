@@ -48,14 +48,13 @@ const PlaidLink = () => {
 
         const transaction = transactionsResponse.data.transactions.map(
           ({ category, date, amount }) => ({
-            userId: email,
-            category: category[0],
+            category: "Miscellaneous",
             date,
             amount,
             paymentMode: "Debit",
             description: "None",
             cashflow: "Expense",
-            time: "00",
+            time: "00:00",
           })
         );
 
@@ -65,6 +64,7 @@ const PlaidLink = () => {
           "/api/transaction/multiple",
           {
             transactions: transaction,
+            email: email,
           }
         );
       } catch (error) {

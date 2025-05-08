@@ -50,7 +50,16 @@ const createTransaction = async (req, res) => {
       time,
     } = req.body;
 
-    if (!userId || !category || !date || !amount || !cashflow) {
+    if (
+      !userId ||
+      !category ||
+      !date ||
+      !paymentMode ||
+      !description ||
+      !amount ||
+      !cashflow ||
+      !time
+    ) {
       throw new Error("All fields are required");
     }
 
@@ -86,14 +95,23 @@ const createTransaction = async (req, res) => {
 
 //for plaid api fetch
 const createMultipleTransactions = async (req, res) => {
-  const multipleTransactions = req.body.expenses;
+  const multipleTransactions = req.body.transactions;
+  const userId = await User.findOne({ email: req.body.email }, { _id: 1 });
+  const userIdString = userId._id.toString();
+
+  multipleTransactions.forEach((transaction) => {
+    transaction.userId = userIdString;
+  });
 
   try {
     const newMultipleTransactions = await TransactionsModel.insertMany(
       multipleTransactions
     );
+    return res.json({
+      message: "Transactions created successfully",
+    });
   } catch (error) {
-    console.error("Error creating multiple transactions:", error);
+    //console.error("Error creating multiple transactions:", error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -137,7 +155,17 @@ const editTransaction = async (req, res) => {
       _id,
     } = req.body;
 
-    if (!userId || !category || !date || !amount || !cashflow || !_id) {
+    if (
+      !userId ||
+      !category ||
+      !date ||
+      !paymentMode ||
+      !description ||
+      !amount ||
+      !cashflow ||
+      !time ||
+      !_id
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -170,10 +198,9 @@ const editTransaction = async (req, res) => {
         amount,
         currentAmount
       );
-      return res.status(200).json({
-        updatedTransaction: updatedTransaction,
-        newBudget: user.budget,
-      });
+      return res
+        .status(200)
+        .json({ updatedTransaction: transEdited, newBudget: user.budget });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
