@@ -1,0 +1,48 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 280 80"
+        width="200"
+        height="50"
+      >
+        {/* Blue rounded rectangle */}
+        <rect x="10" y="15" width="50" height="50" rx="10" fill="#5081f4" />
+
+        {/* White lines forming a stylized "L" */}
+        <path
+          d="M25 30 L45 30 M25 40 L40 40 M25 50 L45 50 M25 30 L25 50"
+          stroke="white"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Text next to the logo */}
+        <text
+          x="66"
+          y="50"
+          fontFamily="Arial, sans-serif"
+          fontSize="34"
+          fontWeight="bold"
+          fill="#333"
+        >
+          - tracker
+        </text>
+
+        {/* Moved the last icon closer to the text */}
+        <g transform="translate(155, 0)">
+          {" "}
+          {/* Adjusted position */}
+          <path
+            d="M50 48 L60 38 L70 43 L80 28"
+            stroke="#5081f4"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+          <circle cx="50" cy="48" r="3" fill="#5081f4" />
+          <circle cx="60" cy="38" r="3" fill="#5081f4" />
+          <circle cx="70" cy="43" r="3" fill="#5081f4" />
+          <circle cx="80" cy="28" r="3" fill="#5081f4" />
+        </g>
+      </svg>

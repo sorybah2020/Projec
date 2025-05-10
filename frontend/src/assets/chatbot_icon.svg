@@ -1,0 +1,17 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle background -->
+  <circle cx="50" cy="50" r="45" fill="#4087f1" />
+
+  <!-- Chat bubble shape -->
+  <path d="M30 35 H70 C75 35 80 40 80 45 V65 C80 70 75 75 70 75 H55 L50 82 L45 75 H30 C25 75 20 70 20 65 V45 C20 40 25 35 30 35 Z" fill="white" />
+
+  <!-- Bot face elements -->
+  <rect x="35" y="50" width="30" height="3" rx="1.5" fill="#4087f1" />
+  <circle cx="37" cy="45" r="3" fill="#4087f1" />
+  <circle cx="63" cy="45" r="3" fill="#4087f1" />
+
+  <!-- Small dots for typing indicator -->
+  <circle cx="42" cy="60" r="2" fill="#4087f1" />
+  <circle cx="50" cy="60" r="2" fill="#4087f1" />
+  <circle cx="58" cy="60" r="2" fill="#4087f1" />
+</svg>

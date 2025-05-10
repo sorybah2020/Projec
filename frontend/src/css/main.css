@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100%;
+}
+#root {
+  width: 100%;
+  font-family: "Inter";
+  min-height: 100%;
+}
+
+#root .container {
+  max-width: 1700px;
+  margin: auto;
+  background: #eef4f9;
+}
+
+#root .container.login {
+  max-width: 1280px;
+  background-color: #ffffff;
+}
+
+.page {
+  background-color: #ededed;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+}
+
+.chat-icon {
+  width: 70px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4.5em;
+  border: 2px solid #5584f6;
+
+  /* Add floating animation */
+  animation: float 3s ease-in-out infinite;
+}
+
+.chat-icon:hover {
+  transform: translateY(-5px);
+}
+
+/* Floating keyframes */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .chat-icon {
+    bottom: 50px;
+    right: 50px;
+  }
+}
