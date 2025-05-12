@@ -29,6 +29,7 @@ const TransactionsContent = () => {
       <div className="page-content">
         <div>
           <p className="header">All Transactions </p>
+          <PlaidLink />
         </div>
         <div className="search">
           <Search />
