@@ -16,7 +16,7 @@ const fetchUserAndUpdateBudget = async (
   let diff = Number(amount) - Number(currentAmount);
 
   if (cashflow.toLowerCase() === "expense") {
-    if (user.budget < amount) throw new Error("Insufficient budget");
+    //if (user.budget < amount) throw new Error("Insufficient budget");
     if (diff > 0) {
       newBudget -= diff;
     } else {
@@ -179,9 +179,10 @@ const editTransaction = async (req, res) => {
         amount,
         currentAmount
       );
-      return res
-        .status(200)
-        .json({ updatedTransaction: transEdited, newBudget: user.budget });
+      return res.status(200).json({
+        updatedTransaction: updatedTransaction,
+        newBudget: user.budget,
+      });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });

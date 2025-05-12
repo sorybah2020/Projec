@@ -24,7 +24,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
 
   const categories = [
     "Rent",
-    "Food",
+    "Food And Drink",
     "Bills",
     "Utilities",
     "Transportation",
@@ -38,6 +38,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
     "Education",
     "Miscellaneous",
     "Personal Care",
+    "General Merchandise",
   ];
   const reqFields = ["category", "date", "amount", "cashflow"];
 
