@@ -25,7 +25,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
   //List of categories and required fields
   const categories = [
     "Rent",
-    "Food",
+    "Food And Drink",
     "Bills",
     "Utilities",
     "Transportation",
@@ -39,6 +39,7 @@ const CreateModal = ({ modalIsOpen, setIsOpen }) => {
     "Education",
     "Miscellaneous",
     "Personal Care",
+    "General Merchandise",
   ];
   const reqFields = ["category", "date", "amount", "cashflow"];
 

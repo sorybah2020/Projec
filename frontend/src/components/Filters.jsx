@@ -9,7 +9,7 @@ const Filters = () => {
   const { sidebarOpened, handleOpenFilters } = useContext(NavigationContext);
   const categories = [
     "Rent",
-    "Food",
+    "Food And Drink",
     "Bills",
     "Utilities",
     "Transportation",
@@ -23,6 +23,7 @@ const Filters = () => {
     "Education",
     "Miscellaneous",
     "Personal Care",
+    "General Merchandise",
   ];
   const filtersInitialState = {
     date: {},
