@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import UserAPI from "../services/UserAPI";
-import PlaidLink from "./Plaid";
 
 const SidebarNavigation = () => {
   const { setAuth } = useContext(AuthContext);
@@ -31,9 +30,7 @@ const SidebarNavigation = () => {
   return (
     <nav className="sidebar-navigation">
       <ul className="sidebar-menu">
-        <li className={location.pathname === "/" ? "active" : ""}>
-          <PlaidLink />
-        </li>
+        <li className={location.pathname === "/" ? "active" : ""}></li>
         <li className={location.pathname === "/transactions" ? "active" : ""}>
           <Link to="/transactions">
             <svg

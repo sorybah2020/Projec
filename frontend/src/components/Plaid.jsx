@@ -1,14 +1,13 @@
 import { useCallback, useState, useEffect, useContext } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
 import axios from "axios";
-
 import { usePlaidLink } from "react-plaid-link";
 import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
 
 const PlaidLink = () => {
-  // const { transactions, setFilters, setTransLoading } =
-  //   useContext(TransactionsContext);
+  const { setTransactions, setFilteredTransactions, setTransLoading } =
+    useContext(TransactionsContext);
 
   const [token, setToken] = useState(null);
 
@@ -41,51 +40,53 @@ const PlaidLink = () => {
       .join(" ");
   };
 
-  const onSuccess = useCallback((publicToken, metadata) => {
-    const exchangeToken = async (publicToken) => {
-      const email = localStorage.email;
-      try {
-        const tokenExchange = await axios.post("/api/plaid/exchange", {
-          publicToken,
-          email,
-        });
+  const onSuccess = useCallback(
+    (publicToken, metadata) => {
+      const exchangeToken = async (publicToken) => {
+        const email = localStorage.email;
+        try {
+          const tokenExchange = await axios.post("/api/plaid/exchange", {
+            publicToken,
+            email,
+          });
 
-        const transactionsResponse = await axios.get(
-          "/api/plaid/transactions",
-          {
-            params: { email: email },
-          }
-        );
+          const transactionsResponse = await axios.get(
+            "/api/plaid/transactions",
+            {
+              params: { email: email },
+            }
+          );
 
-        console.log(transactionsResponse, "TRANSACTION DATA");
+          const transaction = transactionsResponse.data.transactions.map(
+            ({ personal_finance_category, date, amount, merchant_name }) => ({
+              category: formatedCategory(personal_finance_category.primary),
+              date,
+              amount,
+              paymentMode: "Debit Card",
+              description: merchant_name,
+              cashflow: "Expense",
+              time: "00:00",
+            })
+          );
 
-        transactionsResponse.data.transactions.map(({ category }) => ({}));
+          const createTransactions = await axios.post(
+            "/api/transaction/multiple",
+            {
+              transactions: transaction,
+              email: email,
+            }
+          );
 
-        const transaction = transactionsResponse.data.transactions.map(
-          ({ personal_finance_category, date, amount, merchant_name }) => ({
-            category: formatedCategory(personal_finance_category.primary),
-            date,
-            amount,
-            paymentMode: "Debit Card",
-            description: merchant_name,
-            cashflow: "Expense",
-            time: "00:00",
-          })
-        );
-
-        const createTransactions = await axios.post(
-          "/api/transaction/multiple",
-          {
-            transactions: transaction,
-            email: email,
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    exchangeToken(publicToken);
-  }, []);
+          setTransactions(transaction);
+          setFilteredTransactions(transaction);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      exchangeToken(publicToken);
+    },
+    [setFilteredTransactions]
+  );
 
   const config = {
     token,
