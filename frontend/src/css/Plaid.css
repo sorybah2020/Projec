@@ -1,5 +1,5 @@
 .plaid-button {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /* -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   font-variant-ligatures: common-ligatures;
@@ -25,7 +25,18 @@
   position: relative;
   transition-duration: 100ms;
   transition-property: background-color, border-color;
-  transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out; */
+  background-color: #5584f6;
+  border-radius: 0.2em;
+  color: #ffffff;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: capitalize;
+  min-width: 70px;
+  height: 47px;
 }
 
 .plaid-button:hover {
