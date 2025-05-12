@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import TransactionsProvider from "../context/TransactionsProvider";
 import NavigationProvider from "../context/NavigationProvider";
 import ChatBot from "../components/ChatBot";
+import PlaidLink from "../components/Plaid";
 
 const Transactions = () => {
   return (

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import PlusIcon from "../assets/plus.svg";
 import Header from "../components/Header";
 import { useState } from "react";
+import PlaidLink from "../components/Plaid";
 
 const TransactionsContent = () => {
   const [transactionToEdit, setTransactionToEdit] = useState([]);
@@ -27,7 +28,7 @@ const TransactionsContent = () => {
       <Header />
       <div className="page-content">
         <div>
-          <p className="header">All Transactions</p>
+          <p className="header">All Transactions </p>
         </div>
         <div className="search">
           <Search />
