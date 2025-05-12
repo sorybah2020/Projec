@@ -1,81 +1,64 @@
-import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React from "react";
 import Card from "./Card";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
-export default function DashboardTable() {
-  const { auth } = useContext(AuthContext); // Access auth data from context
-  const [transactions, setTransactions] = useState([]); // Transactions data
-  const [totalIncome, setTotalIncome] = useState(0); // Total income
-  const [totalExpenses, setTotalExpenses] = useState(0); // Total expenses
-  const [balance, setBalance] = useState(0); // Balance
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-
-  const fetchTransactions = async () => {
-    if (auth?._id) {
-      try {
-        const response = await fetch(`http://localhost:3000/api/get/transactions/${auth._id}`);
-        const data = await response.json();
-
-        // Log the fetched transactions to debug
-        console.log("Fetched Transactions:", data);
-
-        if (Array.isArray(data)) {
-          setTransactions(data);
-          calculateTotals(data);
-        } else {
-          setTransactions([]);
-          calculateTotals([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch transactions:", error);
-        setTransactions([]);
-        calculateTotals([]);
-      } finally {
-        setIsLoading(false);
-      }
+function groupByCategory(transactions) {
+  const grouped = {};
+  transactions.forEach((tx) => {
+    const category = tx.category || "Unknown";
+    if (!grouped[category]) {
+      grouped[category] = 0;
     }
-  };
+    grouped[category] += Number(tx.amount || 0);
+  });
+  return Object.entries(grouped).map(([name, value]) => ({ name, value }));
+}
 
-  const getRandomColor = () => {
-    const getRandomValue = () => Math.floor(Math.random() * 156) + 100;
-    const r = getRandomValue();
-    const g = getRandomValue();
-    const b = getRandomValue();
-    return `rgb(${r}, ${g}, ${b})`; 
-  };
+const CATEGORY_COLORS = [
+  "#ff80ab", "#80b3ff", "#b2f59c", "#84c1b1", "#ffd580", "#c299fc", "#ffb347", "#b5ead7"
+];
+function getCategoryColor(cat, idx) {
+  return CATEGORY_COLORS[idx % CATEGORY_COLORS.length];
+}
 
-  const calculateTotals = (transactionsData) => {
-    // Filter and sum income transactions
-    const income = transactionsData
-      .filter((transaction) => transaction.cashflow === "Income" && transaction.amount)
-      .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
+const RADIAN = Math.PI / 180;
+function renderCustomLabel({ cx, cy, midAngle, outerRadius, percent, name }) {
+  if (percent < 0.02) return null;
+  const radius = outerRadius + 24;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const maxLen = 12;
+  const display = name.length > maxLen ? name.slice(0, maxLen) + "…" : name;
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#333"
+      fontSize={13}
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+      style={{ pointerEvents: "none", userSelect: "none" }}
+    >
+      {display}
+    </text>
+  );
+}
 
-    // Filter and sum expense transactions
-    const expenses = transactionsData
-      .filter((transaction) => transaction.cashflow === "Expense" && transaction.amount)
-      .reduce((sum, transaction) => sum + Number(transaction.amount), 0);
+export default function DashboardTable({ transactions = [], loading = false, auth = {} }) {
+  const totalIncome = transactions
+    .filter((tx) => tx.cashflow === "Income" && tx.amount)
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+  const totalExpenses = transactions
+    .filter((tx) => tx.cashflow === "Expense" && tx.amount)
+    .reduce((sum, tx) => sum + Number(tx.amount), 0);
 
-    // Update state with calculated values
-    setTotalIncome(income);
-    setTotalExpenses(expenses);
-    setBalance(income - expenses);
+  const chartData = groupByCategory(transactions.filter((tx) => tx.cashflow === "Expense"));
+  const chartTotal = chartData.reduce((sum, d) => sum + d.value, 0);
 
-    // Log calculated totals to debug
-    console.log("Income:", income, "Expenses:", expenses, "Balance:", income - expenses);
-  };
-
-  useEffect(() => {
-    fetchTransactions();
-  }, [auth?._id]);
-
-  if (isLoading) {
-    return <p>Loading...</p>; // Show a loading indicator while fetching data
-  }
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="p">
-      {/* Income, Expenses, Balance */}
       <div className="row">
         <Card className="Income">
           <h2 className="Total Income">${totalIncome.toLocaleString()}</h2>
@@ -86,7 +69,7 @@ export default function DashboardTable() {
           <p>Expenses</p>
         </Card>
         <Card className="Balance">
-          <h2 className="Total Balances">${auth?.budget}</h2>
+          <h2 className="Total Balances">${auth?.budget ?? (totalIncome - totalExpenses).toLocaleString()}</h2>
           <p>Balance</p>
         </Card>
         <Card className="Transactions">
@@ -94,45 +77,66 @@ export default function DashboardTable() {
           <p>Transactions</p>
         </Card>
       </div>
-
-      {/* Pie Chart with Labels on the Right */}
-      <Card className="pie-chart-container">
-        <h3>Total Expenses Breakdown</h3>
-        {transactions.length > 0 ? (
-          <PieChart width={700} height={400} margin={{ left: 200 }}>
-            <Pie
-              data={transactions.map((transaction) => ({
-                name: transaction.category || "Unknown",
-                value: transaction.amount || 0,
-                color: transaction.color || "#8884d8",
-              }))}
-              cx="20%"
-              cy="50%"
-              innerRadius={100}
-              outerRadius={150}
-              dataKey="value"
-              label={({ name }) => name}
-              labelLine
-            >
-              {transactions.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color || getRandomColor()} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend
-              layout="vertical"
-              align="right"
-              verticalAlign="middle"
-              wrapperStyle={{ right: -150 }}
-              formatter={(value, entry) => {
-                const total = transactions.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-                const percent = ((entry.payload.value / total) * 100).toFixed(2);
-                return `${value} $${entry.payload.value} (${percent}%)`;
-              }}
-            />
-          </PieChart>
+      <Card
+        className="pie-chart-container"
+        style={{
+          minHeight: 420,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start"
+        }}
+      >
+        <h3 style={{ textAlign: "center", marginTop: 20 }}>Total Expenses Breakdown</h3>
+        {chartData.length > 0 ? (
+          <PieChart width={700} height={340}>
+          <Pie
+            data={chartData}
+            cx={230}
+            cy={170}
+            innerRadius={90}
+            outerRadius={130}
+            minAngle={4}
+            dataKey="value"
+            paddingAngle={1}
+            labelLine={false}
+          >
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getCategoryColor(entry.name, index)} />
+          ))}
+          </Pie>
+  <Tooltip />
+  <Legend
+    layout="vertical"
+    align="right"
+    verticalAlign="middle"
+    iconType="circle"
+    formatter={(value, entry) => {
+      const slice = chartData.find((d) => d.name === value);
+      const percent = slice
+        ? ((slice.value / chartTotal) * 100).toFixed(2)
+        : "0.00";
+      return (
+        <span>
+          {value} ${slice?.value || 0} ({percent}%)
+        </span>
+      );
+    }}
+    wrapperStyle={{ right: -120, width: 250 }}
+  />
+      </PieChart>
         ) : (
-          <p>No transactions to display.</p> // Default message if no data
+          <div
+            style={{
+              width: 700,
+              height: 340,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <span>No expense transactions to display.</span>
+          </div>
         )}
       </Card>
     </div>
