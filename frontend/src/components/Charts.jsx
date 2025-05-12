@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   AreaChart,
   Area,
@@ -11,87 +11,73 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import TransactionsAPI from "../services/TransactionsAPI";
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
+import { Box, Typography, Paper } from "@mui/material";
 
-const Charts = () => {
-  const [balanceData, setBalanceData] = useState([]);
-  const [incomeExpenseData, setIncomeExpenseData] = useState([]);
-   const { auth } = useContext(AuthContext);
 
-  // Fetch balance and income-expense data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = auth?._id; 
-        const transactions = await TransactionsAPI.getTransactionsById(userId, {
-          method: "GET",
-        });
-  
-        console.log("Fetched transactions:", transactions);
-  
-        if (transactions && transactions.length > 0) {
-          // Group transactions by month
-          const groupedByMonth = transactions.reduce((acc, transaction) => {
-            const month = new Date(transaction.date).toLocaleString("default", {
-              month: "short",
-            });
-  
-            if (!acc[month]) {
-              acc[month] = { income: 0, expense: 0, balance: 0 };
-            }
-  
-            // Update income, expense, and balance
-            if (transaction.cashflow === "Income") {
-              acc[month].income += transaction.amount;
-              acc[month].balance += transaction.amount;
-            } else if (transaction.cashflow === "Expense") {
-              acc[month].expense += transaction.amount;
-              acc[month].balance -= transaction.amount;
-            }
-  
-            return acc;
-          }, {});
-  
-          console.log("Grouped transactions by month:", groupedByMonth);
-  
-          // Prepare data for charts
-          const processedBalanceData = Object.keys(groupedByMonth).map((month) => ({
-            month,
-            amount: groupedByMonth[month].balance,
-          }));
-  
-          const processedIncomeExpenseData = Object.keys(groupedByMonth).map(
-            (month) => ({
-              month,
-              income: groupedByMonth[month].income,
-              expense: groupedByMonth[month].expense,
-            })
-          );
-  
-          setBalanceData(processedBalanceData);
-          setIncomeExpenseData(processedIncomeExpenseData);
-        } else {
-          console.warn("No transaction data returned from API.");
-        }
-      } catch (error) {
-        console.error("Error fetching transaction data:", error);
-      }
-    };
-  
-    fetchData();
-  }, []);
+function formatNumber(num) {
+  if (Math.abs(num) >= 1e6) return (num / 1e6).toFixed(1) + "M";
+  if (Math.abs(num) >= 1e3) return (num / 1e3).toFixed(1) + "K";
+  return num?.toLocaleString?.() ?? num;
+}
+
+
+function groupAndSortByMonth(transactions) {
+  const grouped = {};
+
+  transactions.forEach((tx) => {
+    const date = new Date(tx.date);
+    const year = date.getFullYear();
+    const month = date.getMonth(); 
+    const key = `${year}-${String(month + 1).padStart(2, "0")}`;
+    if (!grouped[key]) {
+      grouped[key] = {
+        income: 0,
+        expense: 0,
+        balance: 0,
+        display: date.toLocaleString("default", { month: "short" }) + " " + year,
+        sortKey: key,
+      };
+    }
+    if (tx.cashflow === "Income") {
+      grouped[key].income += tx.amount;
+      grouped[key].balance += tx.amount;
+    } else if (tx.cashflow === "Expense") {
+      grouped[key].expense += tx.amount;
+      grouped[key].balance -= tx.amount;
+    }
+  });
+
+  return Object.values(grouped)
+    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+    .map(({ income, expense, balance, display }) => ({
+      month: display,
+      income,
+      expense,
+      balance: Math.max(0, balance), 
+    }));
+}
+
+export default function Charts({ transactions = [] }) {
+  const grouped = groupAndSortByMonth(transactions);
+
+  const balanceData = grouped.map(({ month, balance }) => ({
+    month,
+    amount: balance,
+  }));
+  const incomeExpenseData = grouped.map(({ month, income, expense }) => ({
+    month,
+    income,
+    expense,
+  }));
 
   return (
-    <div className="charts-container">
-      {/* Account Balance (Line Chart) */}
-      <div className="chart-box">
-        <h3>Account - Balance</h3>
+    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+      <Paper className="chart-box" sx={{ flex: "1 1 400px", minWidth: 350, p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Account - Balance</Typography>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart
             data={balanceData}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+            margin={{ top: 10, right: 30, left: 40, bottom: 0 }}
           >
             <defs>
               <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
@@ -100,9 +86,9 @@ const Charts = () => {
               </linearGradient>
             </defs>
             <XAxis dataKey="month" />
-            <YAxis />
+            <YAxis width={70} tickFormatter={formatNumber} />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <Tooltip formatter={formatNumber} />
             <Area
               type="monotone"
               dataKey="amount"
@@ -112,25 +98,24 @@ const Charts = () => {
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
-
-      {/* Income vs Expense (Bar Chart) */}
-      <div className="chart-box">
-        <h3>Income - Expense</h3>
+      </Paper>
+      <Paper className="chart-box" sx={{ flex: "1 1 400px", minWidth: 350, p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Income - Expense</Typography>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={incomeExpenseData}>
+          <BarChart
+            data={incomeExpenseData}
+            margin={{ left: 40, right: 30 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
+            <YAxis width={70} tickFormatter={formatNumber} />
+            <Tooltip formatter={formatNumber} />
             <Legend />
             <Bar dataKey="income" fill="#8a5cf6" />
             <Bar dataKey="expense" fill="#3654f6" />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-    </div>
+      </Paper>
+    </Box>
   );
-};
-
-export default Charts;
+}
