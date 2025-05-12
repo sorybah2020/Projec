@@ -1,18 +1,15 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useContext } from "react";
 import { TransactionsContext } from "../context/TransactionsContext";
 import axios from "axios";
 
-import {
-  usePlaidLink,
-  //PlaidLinkOnSuccess,
-  //PlaidLinkOnEvent,
-  //PlaidLinkOnExit,
-  //PlaidLinkOptions,
-} from "react-plaid-link";
+import { usePlaidLink } from "react-plaid-link";
 import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
 
 const PlaidLink = () => {
+  // const { transactions, setFilters, setTransLoading } =
+  //   useContext(TransactionsContext);
+
   const [token, setToken] = useState(null);
 
   // get a link_token from your API when component mounts
@@ -30,6 +27,20 @@ const PlaidLink = () => {
     createLinkToken();
   }, []);
 
+  const formatedCategory = (category) => {
+    if (typeof category !== "string" || category.trim() === "") {
+      return category;
+    }
+
+    return category
+      .trim()
+      .toLowerCase()
+      .split("_")
+      .filter(Boolean)
+      .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+      .join(" ");
+  };
+
   const onSuccess = useCallback((publicToken, metadata) => {
     const exchangeToken = async (publicToken) => {
       const email = localStorage.email;
@@ -46,19 +57,21 @@ const PlaidLink = () => {
           }
         );
 
+        console.log(transactionsResponse, "TRANSACTION DATA");
+
+        transactionsResponse.data.transactions.map(({ category }) => ({}));
+
         const transaction = transactionsResponse.data.transactions.map(
-          ({ category, date, amount }) => ({
-            category: "Miscellaneous",
+          ({ personal_finance_category, date, amount, merchant_name }) => ({
+            category: formatedCategory(personal_finance_category.primary),
             date,
             amount,
             paymentMode: "Debit Card",
-            description: "None",
+            description: merchant_name,
             cashflow: "Expense",
             time: "00:00",
           })
         );
-
-        console.log(transaction, "TRANSACTION DATA");
 
         const createTransactions = await axios.post(
           "/api/transaction/multiple",
