@@ -39,11 +39,11 @@ function groupAndSortByMonth(transactions) {
       };
     }
     if (tx.cashflow === "Income") {
-      grouped[key].income += tx.amount;
-      grouped[key].balance += tx.amount;
+      grouped[key].income += Math.abs(tx.amount); 
+      grouped[key].balance += tx.amount; 
     } else if (tx.cashflow === "Expense") {
-      grouped[key].expense += tx.amount;
-      grouped[key].balance -= tx.amount;
+      grouped[key].expense += Math.abs(tx.amount); 
+      grouped[key].balance -= tx.amount; 
     }
   });
 
@@ -53,10 +53,9 @@ function groupAndSortByMonth(transactions) {
       month: display,
       income,
       expense,
-      balance: Math.max(0, balance), 
+      balance: Math.max(0, Math.abs(balance)), // Use absolute value for balance and ensure it's non-negative
     }));
 }
-
 export default function Charts({ transactions = [] }) {
   const grouped = groupAndSortByMonth(transactions);
 

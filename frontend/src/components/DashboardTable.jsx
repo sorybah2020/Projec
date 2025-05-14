@@ -9,7 +9,7 @@ function groupByCategory(transactions) {
     if (!grouped[category]) {
       grouped[category] = 0;
     }
-    grouped[category] += Number(tx.amount || 0);
+    grouped[category] += Math.abs(Number(tx.amount || 0));
   });
   return Object.entries(grouped).map(([name, value]) => ({ name, value }));
 }
