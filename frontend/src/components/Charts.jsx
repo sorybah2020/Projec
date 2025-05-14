@@ -13,13 +13,11 @@ import {
 } from "recharts";
 import { Box, Typography, Paper } from "@mui/material";
 
-
 function formatNumber(num) {
   if (Math.abs(num) >= 1e6) return (num / 1e6).toFixed(1) + "M";
   if (Math.abs(num) >= 1e3) return (num / 1e3).toFixed(1) + "K";
   return num?.toLocaleString?.() ?? num;
 }
-
 
 function groupAndSortByMonth(transactions) {
   const grouped = {};
@@ -58,7 +56,13 @@ function groupAndSortByMonth(transactions) {
 }
 
 export default function Charts({ transactions = [] }) {
-  const grouped = groupAndSortByMonth(transactions);
+  const defaultData = [
+    { month: "Jan 2025", income: 0, expense: 0, balance: 0 },
+    { month: "Feb 2025", income: 0, expense: 0, balance: 0 },
+    { month: "Mar 2025", income: 0, expense: 0, balance: 0 },
+  ];
+
+  const grouped = transactions.length ? groupAndSortByMonth(transactions) : defaultData;
 
   const balanceData = grouped.map(({ month, balance }) => ({
     month,
@@ -71,7 +75,7 @@ export default function Charts({ transactions = [] }) {
   }));
 
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" ,mt: 4}}>
+    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", mt: 4 }}>
       <Paper className="chart-box" sx={{ flex: "1 1 400px", minWidth: 350, p: 2 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>Account - Balance</Typography>
         <ResponsiveContainer width="100%" height={300}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react"; 
 import { Box } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import NavigationProvider from "../context/NavigationProvider";
@@ -19,7 +19,7 @@ function isInRange(date, range) {
 }
 
 export default function Dashboard() {
-  const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext); 
   const [dateRange, setDateRange] = useState([null, null]);
   const [preset, setPreset] = useState("lastMonth");
   const [transactions, setTransactions] = useState([]);
