@@ -39,11 +39,11 @@ function groupAndSortByMonth(transactions) {
       };
     }
     if (tx.cashflow === "Income") {
-      grouped[key].income += Math.abs(tx.amount); 
-      grouped[key].balance += tx.amount; 
+      grouped[key].income += tx.amount;
+      grouped[key].balance += tx.amount;
     } else if (tx.cashflow === "Expense") {
-      grouped[key].expense += Math.abs(tx.amount); 
-      grouped[key].balance -= tx.amount; 
+      grouped[key].expense += tx.amount;
+      grouped[key].balance -= tx.amount;
     }
   });
 
@@ -53,9 +53,10 @@ function groupAndSortByMonth(transactions) {
       month: display,
       income,
       expense,
-      balance: Math.max(0, Math.abs(balance)), // Use absolute value for balance and ensure it's non-negative
+      balance: Math.max(0, balance), 
     }));
 }
+
 export default function Charts({ transactions = [] }) {
   const grouped = groupAndSortByMonth(transactions);
 
@@ -70,7 +71,7 @@ export default function Charts({ transactions = [] }) {
   }));
 
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" ,mt: 4}}>
       <Paper className="chart-box" sx={{ flex: "1 1 400px", minWidth: 350, p: 2 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>Account - Balance</Typography>
         <ResponsiveContainer width="100%" height={300}>

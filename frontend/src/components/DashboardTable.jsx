@@ -9,7 +9,7 @@ function groupByCategory(transactions) {
     if (!grouped[category]) {
       grouped[category] = 0;
     }
-    grouped[category] += Math.abs(Number(tx.amount || 0));
+    grouped[category] += Math.abs(Number(tx.amount || 0)); // Use absolute value
   });
   return Object.entries(grouped).map(([name, value]) => ({ name, value }));
 }
@@ -47,14 +47,13 @@ function renderCustomLabel({ cx, cy, midAngle, outerRadius, percent, name }) {
 export default function DashboardTable({ transactions = [], loading = false, auth = {} }) {
   const totalIncome = transactions
     .filter((tx) => tx.cashflow === "Income" && tx.amount)
-    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+    .reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0); 
   const totalExpenses = transactions
     .filter((tx) => tx.cashflow === "Expense" && tx.amount)
-    .reduce((sum, tx) => sum + Number(tx.amount), 0);
+    .reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0); 
 
   const chartData = groupByCategory(transactions.filter((tx) => tx.cashflow === "Expense"));
-  const chartTotal = chartData.reduce((sum, d) => sum + d.value, 0);
-
+  const chartTotal = chartData.reduce((sum, d) => sum + d.value, 0); 
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -84,7 +83,8 @@ export default function DashboardTable({ transactions = [], loading = false, aut
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start"
+          justifyContent: "flex-start",
+          marginTop: 20
         }}
       >
         <h3 style={{ textAlign: "center", marginTop: 20 }}>Total Expenses Breakdown</h3>
