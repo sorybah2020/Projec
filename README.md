@@ -35,7 +35,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-<img src='https://github.com/sorybah2020/Projec/blob/main/frontend/src/assets/website.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/sorybah2020/Projec/blob/dorisa_shehi_test_branch/frontend/src/assets/capstone_project_video.webm' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Notes
 
