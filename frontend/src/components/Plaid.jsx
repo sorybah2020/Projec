@@ -6,7 +6,7 @@ import "../css/Plaid.css";
 import { FaChevronRight } from "react-icons/fa";
 
 const PlaidLink = () => {
-  const { setTransactions, setFilteredTransactions, setTransLoading } =
+  const { setTransactions, setFilteredTransactions } =
     useContext(TransactionsContext);
 
   const [token, setToken] = useState(null);
@@ -41,7 +41,7 @@ const PlaidLink = () => {
   };
 
   const onSuccess = useCallback(
-    (publicToken, metadata) => {
+    (publicToken) => {
       const exchangeToken = async (publicToken) => {
         const email = localStorage.email;
         try {
@@ -61,7 +61,7 @@ const PlaidLink = () => {
             ({ personal_finance_category, date, amount, merchant_name }) => ({
               category: formatedCategory(personal_finance_category.primary),
               date,
-              amount,
+              amount: Math.abs(amount),
               paymentMode: "Debit Card",
               description: merchant_name,
               cashflow: "Expense",
@@ -85,7 +85,7 @@ const PlaidLink = () => {
       };
       exchangeToken(publicToken);
     },
-    [setFilteredTransactions]
+    [setFilteredTransactions, setTransactions]
   );
 
   const config = {
