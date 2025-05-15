@@ -14,6 +14,11 @@ const validateAll = (formData, reqFields = null) => {
     valid = false;
   }
 
+  if (formData["amount"] && Number(formData["amount"]) < 1) {
+    newErrors.amount = "Please enter a valid amount.";
+    valid = false;
+  }
+
   return { valid, newErrors };
 };
 

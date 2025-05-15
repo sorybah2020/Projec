@@ -255,6 +255,7 @@ const EditModal = ({ modalIsOpen, setIsOpen, transactionToEdit }) => {
               type="number"
               name="amount"
               min="1"
+              step="1"
               onChange={(e) => handleChange(e.target)}
               value={formData?.amount}
             />
