@@ -449,6 +449,7 @@ nav ul {
 
 .sidebar-navigation {
   padding: 8px;
+  height: 100vh;
 }
 
 .sidebar-navigation .sidebar-menu {
