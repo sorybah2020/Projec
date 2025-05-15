@@ -8,34 +8,34 @@ Time spent: **4** months
 
 The following **required** functionality is completed:
 
-- [] **The web app should have Profile page**
-  - [] **NOTE: will display user information, including: Name, Surname, Address, Total Budget etc..**
+- [x] **The web app should have Profile page**
+  - [x] **NOTE: will display user information, including: Name, Surname, Address, Total Budget etc..**
 - [x] **The web app should have Transactions page**
   - [x] **NOTE: Expenses (category, date, payment method, description, amount—e.g., the name of a purchased product) Incomes.**
   - [x] **NOTE: Filters to sort transactions by category, payment method, amount, and date.**
   - [x] **NOTE: Search functionality to find transactions by keyword.**
   - [x] **NOTE: Popups for adding, editing, and deleting transactions.**
-  - [] **NOTE: Bank expenses imports via API**
-- [] **The web app should have Dashboard page**
+  - [x] **NOTE: Bank expenses imports via API**
+- [x] **The web app should have Dashboard page**
 
-  - [] **NOTE: Total Income**
-  - [] **NOTE: Total Expenses**
-  - [] **NOTE: Total Balance**
-  - [] **NOTE: Graphs displaying expenses, and account balance for a selected period.**
-  - [] **NOTE: Recent Transactions Table (showing the last five transactions)**
+  - [x] **NOTE: Total Income**
+  - [x] **NOTE: Total Expenses**
+  - [x] **NOTE: Total Balance**
+  - [x] **NOTE: Graphs displaying expenses, and account balance for a selected period.**
+  - [x] **NOTE: Recent Transactions Table (showing the last five transactions)**
 
-- [] **The web app should have Login page**
-- [] **The web app should have Sign-up page**
+- [x] **The web app should have Login page**
+- [x] **The web app should have Sign-up page**
 
 The following **additional** features are implemented:
 
-- [] AI chatbot
+- [x] AI chatbot
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented required features:
 
-<img src='https://github.com/sorybah2020/Projec/blob/dorisa_shehi_test_branch/frontend/src/assets/capstone_project_video.webm' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/sorybah2020/Projec/blob/dorisa_shehi_test_branch/frontend/src/assets/CapstoneProject.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Notes
 
