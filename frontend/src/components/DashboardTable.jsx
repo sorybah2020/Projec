@@ -30,8 +30,10 @@ export default function DashboardTable({ transactions = [], loading = false, aut
     .filter((tx) => tx.cashflow === "Expense" && tx.amount)
     .reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0); 
 
-  // Balance is always the budget
-  const totalBalance = auth?.budget || 0;
+  // Balance is calculated as income - expenses, defaulting to budget if no transactions
+  const totalBalance = transactions.length
+    ? totalIncome - totalExpenses
+    : 0;
 
   const chartData = groupByCategory(transactions.filter((tx) => tx.cashflow === "Expense"));
   const chartTotal = chartData.reduce((sum, d) => sum + d.value, 0); 
@@ -42,11 +44,11 @@ export default function DashboardTable({ transactions = [], loading = false, aut
     <div className="p">
       <div className="row">
         <Card className="Income">
-          <h2 className="Total Income">${totalIncome.toLocaleString()}</h2>
+          <h2 className="Total Income">${transactions.length ? totalIncome.toLocaleString() : "0"}</h2>
           <p>Income</p>
         </Card>
         <Card className="Expenses">
-          <h2 className="Total Expenses">${totalExpenses.toLocaleString()}</h2>
+          <h2 className="Total Expenses">${transactions.length ? totalExpenses.toLocaleString() : "0"}</h2>
           <p>Expenses</p>
         </Card>
         <Card className="Balance">
