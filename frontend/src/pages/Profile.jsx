@@ -18,7 +18,7 @@ const Profile = () => {
   return (
     <>
       <NavigationProvider>
-        <div className="page">
+        <div className="page profile-page">
           <div className="container">
             <Sidebar auth={auth} />
             <main>
@@ -75,7 +75,7 @@ const Profile = () => {
                           type="number"
                           id="budget"
                           name="budget"
-                          value={auth?.budget}
+                          value={auth?.budget?.toFixed(2)}
                           disabled
                         />
                       </div>

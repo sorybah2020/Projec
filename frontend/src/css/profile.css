@@ -110,7 +110,8 @@ label {
   max-width: 1150px;
 }
 
-.profile-page .filtersIcon {
+.profile-page .filtersIcon,
+.dashboard-page .filtersIcon {
   display: none;
 }
 

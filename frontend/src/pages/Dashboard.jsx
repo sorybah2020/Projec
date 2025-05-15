@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from "react"; 
+import React, { useState, useEffect, useContext } from "react";
 import { Box } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import NavigationProvider from "../context/NavigationProvider";
-import Sidebar from "../components/Sidebar"; 
+import Sidebar from "../components/Sidebar";
 import DashboardDateRangeSelector from "../components/DashboardDateRangeSelector";
 import DashboardTable from "../components/DashboardTable";
 import Charts from "../components/Charts";
 import TransactionsAPI from "../services/TransactionsAPI";
+import Header from "../components/Header";
 
 function isInRange(date, range) {
   if (!range[0] || !range[1]) return true;
@@ -19,7 +20,7 @@ function isInRange(date, range) {
 }
 
 export default function Dashboard() {
-  const { auth } = useContext(AuthContext); 
+  const { auth } = useContext(AuthContext);
   const [dateRange, setDateRange] = useState([null, null]);
   const [preset, setPreset] = useState("lastMonth");
   const [transactions, setTransactions] = useState([]);
@@ -31,7 +32,9 @@ export default function Dashboard() {
       setLoading(true);
       try {
         if (auth?._id) {
-          const data = await TransactionsAPI.getTransactionsById(auth._id, { method: "GET" });
+          const data = await TransactionsAPI.getTransactionsById(auth._id, {
+            method: "GET",
+          });
           setTransactions(Array.isArray(data) ? data : []);
         }
       } finally {
@@ -58,29 +61,32 @@ export default function Dashboard() {
 
   return (
     <NavigationProvider>
-      <Box sx={{ display: "flex" }}>
-        <Sidebar />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-start",
-              mt: 2,
-              pr: 3,
-            }}
-          >
-            <DashboardDateRangeSelector onChange={handleDateRangeChange} />
+      <div className="page profile-page">
+        <Box sx={{ display: "flex" }}>
+          <Sidebar />
+          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Header />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-start",
+                mt: 2,
+                pr: 3,
+              }}
+            >
+              <DashboardDateRangeSelector onChange={handleDateRangeChange} />
+            </Box>
+            <DashboardTable
+              transactions={filteredTransactions}
+              loading={loading}
+              auth={auth}
+            />
+            <Charts transactions={filteredTransactions} />
           </Box>
-          <DashboardTable
-            transactions={filteredTransactions}
-            loading={loading}
-            auth={auth}
-          />
-          <Charts transactions={filteredTransactions} />
         </Box>
-      </Box>
+      </div>
     </NavigationProvider>
   );
 }
